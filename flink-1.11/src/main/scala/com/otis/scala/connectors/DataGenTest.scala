@@ -1,8 +1,8 @@
-package com.otis.scala.test
+package com.otis.scala.connectors
 
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
-import org.apache.flink.table.api._
+import org.apache.flink.table.api.EnvironmentSettings
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment
 
 object DataGenTest {

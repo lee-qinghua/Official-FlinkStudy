@@ -27,7 +27,6 @@ public class QuickStart {
                 "      'connector.topic' = 'mytopic',\n" +
                 "      'connector.properties.zookeeper.connect' = '10.1.30.8:2181',\n" +
                 "      'connector.properties.bootstrap.servers' = '10.1.30.8:9092',\n" +
-                "\n" +
                 "      'format.type' = 'json',\n" +
                 "      'update-mode' = 'append'\n" +
                 "      )";
