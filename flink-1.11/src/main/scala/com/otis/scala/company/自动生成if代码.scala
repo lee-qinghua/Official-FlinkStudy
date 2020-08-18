@@ -1,12 +1,12 @@
-package com.otis.scala.test
+package com.otis.scala.company
 
-import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
+import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
 
-object B {
+object 自动生成if代码 {
 
   /**
    * @param id            规则编号
@@ -184,4 +184,3 @@ object B {
   }
 
 }
-

@@ -49,7 +49,6 @@ public class FunctionTest {
                 "      'format.type' = 'json',\n" +
                 "      'update-mode' = 'append'\n" +
                 "      )";
-
         tableEnv.createFunction("myfunction", DemoUdf.class );
         tableEnv.executeSql(source_table);
         tableEnv.executeSql(sink_table);
