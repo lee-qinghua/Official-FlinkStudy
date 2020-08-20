@@ -320,15 +320,18 @@ select
 
 
 
-
-
-
-
-
+-- 得到的结果是这样的表
+-- ts     transtype   field_1	  field_2
+-- 001		贷款 		10			20
+-- 001		消费		6			89
+-- 001		转账		2			30
+-- 目前发现问题，不能这样写。因为20s期间可能值过来几种数据，不完全。所以要不同的种类拼接起来。
+create view mid_data_table_2 as
 select
     ttype,
-    count(eid) over w as xiaofei_ccount,
-    sum(amount) over w as xiaofei_aamount
+    count(eid) over w as field_01,
+    sum(amount) over w as field_02,
+    ts as current_timestamp
     from (
             select
                 cast(event_id as string) eid,
@@ -345,15 +348,22 @@ select
                 end as ttype,
                 amount,
                 ts from source_table
-    )t1 where ttype='xiaofei'
-    window w as (order by ts range between interval '20' second preceding and current row)
-union
+    )t1
+    window w as (partition by ttype order by ts range between interval '20' second preceding and current row);
+
+
 select
-    ttype,
-    count(eid) over w as bangong_ccount,
-    sum(amount) over w as bangong_aamount
-    from (
-            select
+    xiaofei_01,
+    xiaofei_02,
+    rongzi_01,
+    rongzi_02
+from (
+        select
+    'xiaofei',
+    count(eid) over w as xiaofei_01,
+    sum(amount) over w as xiaofei_02
+    from
+    ( select
                 cast(event_id as string) eid,
                 case
                 when cast(rulecode as string) like '1%' then 'xiaofei'
@@ -367,10 +377,75 @@ select
                 when cast(rulecode as string) like '9%' then 'other'
                 end as ttype,
                 amount,
-                ts from source_table
-    )t1 where ttype='bangong'
+                ts from source_table) a1 where ttype='xiaofei'
     window w as (order by ts range between interval '20' second preceding and current row)
-
+)t1 join (
+        select
+    'rongzi',
+    count(eid) over w as rongzi_01,
+    sum(amount) over w as rongzi_02
+    from
+    (select
+                cast(event_id as string) eid,
+                case
+                when cast(rulecode as string) like '1%' then 'xiaofei'
+                when cast(rulecode as string) like '2%' then 'bangong'
+                when cast(rulecode as string) like '3%' then 'xinzi'
+                when cast(rulecode as string) like '4%' then 'baoxian'
+                when cast(rulecode as string) like '5%' then 'touzi'
+                when cast(rulecode as string) like '6%' then 'rongzi'
+                when cast(rulecode as string) like '7%' then 'zhuanzhang'
+                when cast(rulecode as string) like '8%' then 'cunqu'
+                when cast(rulecode as string) like '9%' then 'other'
+                end as ttype,
+                amount,
+                ts from source_table) a2 where ttype='rongzi'
+    window w as (order by ts range between interval '20' second preceding and current row)
+)t2
+-- 这是消费的数据
+select
+    'xiaofei',
+    count(eid) over w as xiaofei_01,
+    sum(amount) over w as xiaofei_02
+    from
+    ( select
+                cast(event_id as string) eid,
+                case
+                when cast(rulecode as string) like '1%' then 'xiaofei'
+                when cast(rulecode as string) like '2%' then 'bangong'
+                when cast(rulecode as string) like '3%' then 'xinzi'
+                when cast(rulecode as string) like '4%' then 'baoxian'
+                when cast(rulecode as string) like '5%' then 'touzi'
+                when cast(rulecode as string) like '6%' then 'rongzi'
+                when cast(rulecode as string) like '7%' then 'zhuanzhang'
+                when cast(rulecode as string) like '8%' then 'cunqu'
+                when cast(rulecode as string) like '9%' then 'other'
+                end as ttype,
+                amount,
+                ts from source_table) a1 where ttype='xiaofei'
+    window w as (order by ts range between interval '20' second preceding and current row);
+-- 这是融资的数据
+select
+    'rongzi',
+    count(eid) over w as rongzi_01,
+    sum(amount) over w as rongzi_02
+    from
+    (select
+                cast(event_id as string) eid,
+                case
+                when cast(rulecode as string) like '1%' then 'xiaofei'
+                when cast(rulecode as string) like '2%' then 'bangong'
+                when cast(rulecode as string) like '3%' then 'xinzi'
+                when cast(rulecode as string) like '4%' then 'baoxian'
+                when cast(rulecode as string) like '5%' then 'touzi'
+                when cast(rulecode as string) like '6%' then 'rongzi'
+                when cast(rulecode as string) like '7%' then 'zhuanzhang'
+                when cast(rulecode as string) like '8%' then 'cunqu'
+                when cast(rulecode as string) like '9%' then 'other'
+                end as ttype,
+                amount,
+                ts from source_table) a2 where ttype='rongzi'
+    window w as (order by ts range between interval '20' second preceding and current row);
 
 
 
