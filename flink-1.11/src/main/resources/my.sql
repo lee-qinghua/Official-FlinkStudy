@@ -295,10 +295,11 @@ create table sink_table_1(
 -- 注册函数
 create function my_function as 'com.cebbank.airisk.flink.udfs.PreviousValueAggFunction$LongPreviousValueAggFunction';
 
+-- 这个view的格式为
+--  event_id       transtype        交易金额
 create view mid_data_table_1 as
 select
       event_id,
-      my_function(payer_name,acct_num,currency_conv_type_cd,txn_cd,txn_amt,new_borrow_flage,biz_product_type_cd,txn_desc,new_account_chinessname) as rulecode,
 	  case
 	  when my_function(payer_name,acct_num,currency_conv_type_cd,txn_cd,txn_amt,new_borrow_flage,biz_product_type_cd,txn_desc,new_account_chinessname) like '1%' then 'xiaofei'
 	  when my_function(payer_name,acct_num,currency_conv_type_cd,txn_cd,txn_amt,new_borrow_flage,biz_product_type_cd,txn_desc,new_account_chinessname) like '2%' then 'bangong'
@@ -311,164 +312,254 @@ select
 	  when my_function(payer_name,acct_num,currency_conv_type_cd,txn_cd,txn_amt,new_borrow_flage,biz_product_type_cd,txn_desc,new_account_chinessname) like '9%' then 'other'
 	  end as transtype,
 	  cast(txn_amt as decimal ) as amount,
+	  cast(txn_cd as decimal ) as cd,
+	  txn_dt as txn_dt,
 	   et
 	  from source_table_1;
 
-insert into sink_table_1
-select
-    count (event_id) as xiaofei_01 over
-
-
-
--- 得到的结果是这样的表
--- ts     transtype   field_1	  field_2
--- 001		贷款 		10			20
--- 001		消费		6			89
--- 001		转账		2			30
--- 目前发现问题，不能这样写。因为20s期间可能值过来几种数据，不完全。所以要不同的种类拼接起来。
+-- todo 创建一个中间视图 4个字段
 create view mid_data_table_2 as
 select
-    ttype,
-    count(eid) over w as field_01,
-    sum(amount) over w as field_02,
-    ts as current_timestamp
-    from (
-            select
-                cast(event_id as string) eid,
-                case
-                when cast(rulecode as string) like '1%' then 'xiaofei'
-                when cast(rulecode as string) like '2%' then 'bangong'
-                when cast(rulecode as string) like '3%' then 'xinzi'
-                when cast(rulecode as string) like '4%' then 'baoxian'
-                when cast(rulecode as string) like '5%' then 'touzi'
-                when cast(rulecode as string) like '6%' then 'rongzi'
-                when cast(rulecode as string) like '7%' then 'zhuanzhang'
-                when cast(rulecode as string) like '8%' then 'cunqu'
-                when cast(rulecode as string) like '9%' then 'other'
-                end as ttype,
-                amount,
-                ts from source_table
-    )t1
-    window w as (partition by ttype order by ts range between interval '20' second preceding and current row);
+    et,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.amount,0) xiaofei_amount,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.cd,0) xiaofei_cd,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.txn_dt,0) xiaofei_txn_dt,
+    if(mid_data_table_1.transtype='bangong',mid_data_table_1.amount,0) bangong_amount,
+    if(mid_data_table_1.transtype='bangong',mid_data_table_1.cd,0) bangong_cd,
+    if(mid_data_table_1.transtype='bangong',mid_data_table_1.ctxn_dt,0) bangong_txn_dt,
+    if(mid_data_table_1.transtype='xinzi',mid_data_table_1.amount,0) xinzi_amount,
+    if(mid_data_table_1.transtype='xinzi',mid_data_table_1.cd,0) xinzi_cd,
+    if(mid_data_table_1.transtype='xinzi',mid_data_table_1.txn_dt,0) xinzi_txn_dt,
+    if(mid_data_table_1.transtype='baoxian',mid_data_table_1.amount,0) baoxian_amount,
+    if(mid_data_table_1.transtype='baoxian',mid_data_table_1.cd,0) baoxian_cd,
+    if(mid_data_table_1.transtype='baoxian',mid_data_table_1.txn_dt,0) baoxian_txn_dt,
+    if(mid_data_table_1.transtype='touzi',mid_data_table_1.amount,0) touzi_amount,
+    if(mid_data_table_1.transtype='touzi',mid_data_table_1.cd,0) touzi_cd,
+    if(mid_data_table_1.transtype='touzi',mid_data_table_1.txn_dt,0) touzi_txn_dt,
+    if(mid_data_table_1.transtype='rongzi',mid_data_table_1.amount,0) rongzi_amount,
+    if(mid_data_table_1.transtype='rongzi',mid_data_table_1.cd,0) rongzi_cd,
+    if(mid_data_table_1.transtype='rongzi',mid_data_table_1.txn_dt,0) rongzi_txn_dt,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.amount,0) xiaofei_amount,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.cd,0) xiaofei_cd,
+    if(mid_data_table_1.transtype='xiaofei',mid_data_table_1.txn_dt,0) xiaofei_txn_dt,
+    if(mid_data_table_1.transtype='zhuanzhang',mid_data_table_1.amount,0) zhuanzhang_amount,
+    if(mid_data_table_1.transtype='zhuanzhang',mid_data_table_1.cd,0) zhuanzhang_cd,
+    if(mid_data_table_1.transtype='zhuanzhang',mid_data_table_1.txn_dt,0) zhuanzhang_txn_dt,
+    if(mid_data_table_1.transtype='cunqu',mid_data_table_1.amount,0) cunqu_amount,
+    if(mid_data_table_1.transtype='cunqu',mid_data_table_1.cd,0) cunqu_cd,
+    if(mid_data_table_1.transtype='cunqu',mid_data_table_1.txn_dt,0) cunqu_txn_dt,
+    if(mid_data_table_1.transtype='other',mid_data_table_1.amount,0) other_amount,
+    if(mid_data_table_1.transtype='other',mid_data_table_1.cd,0) other_cd
+    if(mid_data_table_1.transtype='other',mid_data_table_1.txn_dt,0) other_txn_dt
+from mid_data_table_1;
 
 
+
+
+
+--todo 创建1天的视图
 select
-    xiaofei_01,
-    xiaofei_02,
-    rongzi_01,
-    rongzi_02
-from (
-        select
-    'xiaofei',
-    count(eid) over w as xiaofei_01,
-    sum(amount) over w as xiaofei_02
-    from
-    ( select
-                cast(event_id as string) eid,
-                case
-                when cast(rulecode as string) like '1%' then 'xiaofei'
-                when cast(rulecode as string) like '2%' then 'bangong'
-                when cast(rulecode as string) like '3%' then 'xinzi'
-                when cast(rulecode as string) like '4%' then 'baoxian'
-                when cast(rulecode as string) like '5%' then 'touzi'
-                when cast(rulecode as string) like '6%' then 'rongzi'
-                when cast(rulecode as string) like '7%' then 'zhuanzhang'
-                when cast(rulecode as string) like '8%' then 'cunqu'
-                when cast(rulecode as string) like '9%' then 'other'
-                end as ttype,
-                amount,
-                ts from source_table) a1 where ttype='xiaofei'
-    window w as (order by ts range between interval '20' second preceding and current row)
-)t1 join (
-        select
-    'rongzi',
-    count(eid) over w as rongzi_01,
-    sum(amount) over w as rongzi_02
-    from
-    (select
-                cast(event_id as string) eid,
-                case
-                when cast(rulecode as string) like '1%' then 'xiaofei'
-                when cast(rulecode as string) like '2%' then 'bangong'
-                when cast(rulecode as string) like '3%' then 'xinzi'
-                when cast(rulecode as string) like '4%' then 'baoxian'
-                when cast(rulecode as string) like '5%' then 'touzi'
-                when cast(rulecode as string) like '6%' then 'rongzi'
-                when cast(rulecode as string) like '7%' then 'zhuanzhang'
-                when cast(rulecode as string) like '8%' then 'cunqu'
-                when cast(rulecode as string) like '9%' then 'other'
-                end as ttype,
-                amount,
-                ts from source_table) a2 where ttype='rongzi'
-    window w as (order by ts range between interval '20' second preceding and current row)
-)t2
--- 这是消费的数据
+        -- 消费相关
+        sum(if xiaofei_amount!=0,1,0) over w xiaofei_01,
+        sum(xiaofei_amount) over w xiaofei_02,
+        max (xiaofei_amount) over w xiaofei_03,
+        if(max (xiaofei_amount)!=0,1,0) over w xiaofei_04,
+        sum(if xiaofei_amount!=0,1,0)/1 over w   xiaofei_05,
+        sum(xiaofei_amount)/1  over w xiaofei_06,
+        0.5                     xiaofei_07,    
+        1                       xiaofei_08, 
+        1                       xiaofei_09, 
+        -- 办公相关
+        sum(if bangong_amount!=0,1,0) over w bangong_01,
+        sum(bangong_amount) over w bangong_02,
+        max (bangong_amount)over w bangong_03,
+        if(max (bangong_amount)!=0,1,0) over w bangong_04,
+        sum(if bangong_amount!=0,1,0)/1 over w  bangong_05,
+        sum(bangong_amount)/1 over w bangong_06,
+        0.5                     bangong_07,    
+        1                       bangong_08, 
+        1                       bangong_09, 
+        --薪资相关
+        sum(if xinzi_amount!=0,1,0) over w xinzi_01,
+        sum(xinzi_amount)over w xinzi_02,
+        max (xinzi_amount)over w xinzi_03,
+        if(max (xinzi_amount)!=0,1,0)over w xinzi_04,
+        sum(if xinzi_amount!=0,1,0)/1 over w  xinzi_05,
+        sum(xinzi_amount)/1 over w xinzi_06,
+        0.5                     xinzi_07,    
+        1                       xinzi_08, 
+        1                       xinzi_09, 
+        --保险相关
+        sum(if baoxian_amount!=0,1,0) over w baoxian_01,
+        sum(baoxian_amount)over w baoxian_02,
+        max (baoxian_amount)over w baoxian_03,
+        if(max (baoxian_amount)!=0,1,0)over w baoxian_04,
+        sum(if baoxian_amount!=0,1,0)/1 over w  baoxian_05,
+        sum(baoxian_amount)/1 over w baoxian_06,
+        0.5                     baoxian_07,    
+        1                       baoxian_08, 
+        1                       baoxian_09,     
+        --投资相关
+        sum(if touzi_amount!=0,1,0) over w touzi_01,
+        sum(touzi_amount)over w touzi_02,
+        max (touzi_amount)over w touzi_03,
+        if(max (touzi_amount)!=0,1,0)over w touzi_04,
+        sum(if touzi_amount!=0,1,0)/1 over w  touzi_05,
+        sum(touzi_amount)/1 over w  touzi_06,
+        0.5                     touzi_07,    
+        1                       touzi_08, 
+        1                       touzi_09,     
+        -- 融资相关
+        sum(if rongzi_amount!=0,1,0) over w rongzi_01,
+        sum(rongzi_amount) over w rongzi_02,
+        max (rongzi_amount) over w rongzi_03,
+        if(max (rongzi_amount)!=0,1,0)over w  rongzi_04,
+        sum(if rongzi_amount!=0,1,0)/1 over w  rongzi_05,
+        sum(rongzi_amount)/1 over w rongzi_06,
+        0.5                     rongzi_07,    
+        1                       rongzi_08, 
+        1                       rongzi_09,     
+        -- 转账相关
+        sum(if zhuanzhang_amount!=0,1,0) over w zhuanzhang_01,
+        sum(zhuanzhang_amount)over w zhuanzhang_02,
+        max (zhuanzhang_amount)over w zhuanzhang_03,
+        if(max (zhuanzhang_amount)!=0,1,0)over w zhuanzhang_04,
+        sum(if zhuanzhang_amount!=0,1,0)/1 over w  zhuanzhang_05,
+        sum(zhuanzhang_amount)/1 over w zhuanzhang_06,
+        0.5                     zhuanzhang_07,    
+        1                       zhuanzhang_08, 
+        1                       zhuanzhang_09,     
+        -- 存取相关
+        sum(if cunqu_amount!=0,1,0) over w cunqu_01,
+        sum(cunqu_amount) over w cunqu_02,
+        max (cunqu_amount) over w cunqu_03,
+        if(max (cunqu_amount)!=0,1,0)over w cunqu_04,
+        sum(if cunqu_amount!=0,1,0)/1 over w  cunqu_05,
+        sum(cunqu_amount)/1 over w cunqu_06,
+        0.5                     cunqu_07,    
+        1                       cunqu_08, 
+        1                       cunqu_09,     
+        -- 其他相关
+        sum(if other_amount!=0,1,0) over w other_01,
+        sum(other_amount) over w other_02,
+        max (other_amount) over w other_03,
+        if(max (other_amount)!=0,1,0) over w other_04,
+        sum(if other_amount!=0,1,0)/1 over w  other_05,
+        sum(other_amount)/1 over w other_06,
+        0.5                     other_07,    
+        1                       other_08, 
+        1                       other_09     
+from mid_data_table_2
+WINDOW w AS (PARTITION BY ttype order by et RANGE BETWEEN INTERVAL '1' DAY preceding AND CURRENT ROW);
+
+
+
+
+
+--todo 创建3天的视图
 select
-    'xiaofei',
-    count(eid) over w as xiaofei_01,
-    sum(amount) over w as xiaofei_02
-    from
-    ( select
-                cast(event_id as string) eid,
-                case
-                when cast(rulecode as string) like '1%' then 'xiaofei'
-                when cast(rulecode as string) like '2%' then 'bangong'
-                when cast(rulecode as string) like '3%' then 'xinzi'
-                when cast(rulecode as string) like '4%' then 'baoxian'
-                when cast(rulecode as string) like '5%' then 'touzi'
-                when cast(rulecode as string) like '6%' then 'rongzi'
-                when cast(rulecode as string) like '7%' then 'zhuanzhang'
-                when cast(rulecode as string) like '8%' then 'cunqu'
-                when cast(rulecode as string) like '9%' then 'other'
-                end as ttype,
-                amount,
-                ts from source_table) a1 where ttype='xiaofei'
-    window w as (order by ts range between interval '20' second preceding and current row);
--- 这是融资的数据
-select
-    'rongzi',
-    count(eid) over w as rongzi_01,
-    sum(amount) over w as rongzi_02
-    from
-    (select
-                cast(event_id as string) eid,
-                case
-                when cast(rulecode as string) like '1%' then 'xiaofei'
-                when cast(rulecode as string) like '2%' then 'bangong'
-                when cast(rulecode as string) like '3%' then 'xinzi'
-                when cast(rulecode as string) like '4%' then 'baoxian'
-                when cast(rulecode as string) like '5%' then 'touzi'
-                when cast(rulecode as string) like '6%' then 'rongzi'
-                when cast(rulecode as string) like '7%' then 'zhuanzhang'
-                when cast(rulecode as string) like '8%' then 'cunqu'
-                when cast(rulecode as string) like '9%' then 'other'
-                end as ttype,
-                amount,
-                ts from source_table) a2 where ttype='rongzi'
-    window w as (order by ts range between interval '20' second preceding and current row);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        et,
+-- 消费相关
+        sum(if xiaofei_amount!=0,1,0) over w xiaofei_10,
+        sum(xiaofei_amount) over w xiaofei_11,
+        max (xiaofei_amount) over w xiaofei_12,
+        count(distinct day(xiaofei_txn_dt)) over w xiaofei_13,
+        sum(if xiaofei_amount!=0,1,0)/3 over w   xiaofei_14,
+        sum(xiaofei_amount)/3  over w xiaofei_15,
+        0.5                     xiaofei_16,
+        3 xiaofei_17,
+        3 xiaofei_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') xiaofei_19,
+-- 办公相关
+        sum(if bangong_amount!=0,1,0) over w bangong_10,
+        sum(bangong_amount) over w bangong_11,
+        max (bangong_amount) over w bangong_12,
+        count(distinct day(bangong_txn_dt)) over w bangong_13,
+        sum(if bangong_amount!=0,1,0)/3 over w   bangong_14,
+        sum(bangong_amount)/3  over w bangong_15,
+        0.5                     bangong_16,
+        3 bangong_17,
+        3 bangong_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') bangong_19,
+--薪资相关
+        sum(if rongzi_amount!=0,1,0) over w rongzi_10,
+        sum(rongzi_amount) over w rongzi_11,
+        max (rongzi_amount) over w rongzi_12,
+        count(distinct day(rongzi_txn_dt)) over w rongzi_13,
+        sum(if rongzi_amount!=0,1,0)/3 over w   rongzi_14,
+        sum(rongzi_amount)/3  over w rongzi_15,
+        0.5                     rongzi_16,
+        3 rongzi_17,
+        3 rongzi_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') rongzi_19,
+--保险相关
+        sum(if baoxian_amount!=0,1,0) over w baoxian_10,
+        sum(baoxian_amount) over w baoxian_11,
+        max (baoxian_amount) over w baoxian_12,
+        count(distinct day(baoxian_txn_dt)) over w baoxian_13,
+        sum(if baoxian_amount!=0,1,0)/3 over w   baoxian_14,
+        sum(baoxian_amount)/3  over w baoxian_15,
+        0.5                     baoxian_16,
+        3 baoxian_17,
+        3 baoxian_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') baoxian_19,
+--投资相关
+        sum(if touzi_amount!=0,1,0) over w touzi_10,
+        sum(touzi_amount) over w touzi_11,
+        max (touzi_amount) over w touzi_12,
+        count(distinct day(touzi_txn_dt)) over w touzi_13,
+        sum(if touzi_amount!=0,1,0)/3 over w   touzi_14,
+        sum(touzi_amount)/3  over w touzi_15,
+        0.5                     touzi_16,
+        3 touzi_17,
+        3 touzi_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') touzi_19,
+--融资相关
+        sum(if rongzi_amount!=0,1,0) over w rongzi_10,
+        sum(rongzi_amount) over w rongzi_11,
+        max (rongzi_amount) over w rongzi_12,
+        count(distinct day(rongzi_txn_dt)) over w rongzi_13,
+        sum(if rongzi_amount!=0,1,0)/3 over w   rongzi_14,
+        sum(rongzi_amount)/3  over w rongzi_15,
+        0.5                     rongzi_16,
+        3 rongzi_17,
+        3 rongzi_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') rongzi_19,
+-- 转账相关
+        sum(if zhuanzhang_amount!=0,1,0) over w zhuanzhang_10,
+        sum(zhuanzhang_amount) over w zhuanzhang_11,
+        max (zhuanzhang_amount) over w zhuanzhang_12,
+        count(distinct day(zhuanzhang_txn_dt)) over w zhuanzhang_13,
+        sum(if zhuanzhang_amount!=0,1,0)/3 over w   zhuanzhang_14,
+        sum(zhuanzhang_amount)/3  over w zhuanzhang_15,
+        0.5                     zhuanzhang_16,
+        3 zhuanzhang_17,
+        3 zhuanzhang_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') zhuanzhang_19,
+-- 存取相关
+        sum(if cunqu_amount!=0,1,0) over w cunqu_10,
+        sum(cunqu_amount) over w cunqu_11,
+        max (cunqu_amount) over w cunqu_12,
+        count(distinct day(cunqu_txn_dt)) over w cunqu_13,
+        sum(if cunqu_amount!=0,1,0)/3 over w   cunqu_14,
+        sum(cunqu_amount)/3  over w cunqu_15,
+        0.5                     cunqu_16,
+        3 cunqu_17,
+        3 cunqu_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') cunqu_19,
+-- 其他相关
+        sum(if other_amount!=0,1,0) over w other_10,
+        sum(other_amount) over w other_11,
+        max (other_amount) over w other_12,
+        count(distinct day(other_txn_dt)) over w other_13,
+        sum(if other_amount!=0,1,0)/3 over w   other_14,
+        sum(other_amount)/3  over w other_15,
+        0.5                     other_16,
+        3 other_17,
+        3 other_18,
+        if(count(distinct day(txn_dt)) over w =3,'是','否') other_19
+from mid_data_table_2
+WINDOW w AS (PARTITION BY ttype order by et RANGE BETWEEN INTERVAL '3' DAY preceding AND CURRENT ROW);
 
 
 
