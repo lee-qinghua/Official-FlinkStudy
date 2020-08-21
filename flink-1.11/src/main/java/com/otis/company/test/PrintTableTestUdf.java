@@ -119,6 +119,15 @@ public class PrintTableTestUdf {
                 "        ) WITH (" +
                 "          'connector' = 'print'" +
                 "        )";
+
+        String print_table_8 = "" +
+                "create TABLE print_table_8(" +
+                " rulecode int," +
+                " amount1 int," +
+                " amount2 boolean" +
+                "        ) WITH (" +
+                "          'connector' = 'print'" +
+                "        )";
         tableEnv.executeSql(dataGenStr);
 //        tableEnv.executeSql(print_table);
 //        tableEnv.executeSql(print_table_1);
@@ -128,51 +137,27 @@ public class PrintTableTestUdf {
         tableEnv.executeSql(print_table_5);
         tableEnv.executeSql(print_table_7);
         tableEnv.executeSql(print_table_6);
+        tableEnv.executeSql(print_table_8);
 
-        String ab="insert into print_table_5 select\n" +
-                "    ts,\n" +
-                "    if(ttype='xiaofei',amount,0) xiaofei_amount,\n" +
-                "    if(ttype='bangong',amount,0) bangong_amount,\n" +
-                "    if(ttype='xinzi',amount,0) xinzi_amount,\n" +
-                "    if(ttype='baoxian',amount,0) baoxian_amount,\n" +
-                "    if(ttype='touzi',amount,0) touzi_amount,\n" +
-                "    if(ttype='rongzi',amount,0) rongzi_amount,\n" +
-                "    if(ttype='zhuanzhang',amount,0) zhuanzhang_amount,\n" +
-                "    if(ttype='cunqu',amount,0) cunqu_amount,\n" +
-                "    if(ttype='other',amount,0) other_amount\n" +
-                "from (" +
-                    " select\n" +
-                    "       case\n" +
-                    "       when cast(rulecode as string) like '1%' then 'xiaofei'\n" +
-                    "       when cast(rulecode as string) like '2%' then 'bangong'\n" +
-                    "       when cast(rulecode as string) like '3%' then 'xinzi'\n" +
-                    "       when cast(rulecode as string) like '4%' then 'baoxian'\n" +
-                    "       when cast(rulecode as string) like '5%' then 'touzi'\n" +
-                    "       when cast(rulecode as string) like '6%' then 'rongzi'\n" +
-                    "       when cast(rulecode as string) like '7%' then 'zhuanzhang'\n" +
-                    "       when cast(rulecode as string) like '8%' then 'cunqu'\n" +
-                    "       when cast(rulecode as string) like '9%' then 'other'\n" +
-                    "       end as ttype,\n" +
-                    "       amount,\n" +
-                    "       ts \n" +
-                "from source_table)t1";
-
-        String aa="insert into print_table_7 " +
-                "select\n" +
-                "rulecode,\n" +
-                "sum(amount) over (PARTITION BY rulecode order by ts RANGE BETWEEN INTERVAL '10' second preceding and current row) amo1 ,\n" +
-                "sum(amount) over (partition by rulecode order by ts RANGE between INTERVAL '20' second preceding and current row) \n" +
-                "from source_table" ;
-//                "window w1 as (PARTITION BY rulecode order by ts RANGE BETWEEN INTERVAL '10' second preceding and current row)\n" +
-//                "window w2 as (partition by rulecode order by ts RANGE between INTERVAL '20' second preceding and current row)";
-
-        String bb="insert into print_table_6 " +
-                "select\n" +
-                "rulecode,\n" +
-                "sum(amount) over w1 amo1 \n" +
-                "from source_table\n" +
-                "window w1 as (PARTITION BY rulecode order by ts RANGE BETWEEN INTERVAL '10' second preceding and current row)" ;
-
-        tableEnv.executeSql(aa);
+        String ca = "insert into print_table_8 select\n" +
+                "t1.rulecode,\n" +
+                "t1.amo as one_day_amount,\n" +
+                "t2.amo>t1.amo as two_day_amount\n" +
+                "from (\n" +
+                "        select\n" +
+                "            ts,\n" +
+                "            rulecode,\n" +
+                "            sum(amount) over (partition by rulecode order by ts range between interval '10' second preceding and current row) as amo\n" +
+                "        from source_table\n" +
+                ")t1,(\n" +
+                "        select\n" +
+                "            ts,\n" +
+                "            rulecode,\n" +
+                "            sum(amount) over (partition by rulecode order by ts range between interval '20' second preceding and current row)as amo\n" +
+                "        from source_table\n" +
+                ")t2\n" +
+                "where t1.ts=t2.ts and t1.rulecode=t2.rulecode\n" +
+                "      and t1.ts BETWEEN t2.ts - INTERVAL '1' second AND t2.ts + INTERVAL '1' second";
+        tableEnv.executeSql(ca);
     }
 }
