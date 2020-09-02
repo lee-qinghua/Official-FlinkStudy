@@ -1,4 +1,4 @@
-package com.otis.company.udfs.多进多出udtf;
+package com.otis.work.udfs.多进多出udtf;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.table.functions.TableAggregateFunction;

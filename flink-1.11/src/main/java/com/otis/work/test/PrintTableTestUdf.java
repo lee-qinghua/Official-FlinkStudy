@@ -1,4 +1,4 @@
-package com.otis.company.test;
+package com.otis.work.test;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

@@ -21,7 +21,7 @@ object LagFunctionTest {
     val settings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv = StreamTableEnvironment.create(env, settings)
 
-    val dataStream = env.socketTextStream("hadoop101", 7777)
+    val dataStream = env.socketTextStream("10.1.30.10", 7777)
       .map(x => {
         val arr = x.split(",")
         Stu(arr(0), arr(1).toInt, arr(2).toLong * 1000)

@@ -4,10 +4,10 @@ import org.apache.flink.table.functions.AggregateFunction;
 
 import java.util.LinkedList;
 
-public class DemoUdf extends AggregateFunction<Integer, PreviousValue> {
+public class PreviousUdf extends AggregateFunction<Integer, PreviousValue> {
     @Override
     public Integer getValue(PreviousValue accumulator) {
-        return  accumulator.queue.removeLast();
+        return accumulator.queue.removeLast();
     }
 
     @Override

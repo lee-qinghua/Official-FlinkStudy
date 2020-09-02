@@ -1,4 +1,4 @@
-package com.otis.company.udfs;
+package com.otis.work.date20200804消费码值对应udf;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.table.functions.ScalarFunction;
