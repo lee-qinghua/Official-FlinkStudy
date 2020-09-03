@@ -32,12 +32,16 @@ public class MyFunction extends AggregateFunction<String, Result> {
 
     @Override
     public String getValue(Result result) {
+        System.out.println("添加元素之后的队列长度为： " + result.queue.size());
+//        for (Integer integer : result.queue) {
+//            System.out.println("队列中的元素为：=====================" + integer);
+//        }
         //取出队列中的数据,计算各个指标,最后拼接成一个字符串返回
         LinkedList<Integer> list = result.queue;
         //队列当前的长度
         int size = list.size();
         //当前值
-        Integer cur_value = list.peekFirst();
+        Integer cur_value = list.peekLast();
         //默认值
         Integer defaultValue = result.defaultValue;
         //拼接返回的结果
@@ -57,6 +61,7 @@ public class MyFunction extends AggregateFunction<String, Result> {
         } catch (Exception e) {
             two_list.add(defaultValue);
         }
+
 
         if (two_list.contains(defaultValue)) {
             for (int i = 0; i < 5; i++) {
@@ -222,14 +227,10 @@ public class MyFunction extends AggregateFunction<String, Result> {
         acc.defaultValue = defaultValue;
 
         int queeSize = acc.queue.size();
-
-        if (queeSize < 11) {
-            acc.queue.addFirst(value);
-        } else {
-            acc.queue.pollLast();
-            acc.queue.addFirst(value);
+        if (queeSize == 11) {
+            acc.queue.pollFirst();
         }
-
+        acc.queue.add(value);
     }
 
 }
