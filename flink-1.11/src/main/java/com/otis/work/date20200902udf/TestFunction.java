@@ -1,4 +1,4 @@
-package com.otis.work.date20200902多进多出udf;
+package com.otis.work.date20200902udf;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;

@@ -1,48 +1,8 @@
-package com.otis.work.date20200902多进多出udf;
+package com.otis.work.date20200902udf;
 
 import org.apache.flink.table.functions.AggregateFunction;
 
 import java.util.*;
-
-/**
- * //把所有的值放到一个集合中
- * List<Integer> values = new ArrayList<>();
- * int sum = 0;
- * for (Integer value : values) {
- * sum += value;
- * }
- * StringBuilder builder = new StringBuilder();
- * builder.append(sum).append(result.queue.peekFirst());
- * return builder.toString();
- */
-class Result {
-    public LinkedList<Integer> queue;
-    public Integer defaultValue;
-
-    public Result() {
-    }
-
-    public Result(LinkedList<Integer> queue, Integer defaultValue) {
-        this.queue = queue;
-        this.defaultValue = defaultValue;
-    }
-
-    public LinkedList<Integer> getQueue() {
-        return queue;
-    }
-
-    public void setQueue(LinkedList<Integer> queue) {
-        this.queue = queue;
-    }
-
-    public Integer getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(Integer defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-}
 
 public class MyFunction extends AggregateFunction<String, Result> {
     //求list中的平均值
