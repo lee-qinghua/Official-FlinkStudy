@@ -4,6 +4,7 @@ import org.apache.flink.table.functions.AggregateFunction;
 
 import java.util.*;
 
+
 public class MyFunction extends AggregateFunction<String, Result> {
     //求list中的平均值
     public double avgAmount(List<Integer> list) {
@@ -28,6 +29,11 @@ public class MyFunction extends AggregateFunction<String, Result> {
         }
         fangchaSum += (curValue - avg) * (curValue - avg);
         return Math.sqrt(fangchaSum / (list.size() + 1));
+    }
+
+
+    public void retract(Result acc, int value, int defaultValue) {
+
     }
 
     @Override
@@ -232,5 +238,4 @@ public class MyFunction extends AggregateFunction<String, Result> {
         }
         acc.queue.add(value);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.otis.test;
 
-import java.sql.SQLOutput;
 import java.util.LinkedList;
 
 public class A {

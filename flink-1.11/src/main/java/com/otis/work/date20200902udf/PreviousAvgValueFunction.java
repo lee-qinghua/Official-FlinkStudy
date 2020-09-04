@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 
 /**
- * Previous aggregate function.
+ * 刘旭写的udf
  */
 public abstract class PreviousAvgValueFunction<T> extends AggregateFunction<Double, PreviousAvgValueFunction.PreviousAvgValue<Double>> {
 
