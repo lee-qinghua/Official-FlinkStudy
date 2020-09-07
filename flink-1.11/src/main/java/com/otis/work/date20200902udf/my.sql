@@ -14,7 +14,7 @@ CREATE TABLE source_table_1 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'qinghua001_source_table_1',
+      'topic' = 'qinghua002_source_table',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -154,8 +154,8 @@ where c.card_num=d.card_num and c.et=d.et
 and c.et BETWEEN d.et - INTERVAL '2' second AND d.et + INTERVAL '2' second;
 
 -- mid_table_2 和1天join
-create view mid_table_3 as
--- insert into haha
+-- create view mid_table_3 as
+insert into haha
 select
     e.card_num as card_num,
     e.ten_min_count as ten_min_count,
