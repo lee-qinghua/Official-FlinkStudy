@@ -1,6 +1,5 @@
 
--- source表
-CREATE TABLE source_table_1 (
+CREATE TABLE source_table_2 (
       event_id STRING ,
       transtype string,
       amount BIGINT,
