@@ -1,5 +1,5 @@
 -- source表
-CREATE TABLE qinghua_source_table_1 (
+CREATE TABLE qinghua_source_table_a02 (
       event_id string ,
       card_num string,
       transtype string,
@@ -14,7 +14,7 @@ CREATE TABLE qinghua_source_table_1 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'qinghua002_source_table',
+      'topic' = 'qinghua002_source_table_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -22,7 +22,7 @@ CREATE TABLE qinghua_source_table_1 (
       'scan.startup.mode' = 'latest-offset'
       );
 -- sink表
-create table qinghua_sink_table_1(
+create table qinghua_sink_table_a02(
     card_num STRING,
     ten_min_count BIGINT,
     ten_min_avg BIGINT,
@@ -54,7 +54,7 @@ create table qinghua_sink_table_1(
 )
 WITH (
       'connector' = 'kafka',
-      'topic' = 'otis_test_sink_table',
+      'topic' = 'otis_test_sink_table_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -63,10 +63,10 @@ WITH (
       );
 
 --注册所需的udf
-create function transamount_udaf as 'com.otis.work.date20200902udf.MyFunction';
+-- create function transamount_udaf as 'com.otis.work.date20200902udf.MyFunction';
 
 -- todo 创建四个kafka table
-CREATE TABLE kafka_table_1 (
+CREATE TABLE kafka_table_1_a02 (
        card_num STRING,
        ts BIGINT,
        mcount BIGINT ,
@@ -95,7 +95,7 @@ CREATE TABLE kafka_table_1 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_1',
+      'topic' = 'kafka_table_1_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -104,7 +104,7 @@ CREATE TABLE kafka_table_1 (
       );
 
 -- 10分钟的相关数据
-insert into kafka_table_1
+insert into kafka_table_1_a02
 select
     card_num,
     ts,
@@ -132,11 +132,11 @@ select
          when use_method_cd='003' then '线上银行自由渠道'
          when use_method_cd='004' then '线下POS刷卡' end as trans_type,
     if(amount>20000,'是','否')                           as is_overconsume -- todo 授信额度80%还没有加上，授信额度字段不知道
-from qinghua_source_table_1
+from qinghua_source_table_a02
 window w as (partition by card_num order by et range between interval '10' minute preceding and current row);
 
 -- 30分钟的相关数据
-CREATE TABLE kafka_table_2 (
+CREATE TABLE kafka_table_2_a02 (
        card_num STRING,
        ts BIGINT,
        mcount BIGINT ,
@@ -146,7 +146,7 @@ CREATE TABLE kafka_table_2 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_2',
+      'topic' = 'kafka_table_2_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -154,16 +154,16 @@ CREATE TABLE kafka_table_2 (
       'scan.startup.mode' = 'latest-offset'
       );
 
-insert into kafka_table_2
+insert into kafka_table_2_a02
 select
     card_num,
     ts,
     count(txn_cd) over w as mcount,
     avg(amount) over w as avgamount
-from qinghua_source_table_1
+from qinghua_source_table_a02
 window w as (partition by card_num order by et range between interval '30' minute preceding and current row);
 -- 1小时的相关数据
-CREATE TABLE kafka_table_3 (
+CREATE TABLE kafka_table_3_a02 (
        card_num STRING,
        ts BIGINT,
        mcount BIGINT ,
@@ -173,7 +173,7 @@ CREATE TABLE kafka_table_3 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_3',
+      'topic' = 'kafka_table_3_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -181,17 +181,17 @@ CREATE TABLE kafka_table_3 (
       'scan.startup.mode' = 'latest-offset'
       );
 
-insert into kafka_table_3
+insert into kafka_table_3_a02
 select
     card_num,
     ts,
     count(txn_cd) over w as mcount,
     avg(amount) over w as avgamount
-from qinghua_source_table_1
+from qinghua_source_table_a02
 window w as (partition by card_num order by et range between interval '1' hour preceding and current row);
 -- 1天的相关数据
 
-CREATE TABLE kafka_table_4 (
+CREATE TABLE kafka_table_4_a02 (
        card_num STRING,
        ts BIGINT,
        mcount BIGINT ,
@@ -201,7 +201,7 @@ CREATE TABLE kafka_table_4 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_4',
+      'topic' = 'kafka_table_4_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -209,19 +209,19 @@ CREATE TABLE kafka_table_4 (
       'scan.startup.mode' = 'latest-offset'
       );
 
-insert into kafka_table_4
+insert into kafka_table_4_a02
 select
     card_num,
     ts,
     count(txn_cd) over w as mcount,
     avg(amount) over w as avgamount
-from qinghua_source_table_1
+from qinghua_source_table_a02
 window w as (partition by card_num order by et range between interval '1' day preceding and current row);
 
 
 -- todo 四个view进行join总结到一张表中
 -- 10分钟和30分钟join
-CREATE TABLE kafka_table_5 (
+CREATE TABLE kafka_table_5_a02 (
        card_num STRING,
        ts BIGINT,
        ten_min_count BIGINT ,
@@ -252,14 +252,14 @@ CREATE TABLE kafka_table_5 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_5',
+      'topic' = 'kafka_table_5_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
       'format' = 'json',
       'scan.startup.mode' = 'latest-offset'
       );
-insert into kafka_table_5
+insert into kafka_table_5_a02
 select
     a.card_num as card_num,
     a.ts as ts,
@@ -286,14 +286,14 @@ select
     a.is_sundaymorning as   is_sundaymorning,
     a.trans_type as         trans_type,
     a.is_overconsume as     is_overconsume
-from kafka_table_1 a,kafka_table_2 b
+from kafka_table_1_a02 a,kafka_table_2_a02 b
 where a.card_num=b.card_num
 and a.et BETWEEN b.et - INTERVAL '0' second AND b.et + INTERVAL '2' second;
 
 
 
 -- 上次结果和1小时join
-CREATE TABLE kafka_table_6 (
+CREATE TABLE kafka_table_6_a02 (
        card_num STRING,
        ts BIGINT,
        ten_min_count BIGINT ,
@@ -328,7 +328,7 @@ CREATE TABLE kafka_table_6 (
     )
     WITH (
       'connector' = 'kafka',
-      'topic' = 'kafka_table_6',
+      'topic' = 'kafka_table_6_a02',
       'properties.group.id'='dev_flink',
       'properties.zookeeper.connect'='10.1.30.6:2181',
       'properties.bootstrap.servers' = '10.1.30.8:9092',
@@ -336,7 +336,7 @@ CREATE TABLE kafka_table_6 (
       'scan.startup.mode' = 'latest-offset'
       );
 
-insert into kafka_table_6
+insert into kafka_table_6_a02
 select
     c.card_num as card_num,
     c.ts as ts,
@@ -365,13 +365,13 @@ select
     c.is_sundaymorning as   is_sundaymorning,
     c.trans_type as         trans_type,
     c.is_overconsume as     is_overconsume
-from kafka_table_5 c,kafka_table_3 d
+from kafka_table_5_a02 c,kafka_table_3_a02 d
 where c.card_num=d.card_num
 and c.et BETWEEN d.et - INTERVAL '2' second AND d.et + INTERVAL '2' second;
 
 -- mid_table_2 和1天join
 -- create view mid_table_3 as
-insert into qinghua_sink_table_1
+insert into qinghua_sink_table_a02
 select
     e.card_num as card_num,
     e.ten_min_count as ten_min_count,
@@ -401,6 +401,6 @@ select
     e.is_sundaymorning as   is_sundaymorning,
     e.trans_type as         trans_type,
     e.is_overconsume as     is_overconsume
-from kafka_table_6 as e,kafka_table_4 as f
+from kafka_table_6_a02 as e,kafka_table_4_a02 as f
 where e.card_num=f.card_num
 and e.et between f.et - interval '2' second and f.et + interval '2' second;
