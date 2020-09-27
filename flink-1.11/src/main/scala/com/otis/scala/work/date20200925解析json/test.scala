@@ -11,7 +11,7 @@ object test {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val bsSettings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv = StreamTableEnvironment.create(env, bsSettings)
-    val ods_table=
+    val ods_table =
       """
         |create table ods_table(
         |PRH ROW(PA01 ROW(
@@ -106,12 +106,16 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
+        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
         |'format' = 'json'
         |)
         |""".stripMargin
     tableEnv.executeSql(ods_table)
-    tableEnv.sqlQuery(
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUERYREQ
+    //===========================================================================================================================================
+
+    val ICR_QUERYREQ_table = tableEnv.sqlQuery(
       """
         |select
         |PRH.PA01.PA01A.PA01AI01 as report_id,
@@ -124,7 +128,38 @@ object test {
         |PRH.PA01.PA01B.PA01BD02 as query_reason_cd,
         |'2020-09-27'            as STATISTICS_DT
         |from ods_table
-        |""".stripMargin).toAppendStream[Row].print()
+        |""".stripMargin)
+
+//    ICR_QUERYREQ_table.toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_OTHER_IDEN_NUM
+    //===========================================================================================================================================
+    val ICR_OTHER_IDEN_NUM_table = tableEnv.sqlQuery(
+      """
+        |select
+        |PRH.PA01.PA01A.PA01AI01 as report_id,
+        |PRH.PA01.PA01C.PA01CS01 as iden_type_num,
+        |'2020-09-27'            as STATISTICS_DT
+        |from ods_table
+        |""".stripMargin)
+//    ICR_OTHER_IDEN_NUM_table.toAppendStream[Row].print()
+
+//    val ICR_OTHER_IDEN= tableEnv.sqlQuery(
+//      """
+//        |select
+//        |PA01CD01				as iden_cd,
+//        |PA01CI01				as iden_id
+//        |from ods_table,
+//        |unnest(ods_table.PRH.PA01.PA01C.PA01CH) as t(PA01CD01,PA01CI01)
+//        |""".stripMargin)
+
+    val ICR_OTHER_IDEN= tableEnv.sqlQuery(
+      """
+        |select
+        |t.a				as iden_cd
+        |from ods_table,unnest(PRH.PA01.PA01C.PA01CH) as  t(a,b)
+        |""".stripMargin)
+    ICR_OTHER_IDEN.toAppendStream[Row].print()
     env.execute()
   }
 }
