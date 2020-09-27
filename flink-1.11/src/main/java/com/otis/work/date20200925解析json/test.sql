@@ -1,29 +1,4 @@
 
-
-
-
-
-{
-    "data":{
-        "data":{
-            "mac_value":0,
-            "ad_name":2056,
-            "voice":75,
-            "dataTimeStamp":1598522106830
-        },
-        "type":3,
-        "deviceId":"001C92F7DCd85A"
-    },
-    "timestamp":1598522106835,
-    "type":1
-}
-
-
-
-
-
-
-
 CREATE TABLE t_1144_1 (
    -- 最主要的是这行,定义类型为ROW
    `data` ROW(deviceId string,`data` ROW(mac_value string,ad_name string,voice string,dataTimeStamp string)),
