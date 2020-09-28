@@ -1,3 +1,237 @@
+
+
+select
+PRH.PA01.PA01A.PA01AI01 as report_id,
+PRH.PA01.PA01D.PA01DQ01 as fraud_cd,
+PRH.PA01.PA01D.PA01DQ02 as fraud_tel,
+PRH.PA01.PA01D.PA01DR01 as fraud_start_dt,
+PRH.PA01.PA01D.PA01DR02 as fraud_end_dt,
+cast(PRH.PA01.PA01E.PA01ES01 as bigint) as objection_num,
+'2020-09-27'            as STATISTICS_DT
+from ods_table;
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PIM.PB01.PB01A.PB01AD01                 as gender_cd,
+PIM.PB01.PB01A.PB01AR01                 as birth_date,
+PIM.PB01.PB01A.PB01AD02                 as edu_level_cd,
+PIM.PB01.PB01A.PB01AD03                 as edu_degree_cd,
+PIM.PB01.PB01A.PB01AD04                 as employment_cd,
+PIM.PB01.PB01A.PB01AQ01                 as email,
+PIM.PB01.PB01A.PB01AQ02                 as comm_addr,
+PIM.PB01.PB01A.PB01AD05                 as nationality,
+PIM.PB01.PB01A.PB01AQ03                 as reg_addr,
+cast(PIM.PB01.PB01B.PB01AQ03 as bigint) as tel_cnt,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+
+select
+t1.report_id                            as report_id,
+info.PB01BQ01                           as tel_num,
+info.PB01BR01                           as update_dt,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+SELECT
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PIM.PB01.PB01B.PB01BH                   as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+FROM ods_table)t1,unnest(t1.data) as cloumn(PB01BQ01,PB01BR01)
+
+
+
+
+SELECT
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PMM.PB02.PB020D01                       as marital_stat_cd,
+PMM.PB02.PB020Q01                       as spo_name,
+PMM.PB02.PB020D02                       as spo_iden_cd,
+PMM.PB02.PB020I01                       as spo_iden_id,
+PMM.PB02.PB020Q02                       as spo_unit,
+PMM.PB02.PB020Q03                       as spo_tel_num,
+'2020-09-27'                            as STATISTICS_DT
+FROM ods_table
+
+PRM ROW(PB03 ARRAY<ROW(PB030D01 STRING,PB030Q01 STRING,PB030Q02 STRING,PB030R01 STRING)>)
+
+
+select
+t1.report_id                            as report_id,
+info.PB030D01                           as res_cd,
+info.PB030Q01                           as res_addr,
+info.PB030Q02                           as res_tel,
+info.PB030R01                           as res_update_dt,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from
+(
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PRM.PB03                                as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)
+
+
+
+
+
+
+select
+t1.report_id                            as report_id,
+info.PB040D01                           as work_situation,
+info.PB040Q01                           as work_unit,
+info.PB040D02                           as unit_property_cd,
+info.PB040D03                           as industry_cd,
+info.PB040Q02                           as unit_addr,
+info.PB040Q03                           as unit_tel,
+info.PB040D04                           as occupation_cd,
+info.PB040D05                           as position_cd,
+info.PB040D06                           as title_cd,
+info.PB040R01                           as int_year,
+info.PB040R02                           as pro_update_date,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from
+(
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+POM.PB04                                as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02)
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PSM.PC01.PC010Q01                       as score,
+PSM.PC01.PC010Q02                       as score_level,
+PSM.PC01.PC010S01                       as score_desc_num,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PSM.PC01.PC010D01                       as score_cd,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02A.PC02AS01                 as acct_total_cnt,
+PCO.PC02.PC02A.PC02AS02                 as busi_type_num,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+
+
+select
+t1.report_id                            as report_id,
+info.PC02AD01                           as busi_type_cd,
+info.PC02AD02                           as busi_kind_cd,
+info.PC02AS03                           as acct_cnt,
+info.PC02AR01                           as first_mon,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from
+(select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02A.PC02AH                   as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table)t1,unest(t1.data) as info(PC02AD01,PC02AD02,PC02AS03,PC02AR01)
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02B.PC02BS01                 as rec_total_cnt,
+PCO.PC02.PC02B.PC02BJ01                 as rec_total_bal,
+PCO.PC02.PC02B.PC02BS02                 as rec_type_num,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+
+
+
+select
+t1.report_id                            as report_id,
+info.PC02BD01                           as rec_type_cd,
+cast(info.PC02BS03 as bigint)           as rec_acct_cnt,
+cast(info.PC02BJ02 as decimal(18,2))    as rec_bal,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from (
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02B.PC02BH                   as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02)
+
+
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                         as report_id,
+cast(PCO.PC02.PC02C.PC02CS01 as bigint)         as deadacct_cnt,
+cast(PCO.PC02.PC02C.PC02CJ01 as decimal(18,2))  as deadacct_bal,
+'2020-09-27'                                    as STATISTICS_DT
+from ods_table
+
+
+
+
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+cast(PCO.PC02D.PC02DS01 as bigint)      as ove_type_num,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+
+PCO ROW(PC02 ROW(
+                  PC02A ROW(PC02AS01 STRING,PC02AS02 STRING,PC02AH ARRAY<ROW(PC02AD01 STRING,PC02AD02 STRING,PC02AS03 STRING,PC02AR01 STRING)>),
+                  PC02B ROW(PC02BS01 STRING,PC02BJ01 STRING,PC02BS02 STRING,PC02BH ARRAY<ROW(PC02BD01 STRING,PC02BS03 STRING,PC02BJ02 STRING)>),
+                  PC02C ROW(PC02CS01 STRING,PC02CJ01 STRING),
+                  PC02D ROW(PC02DS01 STRING,PC02DH ARRAY<ROW(PC02DD01 STRING,PC02DS02 STRING,PC02DS03 STRING,PC02DJ01 STRING,PC02DS04 STRING)>),
+
+
+select
+t1.report_id                            as report_id,
+info.PC02DD01                           as ove_type_cd,
+info.PC02DS02                           as ove_acct_cnt,
+info.PC02DS03                           as ove_mon_num,
+info.PC02DJ01                           as ove_bal,
+info.PC02DS04                           as ove_mon,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02D.PC02DH                   as data,
+PRH.PA01.PA01A.PA01AI01                 as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)
+
+
+
+
+
+
+
+
 -- todo ICR_QUERYREQ
 
 

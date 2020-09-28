@@ -1,0 +1,574 @@
+ //===========================================================================================================================================
+//                                                          todo ICR_QUERYREQ
+ //===========================================================================================================================================
+val ICR_QUERYREQ=
+createView(tableEnv,ICR_QUERYREQ,"ICR_QUERYREQ")
+//    tableEnv.sqlQuery("select * from ICR_QUERYREQ").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUERY_RECORD
+ //===========================================================================================================================================
+val ICR_QUERY_RECORD=
+createView(tableEnv,ICR_QUERY_RECORD,"ICR_QUERY_RECORD")
+//    tableEnv.sqlQuery("select * from ICR_QUERY_RECORD").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OTHER_DECLARE
+ //===========================================================================================================================================
+val ICR_OTHER_DECLARE=
+createView(tableEnv,ICR_OTHER_DECLARE,"ICR_OTHER_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_OTHER_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OTHER_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_OTHER_DECLARE_NUM=
+createView(tableEnv,ICR_OTHER_DECLARE_NUM,"ICR_OTHER_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_OTHER_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REWARD_DECLARE
+ //===========================================================================================================================================
+val ICR_REWARD_DECLARE=
+createView(tableEnv,ICR_REWARD_DECLARE,"ICR_REWARD_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REWARD_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_REWARD_DECLARE_NUM=
+createView(tableEnv,ICR_REWARD_DECLARE_NUM,"ICR_REWARD_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REWARD
+ //===========================================================================================================================================
+val ICR_REWARD=
+createView(tableEnv,ICR_REWARD,"ICR_REWARD")
+//    tableEnv.sqlQuery("select * from ICR_REWARD").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUALIFICATION_DECLARE
+ //===========================================================================================================================================
+val ICR_QUALIFICATION_DECLARE=
+createView(tableEnv,ICR_QUALIFICATION_DECLARE,"ICR_QUALIFICATION_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_QUALIFICATION_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUALFICATION_DECL_NUM
+ //===========================================================================================================================================
+val ICR_QUALFICATION_DECL_NUM=
+createView(tableEnv,ICR_QUALFICATION_DECL_NUM,"ICR_QUALFICATION_DECL_NUM")
+//    tableEnv.sqlQuery("select * from ICR_QUALFICATION_DECL_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUALIFICATION
+ //===========================================================================================================================================
+val ICR_QUALIFICATION=
+createView(tableEnv,ICR_QUALIFICATION,"ICR_QUALIFICATION")
+//    tableEnv.sqlQuery("select * from ICR_QUALIFICATION").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ALLOWANCE_DECLARE
+ //===========================================================================================================================================
+val ICR_ALLOWANCE_DECLARE=
+createView(tableEnv,ICR_ALLOWANCE_DECLARE,"ICR_ALLOWANCE_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ALLOWANCE_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_ALLOWANCE_DECLARE_NUM=
+createView(tableEnv,ICR_ALLOWANCE_DECLARE_NUM,"ICR_ALLOWANCE_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ALLOWANCE
+ //===========================================================================================================================================
+val ICR_ALLOWANCE=
+createView(tableEnv,ICR_ALLOWANCE,"ICR_ALLOWANCE")
+//    tableEnv.sqlQuery("select * from ICR_ALLOWANCE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_HOUSINGFUND_DECLARE
+ //===========================================================================================================================================
+val ICR_HOUSINGFUND_DECLARE=
+createView(tableEnv,ICR_HOUSINGFUND_DECLARE,"ICR_HOUSINGFUND_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_HOUSINGFUND_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_HOUSINGFUND_DECLARE_NUM=
+createView(tableEnv,ICR_HOUSINGFUND_DECLARE_NUM,"ICR_HOUSINGFUND_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_HOUSINGFUND
+ //===========================================================================================================================================
+val ICR_HOUSINGFUND=
+createView(tableEnv,ICR_HOUSINGFUND,"ICR_HOUSINGFUND")
+//    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ADMINPUNISHMENT_DECLARE
+ //===========================================================================================================================================
+val ICR_ADMINPUNISHMENT_DECLARE=
+createView(tableEnv,ICR_ADMINPUNISHMENT_DECLARE,"ICR_ADMINPUNISHMENT_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_ADMINPUNISHMENT_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_PUNISHMENT_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_PUNISHMENT_DECLARE_NUM=
+createView(tableEnv,ICR_PUNISHMENT_DECLARE_NUM,"ICR_PUNISHMENT_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_PUNISHMENT_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ADMINPUNISHMENT
+ //===========================================================================================================================================
+val ICR_ADMINPUNISHMENT=
+createView(tableEnv,ICR_ADMINPUNISHMENT,"ICR_ADMINPUNISHMENT")
+//    tableEnv.sqlQuery("select * from ICR_ADMINPUNISHMENT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ENFORCEMENT_DECLARE
+ //===========================================================================================================================================
+val ICR_ENFORCEMENT_DECLARE=
+createView(tableEnv,ICR_ENFORCEMENT_DECLARE,"ICR_ENFORCEMENT_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_ENFORCEMENT_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ENFORCEMENT_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_ENFORCEMENT_DECLARE_NUM=
+createView(tableEnv,ICR_ENFORCEMENT_DECLARE_NUM,"ICR_ENFORCEMENT_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_ENFORCEMENT_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ENFORCEMENT
+ //===========================================================================================================================================
+val ICR_ENFORCEMENT=
+createView(tableEnv,ICR_ENFORCEMENT,"ICR_ENFORCEMENT")
+//    tableEnv.sqlQuery("select * from ICR_ENFORCEMENT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CIVIL_JUDGEMENT_DECLARE
+ //===========================================================================================================================================
+val ICR_CIVIL_JUDGEMENT_DECLARE=
+createView(tableEnv,ICR_CIVIL_JUDGEMENT_DECLARE,"ICR_CIVIL_JUDGEMENT_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_CIVIL_JUDGEMENT_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CIV_JUDGE_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_CIV_JUDGE_DECLARE_NUM=
+createView(tableEnv,ICR_CIV_JUDGE_DECLARE_NUM,"ICR_CIV_JUDGE_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_CIV_JUDGE_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CIVIL_JUDGEMENT
+ //===========================================================================================================================================
+val ICR_CIVIL_JUDGEMENT=
+createView(tableEnv,ICR_CIVIL_JUDGEMENT,"ICR_CIVIL_JUDGEMENT")
+//    tableEnv.sqlQuery("select * from ICR_CIVIL_JUDGEMENT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_TAX_DECLARE
+ //===========================================================================================================================================
+val ICR_TAX_DECLARE=
+createView(tableEnv,ICR_TAX_DECLARE,"ICR_TAX_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_TAX_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_TAX_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_TAX_DECLARE_NUM=
+createView(tableEnv,ICR_TAX_DECLARE_NUM,"ICR_TAX_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_TAX_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_TAX_INFO
+ //===========================================================================================================================================
+val ICR_TAX_INFO=
+createView(tableEnv,ICR_TAX_INFO,"ICR_TAX_INFO")
+//    tableEnv.sqlQuery("select * from ICR_TAX_INFO").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_POSTPAID_DECLARE
+ //===========================================================================================================================================
+val ICR_POSTPAID_DECLARE=
+createView(tableEnv,ICR_POSTPAID_DECLARE,"ICR_POSTPAID_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_POSTPAID_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_POSTPAID_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_POSTPAID_DECLARE_NUM=
+createView(tableEnv,ICR_POSTPAID_DECLARE_NUM,"ICR_POSTPAID_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_POSTPAID_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_POSTPAID_INFO
+ //===========================================================================================================================================
+val ICR_POSTPAID_INFO=
+createView(tableEnv,ICR_POSTPAID_INFO,"ICR_POSTPAID_INFO")
+//    tableEnv.sqlQuery("select * from ICR_POSTPAID_INFO").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REPAYMENTDUTY_DECL
+ //===========================================================================================================================================
+val ICR_REPAYMENTDUTY_DECL=
+createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL")
+//    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REPAYMENTDUTY_DECL_NUM
+ //===========================================================================================================================================
+val ICR_REPAYMENTDUTY_DECL_NUM=
+createView(tableEnv,ICR_REPAYMENTDUTY_DECL_NUM,"ICR_REPAYMENTDUTY_DECL_NUM")
+//    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REPAYMENTDUTY_INFO
+ //===========================================================================================================================================
+val ICR_REPAYMENTDUTY_INFO=
+createView(tableEnv,ICR_REPAYMENTDUTY_INFO,"ICR_REPAYMENTDUTY_INFO")
+//    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_INFO").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_AGREEMENT_DECLARE
+ //===========================================================================================================================================
+val ICR_AGREEMENT_DECLARE=
+createView(tableEnv,ICR_AGREEMENT_DECLARE,"ICR_AGREEMENT_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_AGREEMENT_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_AGREEMENT_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_AGREEMENT_DECLARE_NUM=
+createView(tableEnv,ICR_AGREEMENT_DECLARE_NUM,"ICR_AGREEMENT_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_AGREEMENT_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CREDIT_AGREEMENT
+ //===========================================================================================================================================
+val ICR_CREDIT_AGREEMENT=
+createView(tableEnv,ICR_CREDIT_AGREEMENT,"ICR_CREDIT_AGREEMENT")
+//    tableEnv.sqlQuery("select * from ICR_CREDIT_AGREEMENT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_DECLARE
+ //===========================================================================================================================================
+val ICR_LOAN_DECLARE=
+createView(tableEnv,ICR_LOAN_DECLARE,"ICR_LOAN_DECLARE")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_DECLARE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_DECLARE_NUM
+ //===========================================================================================================================================
+val ICR_LOAN_DECLARE_NUM=
+createView(tableEnv,ICR_LOAN_DECLARE_NUM,"ICR_LOAN_DECLARE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_DECLARE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LARGE_INSTALMENTS
+ //===========================================================================================================================================
+val ICR_LARGE_INSTALMENTS=
+createView(tableEnv,ICR_LARGE_INSTALMENTS,"ICR_LARGE_INSTALMENTS")
+//    tableEnv.sqlQuery("select * from ICR_LARGE_INSTALMENTS").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LARGE_INSTALMENTS_NUM
+ //===========================================================================================================================================
+val ICR_LARGE_INSTALMENTS_NUM=
+createView(tableEnv,ICR_LARGE_INSTALMENTS_NUM,"ICR_LARGE_INSTALMENTS_NUM")
+//    tableEnv.sqlQuery("select * from ICR_LARGE_INSTALMENTS_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SPECIAL_EVENT
+ //===========================================================================================================================================
+val ICR_SPECIAL_EVENT=
+createView(tableEnv,ICR_SPECIAL_EVENT,"ICR_SPECIAL_EVENT")
+//    tableEnv.sqlQuery("select * from ICR_SPECIAL_EVENT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SPECIAL_EVENT_NUM
+ //===========================================================================================================================================
+val ICR_SPECIAL_EVENT_NUM=
+createView(tableEnv,ICR_SPECIAL_EVENT_NUM,"ICR_SPECIAL_EVENT_NUM")
+//    tableEnv.sqlQuery("select * from ICR_SPECIAL_EVENT_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SPECIAL_TXN
+ //===========================================================================================================================================
+val ICR_SPECIAL_TXN=
+createView(tableEnv,ICR_SPECIAL_TXN,"ICR_SPECIAL_TXN")
+//    tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SPECIAL_TXN_NUM
+ //===========================================================================================================================================
+val ICR_SPECIAL_TXN_NUM=
+createView(tableEnv,ICR_SPECIAL_TXN_NUM,"ICR_SPECIAL_TXN_NUM")
+//    tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_5YEARS
+ //===========================================================================================================================================
+val ICR_LOAN_5YEARS=
+createView(tableEnv,ICR_LOAN_5YEARS,"ICR_LOAN_5YEARS")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_5YEARS_DATE
+ //===========================================================================================================================================
+val ICR_LOAN_5YEARS_DATE=
+createView(tableEnv,ICR_LOAN_5YEARS_DATE,"ICR_LOAN_5YEARS_DATE")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS_DATE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_24MONTH
+ //===========================================================================================================================================
+val ICR_LOAN_24MONTH=
+createView(tableEnv,ICR_LOAN_24MONTH,"ICR_LOAN_24MONTH")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_24MONTH").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_24MONTH_DATE
+ //===========================================================================================================================================
+val ICR_LOAN_24MONTH_DATE=
+createView(tableEnv,ICR_LOAN_24MONTH_DATE,"ICR_LOAN_24MONTH_DATE")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_24MONTH_DATE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_1MONTH
+ //===========================================================================================================================================
+val ICR_LOAN_1MONTH=
+createView(tableEnv,ICR_LOAN_1MONTH,"ICR_LOAN_1MONTH")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_1MONTH").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_LATEST
+ //===========================================================================================================================================
+val ICR_LOAN_LATEST=
+createView(tableEnv,ICR_LOAN_LATEST,"ICR_LOAN_LATEST")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LOAN_INFO
+ //===========================================================================================================================================
+val ICR_LOAN_INFO=
+createView(tableEnv,ICR_LOAN_INFO,"ICR_LOAN_INFO")
+//    tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUERY
+ //===========================================================================================================================================
+val ICR_QUERY=
+createView(tableEnv,ICR_QUERY,"ICR_QUERY")
+//    tableEnv.sqlQuery("select * from ICR_QUERY").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_LAST_QUERY
+ //===========================================================================================================================================
+val ICR_LAST_QUERY=
+createView(tableEnv,ICR_LAST_QUERY,"ICR_LAST_QUERY")
+//    tableEnv.sqlQuery("select * from ICR_LAST_QUERY").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_PUBLIC
+ //===========================================================================================================================================
+val ICR_PUBLIC=
+createView(tableEnv,ICR_PUBLIC,"ICR_PUBLIC")
+//    tableEnv.sqlQuery("select * from ICR_PUBLIC").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_PUBLIC_TYPE_NUM
+ //===========================================================================================================================================
+val ICR_PUBLIC_TYPE_NUM=
+createView(tableEnv,ICR_PUBLIC_TYPE_NUM,"ICR_PUBLIC_TYPE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_PUBLIC_TYPE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_POSTPAID
+ //===========================================================================================================================================
+val ICR_POSTPAID=
+createView(tableEnv,ICR_POSTPAID,"ICR_POSTPAID")
+//    tableEnv.sqlQuery("select * from ICR_POSTPAID").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_POSTPAID_NUM
+ //===========================================================================================================================================
+val ICR_POSTPAID_NUM=
+createView(tableEnv,ICR_POSTPAID_NUM,"ICR_POSTPAID_NUM")
+//    tableEnv.sqlQuery("select * from ICR_POSTPAID_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REPAYMENT_DUTY
+ //===========================================================================================================================================
+val ICR_REPAYMENT_DUTY=
+createView(tableEnv,ICR_REPAYMENT_DUTY,"ICR_REPAYMENT_DUTY")
+//    tableEnv.sqlQuery("select * from ICR_REPAYMENT_DUTY").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REPAY_DUTY_NUM
+ //===========================================================================================================================================
+val ICR_REPAY_DUTY_NUM=
+createView(tableEnv,ICR_REPAY_DUTY_NUM,"ICR_REPAY_DUTY_NUM")
+//    tableEnv.sqlQuery("select * from ICR_REPAY_DUTY_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_QUASI_CREDITCARD
+ //===========================================================================================================================================
+val ICR_QUASI_CREDITCARD=
+createView(tableEnv,ICR_QUASI_CREDITCARD,"ICR_QUASI_CREDITCARD")
+//    tableEnv.sqlQuery("select * from ICR_QUASI_CREDITCARD").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CREDITCARD
+ //===========================================================================================================================================
+val ICR_CREDITCARD=
+createView(tableEnv,ICR_CREDITCARD,"ICR_CREDITCARD")
+//    tableEnv.sqlQuery("select * from ICR_CREDITCARD").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REVOLVING
+ //===========================================================================================================================================
+val ICR_REVOLVING=
+createView(tableEnv,ICR_REVOLVING,"ICR_REVOLVING")
+//    tableEnv.sqlQuery("select * from ICR_REVOLVING").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_REVOLVING_ACCT
+ //===========================================================================================================================================
+val ICR_REVOLVING_ACCT=
+createView(tableEnv,ICR_REVOLVING_ACCT,"ICR_REVOLVING_ACCT")
+//    tableEnv.sqlQuery("select * from ICR_REVOLVING_ACCT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_ONEOFF
+ //===========================================================================================================================================
+val ICR_ONEOFF=
+createView(tableEnv,ICR_ONEOFF,"ICR_ONEOFF")
+//    tableEnv.sqlQuery("select * from ICR_ONEOFF").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OVERDUE
+ //===========================================================================================================================================
+val ICR_OVERDUE=
+createView(tableEnv,ICR_OVERDUE,"ICR_OVERDUE")
+//    tableEnv.sqlQuery("select * from ICR_OVERDUE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OVERDUE_NUM
+ //===========================================================================================================================================
+val ICR_OVERDUE_NUM=
+createView(tableEnv,ICR_OVERDUE_NUM,"ICR_OVERDUE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_OVERDUE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_DEADACCOUNT
+ //===========================================================================================================================================
+val ICR_DEADACCOUNT=
+createView(tableEnv,ICR_DEADACCOUNT,"ICR_DEADACCOUNT")
+//    tableEnv.sqlQuery("select * from ICR_DEADACCOUNT").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_RECOUPED_INFO
+ //===========================================================================================================================================
+val ICR_RECOUPED_INFO=
+createView(tableEnv,ICR_RECOUPED_INFO,"ICR_RECOUPED_INFO")
+//    tableEnv.sqlQuery("select * from ICR_RECOUPED_INFO").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_RECOUPED_NUM
+ //===========================================================================================================================================
+val ICR_RECOUPED_NUM=
+createView(tableEnv,ICR_RECOUPED_NUM,"ICR_RECOUPED_NUM")
+//    tableEnv.sqlQuery("select * from ICR_RECOUPED_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CREDIT_CUE
+ //===========================================================================================================================================
+val ICR_CREDIT_CUE=
+createView(tableEnv,ICR_CREDIT_CUE,"ICR_CREDIT_CUE")
+//    tableEnv.sqlQuery("select * from ICR_CREDIT_CUE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CREDIT_CUE_NUM
+ //===========================================================================================================================================
+val ICR_CREDIT_CUE_NUM=
+createView(tableEnv,ICR_CREDIT_CUE_NUM,"ICR_CREDIT_CUE_NUM")
+//    tableEnv.sqlQuery("select * from ICR_CREDIT_CUE_NUM").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SCORE_DESC
+ //===========================================================================================================================================
+val ICR_SCORE_DESC=
+createView(tableEnv,ICR_SCORE_DESC,"ICR_SCORE_DESC")
+//    tableEnv.sqlQuery("select * from ICR_SCORE_DESC").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_CREDITSCORE
+ //===========================================================================================================================================
+val ICR_CREDITSCORE=
+createView(tableEnv,ICR_CREDITSCORE,"ICR_CREDITSCORE")
+//    tableEnv.sqlQuery("select * from ICR_CREDITSCORE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_PROFESSION
+ //===========================================================================================================================================
+val ICR_PROFESSION=
+createView(tableEnv,ICR_PROFESSION,"ICR_PROFESSION")
+//    tableEnv.sqlQuery("select * from ICR_PROFESSION").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_RESIDENCE
+ //===========================================================================================================================================
+val ICR_RESIDENCE=
+createView(tableEnv,ICR_RESIDENCE,"ICR_RESIDENCE")
+//    tableEnv.sqlQuery("select * from ICR_RESIDENCE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_SPOUSE
+ //===========================================================================================================================================
+val ICR_SPOUSE=
+createView(tableEnv,ICR_SPOUSE,"ICR_SPOUSE")
+//    tableEnv.sqlQuery("select * from ICR_SPOUSE").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_TEL
+ //===========================================================================================================================================
+val ICR_TEL=
+createView(tableEnv,ICR_TEL,"ICR_TEL")
+//    tableEnv.sqlQuery("select * from ICR_TEL").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_IDENTITY
+ //===========================================================================================================================================
+val ICR_IDENTITY=
+createView(tableEnv,ICR_IDENTITY,"ICR_IDENTITY")
+//    tableEnv.sqlQuery("select * from ICR_IDENTITY").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_FRAUD
+ //===========================================================================================================================================
+val ICR_FRAUD=
+createView(tableEnv,ICR_FRAUD,"ICR_FRAUD")
+//    tableEnv.sqlQuery("select * from ICR_FRAUD").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OTHER_IDEN
+ //===========================================================================================================================================
+val ICR_OTHER_IDEN=
+createView(tableEnv,ICR_OTHER_IDEN,"ICR_OTHER_IDEN")
+//    tableEnv.sqlQuery("select * from ICR_OTHER_IDEN").toAppendStream[Row].print()
+
+ //===========================================================================================================================================
+//                                                          todo ICR_OTHER_IDEN_NUM
+ //===========================================================================================================================================
+val ICR_OTHER_IDEN_NUM=
+createView(tableEnv,ICR_OTHER_IDEN_NUM,"ICR_OTHER_IDEN_NUM")
+//    tableEnv.sqlQuery("select * from ICR_OTHER_IDEN_NUM").toAppendStream[Row].print()
+

@@ -3,6 +3,7 @@ package com.otis.work.date20200902udf;
 import java.util.LinkedList;
 
 public class Result {
+    int[] arr = {1, 2, 3};
     public LinkedList<Integer> queue;
     public Integer defaultValue;
 

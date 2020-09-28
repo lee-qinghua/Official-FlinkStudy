@@ -1,9 +1,12 @@
 package com.otis.work.date20200925解析json;
 
+import org.apache.flink.api.java.operators.translation.PlanRightUnwrappingCoGroupOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+
+import static sun.misc.Version.print;
 
 /**
  * 作者：李清华
@@ -143,6 +146,43 @@ public class ParseJsonToKafka {
                 ") WITH (" +
                 "'connector' = 'print')";
         tableEnv.executeSql(a);
-        tableEnv.executeSql("insert into ICR_QUERYREQ_print select * from ICR_QUERYREQ");
+//        tableEnv.executeSql("insert into ICR_QUERYREQ_print select * from ICR_QUERYREQ");
+        //===========================================================================================================================================
+        //                                                          todo ICR_OTHER_IDEN
+        //===========================================================================================================================================
+        Table ICR_OTHER_IDEN_table = null;
+//        try {
+            ICR_OTHER_IDEN_table = tableEnv.sqlQuery("select\n" +
+                    "report_id as report_id,\n" +
+                    "t2.a      as iden_cd,\n" +
+                    "t2.b      as iden_id,\n" +
+                    "SID\t\t  as SID,\n" +
+                    "STATISTICS_DT as STATISTICS_DT\n" +
+                    "from\n" +
+                    "(select\n" +
+                    "PRH.PA01.PA01A.PA01AI01 as SID,\n" +
+                    "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
+                    "PRH.PA01.PA01C.PA01CH as ok,\n" +
+                    "'2020-09-27'            as STATISTICS_DT\n" +
+                    "from ods_table)t1,\n" +
+                    "unnest(t1.ok) as t2(a,b)");
+//        } catch (Exception e) {
+//            System.out.println("aaaaaaaaaaaaaaaa");
+//            ICR_OTHER_IDEN_table = tableEnv.sqlQuery("select\n" +
+//                    "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
+//                    "'aaa'      as iden_cd,\n" +
+//                    "'bbb'      as iden_id,\n" +
+//                    "PRH.PA01.PA01A.PA01AI01 as SID,\n" +
+//                    "'2020-09-27'            as STATISTICS_DT\n" +
+//                    "from\n" +
+//                    "ods_table");
+//        }
+        String b = "CREATE TABLE ICR_OTHER_IDEN_print (\n" +
+                "report_id        string\n" +
+                ") WITH (" +
+                "'connector' = 'print')";
+        tableEnv.executeSql(b);
+        tableEnv.createTemporaryView("ICR_OTHER_IDEN", ICR_OTHER_IDEN_table);
+        tableEnv.executeSql("insert into ICR_OTHER_IDEN_print select report_id from ICR_OTHER_IDEN");
     }
 }

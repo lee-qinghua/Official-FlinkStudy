@@ -1,7 +1,8 @@
 package com.otis.scala.work.date20200925解析json
 
+import com.otis.work.date20200925解析json.Json2StringFunction
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.table.api.EnvironmentSettings
+import org.apache.flink.table.api.{EnvironmentSettings, Table}
 import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.types.Row
 
@@ -10,7 +11,8 @@ object test {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val bsSettings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
-    val tableEnv = StreamTableEnvironment.create(env, bsSettings)
+    val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env, bsSettings)
+    tableEnv.createFunction("jsonarray2string", classOf[Json2StringFunction])
     val ods_table =
       """
         |create table ods_table(
@@ -106,7 +108,7 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
+        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
         |'format' = 'json'
         |)
         |""".stripMargin
@@ -130,11 +132,11 @@ object test {
         |from ods_table
         |""".stripMargin)
 
-//    ICR_QUERYREQ_table.toAppendStream[Row].print()
+    //    ICR_QUERYREQ_table.toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_OTHER_IDEN_NUM
     //===========================================================================================================================================
-    val ICR_OTHER_IDEN_NUM_table = tableEnv.sqlQuery(
+    val ICR_OTHER_IDEN_NUM_table: Table = tableEnv.sqlQuery(
       """
         |select
         |PRH.PA01.PA01A.PA01AI01 as report_id,
@@ -142,24 +144,354 @@ object test {
         |'2020-09-27'            as STATISTICS_DT
         |from ods_table
         |""".stripMargin)
-//    ICR_OTHER_IDEN_NUM_table.toAppendStream[Row].print()
+    //    ICR_OTHER_IDEN_NUM_table.toAppendStream[Row].print()
 
-//    val ICR_OTHER_IDEN= tableEnv.sqlQuery(
-//      """
-//        |select
-//        |PA01CD01				as iden_cd,
-//        |PA01CI01				as iden_id
-//        |from ods_table,
-//        |unnest(ods_table.PRH.PA01.PA01C.PA01CH) as t(PA01CD01,PA01CI01)
-//        |""".stripMargin)
+    //===========================================================================================================================================
+    //                                                          todo ICR_OTHER_IDEN
+    //===========================================================================================================================================
 
-    val ICR_OTHER_IDEN= tableEnv.sqlQuery(
+    var ICR_OTHER_IDEN: Table = null
+    ICR_OTHER_IDEN = tableEnv.sqlQuery(
       """
         |select
-        |t.a				as iden_cd
-        |from ods_table,unnest(PRH.PA01.PA01C.PA01CH) as  t(a,b)
+        |report_id as report_id,
+        |t2.a      as iden_cd,
+        |t2.b      as iden_id,
+        |SID		  as SID,
+        |STATISTICS_DT as STATISTICS_DT
+        |from
+        |(select
+        |PRH.PA01.PA01A.PA01AI01 as SID,
+        |PRH.PA01.PA01A.PA01AI01 as report_id,
+        |PRH.PA01.PA01C.PA01CH as ok,
+        |'2020-09-27'            as STATISTICS_DT
+        |from ods_table)t1,
+        |unnest(t1.ok) as t2(a,b)
         |""".stripMargin)
-    ICR_OTHER_IDEN.toAppendStream[Row].print()
+    tableEnv.createTemporaryView("ICR_OTHER_IDEN", ICR_OTHER_IDEN)
+    //    tableEnv.sqlQuery(
+    //      """
+    //        |select iden_cd from ICR_OTHER_IDEN
+    //        |""".stripMargin).toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_FRAUD
+    //===========================================================================================================================================
+
+    val ICR_FRAUD_table = tableEnv.sqlQuery(
+      """
+        |select
+        |PRH.PA01.PA01A.PA01AI01 as report_id,
+        |PRH.PA01.PA01D.PA01DQ01 as fraud_cd,
+        |PRH.PA01.PA01D.PA01DQ02 as fraud_tel,
+        |PRH.PA01.PA01D.PA01DR01 as fraud_start_dt,
+        |PRH.PA01.PA01D.PA01DR02 as fraud_end_dt,
+        |cast(PRH.PA01.PA01E.PA01ES01 as bigint) as objection_num,
+        |'2020-09-27'            as STATISTICS_DT
+        |from ods_table
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_FRAUD", ICR_FRAUD_table)
+    //    tableEnv.sqlQuery("""select * from ICR_FRAUD""").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_IDENTITY
+    //===========================================================================================================================================
+
+    val ICR_IDENTITY = tableEnv.sqlQuery(
+      """
+        |select
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |PIM.PB01.PB01A.PB01AD01                 as gender_cd,
+        |PIM.PB01.PB01A.PB01AR01                 as birth_date,
+        |PIM.PB01.PB01A.PB01AD02                 as edu_level_cd,
+        |PIM.PB01.PB01A.PB01AD03                 as edu_degree_cd,
+        |PIM.PB01.PB01A.PB01AD04                 as employment_cd,
+        |PIM.PB01.PB01A.PB01AQ01                 as email,
+        |PIM.PB01.PB01A.PB01AQ02                 as comm_addr,
+        |PIM.PB01.PB01A.PB01AD05                 as nationality,
+        |PIM.PB01.PB01A.PB01AQ03                 as reg_addr,
+        |cast(PIM.PB01.PB01B.PB01BS01 as bigint) as tel_cnt,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_IDENTITY", ICR_IDENTITY)
+    //    tableEnv.sqlQuery("select * from ICR_IDENTITY").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_TEL
+    //===========================================================================================================================================
+    val ICR_TEL = tableEnv.sqlQuery(
+      """
+        |select
+        |t1.report_id                            as report_id,
+        |info.PB01BQ01                           as tel_num,
+        |info.PB01BR01                           as update_dt,
+        |t1.SID                                  as SID,
+        |t1.STATISTICS_DT                        as STATISTICS_DT
+        |from(
+        |SELECT
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |PIM.PB01.PB01B.PB01BH                   as data,
+        |PRH.PA01.PA01A.PA01AI01                 as SID,
+        |'2020-09-27'                            as STATISTICS_DT
+        |FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01)
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_TEL", ICR_TEL)
+    //    tableEnv.sqlQuery("select * from ICR_TEL").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SPOUSE
+    //===========================================================================================================================================
+    val ICR_SPOUSE = tableEnv.sqlQuery(
+      """
+        |SELECT
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |PMM.PB02.PB020D01                       as marital_stat_cd,
+        |PMM.PB02.PB020Q01                       as spo_name,
+        |PMM.PB02.PB020D02                       as spo_iden_cd,
+        |PMM.PB02.PB020I01                       as spo_iden_id,
+        |PMM.PB02.PB020Q02                       as spo_unit,
+        |PMM.PB02.PB020Q03                       as spo_tel_num,
+        |'2020-09-27'                            as STATISTICS_DT
+        |FROM ods_table
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_SPOUSE", ICR_SPOUSE)
+    //    tableEnv.sqlQuery("select * from ICR_SPOUSE").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_RESIDENCE
+    //===========================================================================================================================================
+
+    val ICR_RESIDENCE = tableEnv.sqlQuery(
+      """
+        |select
+        |t1.report_id                            as report_id,
+        |info.PB030D01                           as res_cd,
+        |info.PB030Q01                           as res_addr,
+        |info.PB030Q02                           as res_tel,
+        |info.PB030R01                           as res_update_dt,
+        |t1.SID                                  as SID,
+        |t1.STATISTICS_DT                        as STATISTICS_DT
+        |from
+        |(
+        |select
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |PRM.PB03                                as data,
+        |PRH.PA01.PA01A.PA01AI01                 as SID,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |)t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_RESIDENCE", ICR_RESIDENCE)
+    //    tableEnv.sqlQuery("select * from ICR_RESIDENCE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_PROFESSION
+    //===========================================================================================================================================
+    val ICR_PROFESSION = tableEnv.sqlQuery(
+      """
+        |select
+        |t1.report_id                            as report_id,
+        |info.PB040D01                           as work_situation,
+        |info.PB040Q01                           as work_unit,
+        |info.PB040D02                           as unit_property_cd,
+        |info.PB040D03                           as industry_cd,
+        |info.PB040Q02                           as unit_addr,
+        |info.PB040Q03                           as unit_tel,
+        |info.PB040D04                           as occupation_cd,
+        |info.PB040D05                           as position_cd,
+        |info.PB040D06                           as title_cd,
+        |info.PB040R01                           as int_year,
+        |info.PB040R02                           as pro_update_date,
+        |t1.SID                                  as SID,
+        |t1.STATISTICS_DT                        as STATISTICS_DT
+        |from
+        |(
+        |select
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |POM.PB04                                as data,
+        |PRH.PA01.PA01A.PA01AI01                 as SID,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |)t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02)
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_PROFESSION", ICR_PROFESSION)
+    //    tableEnv.sqlQuery("select * from ICR_PROFESSION").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_CREDITSCORE
+    //===========================================================================================================================================
+    val ICR_CREDITSCORE = tableEnv.sqlQuery(
+      """
+        |select
+        |PRH.PA01.PA01A.PA01AI01                 as report_id,
+        |PSM.PC01.PC010Q01                       as score,
+        |PSM.PC01.PC010Q02                       as score_level,
+        |PSM.PC01.PC010S01                       as score_desc_num,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |""".stripMargin)
+    tableEnv.createTemporaryView("ICR_CREDITSCORE", ICR_CREDITSCORE)
+    //    tableEnv.sqlQuery("select * from ICR_CREDITSCORE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SCORE_DESC
+    //===========================================================================================================================================
+    val ICR_SCORE_DESC =
+    """
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PSM.PC01.PC010D01                       as score_cd,
+      |PRH.PA01.PA01A.PA01AI01                 as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table""".stripMargin
+    createView(tableEnv, ICR_SCORE_DESC, "ICR_SCORE_DESC")
+    //    tableEnv.sqlQuery("select * from ICR_SCORE_DESC").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_CREDIT_CUE_NUM
+    //===========================================================================================================================================
+    val ICR_CREDIT_CUE_NUM =
+    """
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PCO.PC02.PC02A.PC02AS01                 as acct_total_cnt,
+      |PCO.PC02.PC02A.PC02AS02                 as busi_type_num,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_CREDIT_CUE_NUM, "ICR_CREDIT_CUE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_CREDIT_CUE_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_CREDIT_CUE
+    //===========================================================================================================================================
+    val ICR_CREDIT_CUE =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC02AD01                           as busi_type_cd,
+      |info.PC02AD02                           as busi_kind_cd,
+      |info.PC02AS03                           as acct_cnt,
+      |info.PC02AR01                           as first_mon,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from
+      |(select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PCO.PC02.PC02A.PC02AH                   as data,
+      |PRH.PA01.PA01A.PA01AI01                 as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table)t1,unnest(t1.data) as info(PC02AD01,PC02AD02,PC02AS03,PC02AR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_CREDIT_CUE, "ICR_CREDIT_CUE")
+    //    tableEnv.sqlQuery("select * from ICR_CREDIT_CUE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_RECOUPED_NUM
+    //===========================================================================================================================================
+    val ICR_RECOUPED_NUM =
+    """
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PCO.PC02.PC02B.PC02BS01                 as rec_total_cnt,
+      |PCO.PC02.PC02B.PC02BJ01                 as rec_total_bal,
+      |PCO.PC02.PC02B.PC02BS02                 as rec_type_num,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_RECOUPED_NUM, "ICR_RECOUPED_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_RECOUPED_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_RECOUPED_INFO
+    //===========================================================================================================================================
+    val ICR_RECOUPED_INFO =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC02BD01                           as rec_type_cd,
+      |cast(info.PC02BS03 as bigint)           as rec_acct_cnt,
+      |cast(info.PC02BJ02 as decimal(18,2))    as rec_bal,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from (
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PCO.PC02.PC02B.PC02BH                   as data,
+      |PRH.PA01.PA01A.PA01AI01                 as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02)
+      |""".stripMargin
+    createView(tableEnv, ICR_RECOUPED_INFO, "ICR_RECOUPED_INFO")
+    //    tableEnv.sqlQuery("select * from ICR_RECOUPED_INFO").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_DEADACCOUNT
+    //===========================================================================================================================================
+    val ICR_DEADACCOUNT =
+    """
+      |select
+      |PRH.PA01.PA01A.PA01AI01                         as report_id,
+      |cast(PCO.PC02.PC02C.PC02CS01 as bigint)         as deadacct_cnt,
+      |cast(PCO.PC02.PC02C.PC02CJ01 as decimal(18,2))  as deadacct_bal,
+      |'2020-09-27'                                    as STATISTICS_DT
+      |from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_DEADACCOUNT, "ICR_DEADACCOUNT")
+    //    tableEnv.sqlQuery("select * from ICR_DEADACCOUNT").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_OVERDUE_NUM
+    //===========================================================================================================================================
+    val ICR_OVERDUE_NUM =
+    """
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |cast(PCO.PC02D.PC02DS01 as bigint)      as ove_type_num,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_OVERDUE_NUM, "ICR_OVERDUE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_OVERDUE_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_OVERDUE
+    //===========================================================================================================================================
+    val ICR_OVERDUE =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC02DD01                           as ove_type_cd,
+      |info.PC02DS02                           as ove_acct_cnt,
+      |info.PC02DS03                           as ove_mon_num,
+      |info.PC02DJ01                           as ove_bal,
+      |info.PC02DS04                           as ove_mon,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |PCO.PC02.PC02D.PC02DH                   as data,
+      |PRH.PA01.PA01A.PA01AI01                 as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)
+      |""".stripMargin
+    createView(tableEnv, ICR_OVERDUE, "ICR_OVERDUE")
+    tableEnv.sqlQuery("select * from ICR_OVERDUE").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo 最后
+    //===========================================================================================================================================
+
     env.execute()
   }
+
+  /**
+   * 创建view的方法
+   *
+   * @param tableEnv
+   * @param sql
+   * @param tableName
+   */
+  def createView(tableEnv: StreamTableEnvironment, sql: String, tableName: String): Unit = {
+    val table = tableEnv.sqlQuery(sql)
+    tableEnv.createTemporaryView(tableName, table)
+  }
+
+
 }
