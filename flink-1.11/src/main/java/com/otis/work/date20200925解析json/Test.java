@@ -5,6 +5,7 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 import javax.print.DocFlavor;
+import java.util.HashMap;
 
 public class Test {
     public static void main(String[] args) throws Exception {
@@ -195,3 +196,25 @@ public class Test {
         tableEnv.executeSql("insert into mysql_print select POQ.PH01[0].PH010R01 from ods_table");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

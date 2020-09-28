@@ -108,7 +108,7 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
+        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
         |'format' = 'json'
         |)
         |""".stripMargin
@@ -472,7 +472,80 @@ object test {
       |from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)
       |""".stripMargin
     createView(tableEnv, ICR_OVERDUE, "ICR_OVERDUE")
-    tableEnv.sqlQuery("select * from ICR_OVERDUE").toAppendStream[Row].print()
+    //    tableEnv.sqlQuery("select * from ICR_OVERDUE").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_ONEOFF
+    //===========================================================================================================================================
+    val ICR_ONEOFF =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02E.PC02ES01 as bigint)                 as oneoff_org_num,
+      |    cast(PCO.PC02.PC02E.PC02ES02 as bigint)                 as oneoff_acct_cnt,
+      |    cast(PCO.PC02.PC02E.PC02EJ01 as decimal(18,2))                 as oneoff_credit_amt,
+      |    cast(PCO.PC02.PC02E.PC02EJ02 as decimal(18,2))                 as oneoff_bal,
+      |    cast(PCO.PC02.PC02E.PC02EJ03 as decimal(18,2))                 as oneoff_6mon_avg,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_ONEOFF, "ICR_ONEOFF")
+    //    tableEnv.sqlQuery("select * from ICR_ONEOFF").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_REVOLVING_ACCT
+    //===========================================================================================================================================
+    val ICR_REVOLVING_ACCT =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02F.PC02FS01 as bigint)                 as revacct_org_num,
+      |    cast(PCO.PC02.PC02F.PC02FS02 as bigint)                 as revacc_acct_cnt,
+      |    cast(PCO.PC02.PC02F.PC02FJ01 as decimal(18,2))                 as revacct_credit_amt,
+      |    cast(PCO.PC02.PC02F.PC02FJ02 as decimal(18,2))                 as revacct_bal,
+      |    cast(PCO.PC02.PC02F.PC02FJ03 as decimal(18,2))                 as revacct_6mon_avg,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_REVOLVING_ACCT, "ICR_REVOLVING_ACCT")
+    //    tableEnv.sqlQuery("select * from ICR_REVOLVING_ACCT").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_REVOLVING
+    //===========================================================================================================================================
+    val ICR_REVOLVING =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02G.PC02GS01 as bigint)                 as rev_org_num,
+      |    cast(PCO.PC02.PC02G.PC02GS02 as bigint)                 as rev_acct_cnt,
+      |    cast(PCO.PC02.PC02G.PC02GJ01 as decimal(18,2))                 as rev_credit_amt,
+      |    cast(PCO.PC02.PC02G.PC02GJ02 as decimal(18,2))                 as rev_bal,
+      |    cast(PCO.PC02.PC02G.PC02GJ03 as decimal(18,2))                 as rev_6mon_avg,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_REVOLVING, "ICR_REVOLVING")
+    //tableEnv.sqlQuery("select * from ICR_REVOLVING").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_CREDITCARD
+    //===========================================================================================================================================
+    val ICR_CREDITCARD =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02H.PC02HS01 as bigint)                 as ccd_org_num,
+      |    cast(PCO.PC02.PC02H.PC02HS02 as bigint)                 as ccd_acct_cnt,
+      |    cast(PCO.PC02.PC02H.PC02HJ01 as decimal(18,2))                 as ccd_credit_amt,
+      |    cast(PCO.PC02.PC02H.PC02HJ02 as decimal(18,2))                 as ccd_max_bal,
+      |    cast(PCO.PC02.PC02H.PC02HJ03 as decimal(18,2))                 as ccd_min_bal,
+      |    cast(PCO.PC02.PC02H.PC02HJ04 as decimal(18,2))                 as ccd_bal,
+      |    cast(PCO.PC02.PC02H.PC02HJ05 as decimal(18,2))                 as ccd_6mon_avg,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_CREDITCARD, "ICR_CREDITCARD")
+    //tableEnv.sqlQuery("select * from ICR_CREDITCARD").toAppendStream[Row].print()
+
 
     //===========================================================================================================================================
     //                                                          todo 最后

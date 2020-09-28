@@ -76,7 +76,14 @@ from ods_table
 )t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)
 
 
-
+select
+PRH.PA01.PA01A.PA01AI01                 as report_id,
+PCO.PC02.PC02E.PC02ES02                 as oneoff_acct_cnt,
+PCO.PC02.PC02E.PC02EJ01                 as oneoff_credit_amt,
+PCO.PC02.PC02E.PC02EJ02                 as oneoff_bal,
+PCO.PC02.PC02E.PC02EJ03                 as oneoff_6mon_avg,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
 
 
 
@@ -181,6 +188,15 @@ PRH.PA01.PA01A.PA01AI01                 as SID,
 from ods_table
 )t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02)
 
+
+select
+info.xx1 as field1,
+info.xx2 as field2
+from(
+select
+A.B.C   as data
+from ods_table
+)t1,unnest(t1.data) as info(xx1,xx2)
 
 
 
