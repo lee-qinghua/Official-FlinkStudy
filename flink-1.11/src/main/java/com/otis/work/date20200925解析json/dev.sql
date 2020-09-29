@@ -522,7 +522,13 @@ from PDAPD01
 )t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01)
 
 
-
+select
+report_id as report_id,
+PD01A.PD01AI01      as acct_num,
+cast(PD01F.PD01FS01 as bigint) as spe_txn_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PDAPD01
 
 
 

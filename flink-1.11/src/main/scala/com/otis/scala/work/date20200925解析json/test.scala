@@ -108,7 +108,7 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
+        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
         |'format' = 'json'
         |)
         |""".stripMargin
@@ -973,7 +973,22 @@ object test {
       |)t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_5YEARS, "ICR_LOAN_5YEARS")
-    tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SPECIAL_TXN_NUM
+    //===========================================================================================================================================
+    val ICR_SPECIAL_TXN_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |cast(PD01F.PD01FS01 as bigint) as spe_txn_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PDAPD01
+      |""".stripMargin
+    createView(tableEnv, ICR_SPECIAL_TXN_NUM, "ICR_SPECIAL_TXN_NUM")
+    tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN_NUM").toAppendStream[Row].print()
 
 
     env.execute()
