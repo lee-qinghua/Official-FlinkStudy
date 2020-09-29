@@ -242,6 +242,287 @@ PRH.PA01.PA01A.PA01AI01                 as SID,
 from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)
 
 
+select
+t1.report_id                            as report_id,
+info.PC02KD01                           as rep_iden_type,
+info.PC02KD02                           as rep_duty_type_cd,
+cast(info.PC02KS02 as bigint)           as rep_acct_cnt,
+cast(info.PC02KJ01 as decimal(18,2))    as rep_amt,
+cast(info.PC02KJ02 as decimal(18,2))    as rep_bal,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PCO.PC02.PC02K.PC02KH         as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PC02KD01,PC02KD02,PC02KS02,PC02KJ01,PC02KJ02)
+
+
+
+select
+t1.report_id                            as report_id,
+info.PC030D01                           as    pos_type_cd,
+cast(info.PC030S02 as bigint)           as    pos_acct_cnt,
+cast(info.PC030J01 as decimal(18,2))    as    pos_bal,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PNO.PC030H         as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PC030D01,PC030S02,PC030J01)
+
+
+select
+t1.report_id                            as report_id,
+info.PC040D01                           as pub_type_cd,
+cast(info.PC040S02 as bigint)           as pub_cnt,
+cast(info.PC040J01 as decimal(18,2))    as pub_amt,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PPO.PC040H         as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PC040D01,PC040S02,PC040J01)
+
+
+select
+t1.report_id                            as report_id,
+info.PH010R01                           as que_dt,
+info.PH010D01                           as que_org_type,
+info.PH010Q02                           as que_org_id,
+info.PH010Q03                           as que_reason,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from (
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+POQ.PH01         as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PH010R01,PH010D01,PH010Q02,PH010Q03)
+
+
+
+select
+t1.report_id                            as report_id,
+info.PD01A.PD01AI01                     as acct_num,
+info.PD01A.PD01AD01                     as acct_type_cd,
+info.PD01A.PD01AD02                     as acct_org_type_cd,
+info.PD01A.PD01AI02                     as acct_org_id,
+info.PD01A.PD01AI03                     as acct_sign,
+info.PD01A.PD01AI04                     as acct_agmt_num,
+info.PD01A.PD01AD03                     as busi_spec_cd,
+info.PD01A.PD01AR01                     as open_dt,
+info.PD01A.PD01AD04                     as currency_cd,
+cast(info.PD01A.PD01AJ01 as decimal(18,2)) as due_amt,
+cast(info.PD01A.PD01AJ02 as decimal(18,2)) as credit_amt,
+cast(info.PD01A.PD01AJ03 as decimal(18,2)) as credit_amt_share,
+info.PD01A.PD01AR02                     as due_dt,
+info.PD01A.PD01AD05                     as repay_mode_cd,
+info.PD01A.PD01AD06                     as repay_frequency_cd,
+cast(info.PD01A.PD01AS01 as bigint)     as repay_period,
+info.PD01A.PD01AD07                     as grt_mode_cd,
+info.PD01A.PD01AD08                     as lending_mode_cd,
+info.PD01A.PD01AD09                     as share_sign_cd,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PDA.PD01                                as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+
+
+
+select
+t1.report_id                            as report_id,
+info.PD01A.PD01AI01                     as acct_num,
+info.PD01B.PD01BD01                     as acct_stat,
+info.PD01B.PD01BR01                     as close_dt,
+info.PD01B.PD01BR04                     as out_month,
+cast(info.PD01B.PD01BJ01 as decimal(18,2))  as loan_bal,
+info.PD01B.PD01BR02                     as latest_repay_dt,
+cast(info.PD01B.PD01BJ02 as decimal(18,2)) as latest_repay_amt,
+info.PD01B.PD01BD03                     as five_class_cd,
+info.PD01B.PD01BD04                     as repay_stat,
+info.PD01B.PD01BR03                     as report_dt,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PDA.PD01                                as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+
+
+PDA ROW(PD01 ARRAY<ROW(
+                    PD01A ROW(PD01AI01 STRING,PD01AD01 STRING,PD01AD02 STRING,PD01AI02 STRING,PD01AI03 STRING,PD01AI04 STRING,PD01AD03 STRING,PD01AR01 STRING,PD01AD04 STRING,PD01AJ01 STRING,PD01AJ02 STRING,PD01AJ03 STRING,PD01AR02 STRING,PD01AD05 STRING,PD01AD06 STRING,PD01AS01 STRING,PD01AD07 STRING,PD01AD08 STRING,PD01AD09 STRING,PD01AD10 STRING),
+                    PD01B ROW(PD01BD01 STRING,PD01BR01 STRING,PD01BR04 STRING,PD01BJ01 STRING,PD01BR02 STRING,PD01BJ02 STRING,PD01BD03 STRING,PD01BD04 STRING,PD01BR03 STRING),
+                    PD01C ROW(PD01CR01 STRING,PD01CD01 STRING,PD01CJ01 STRING,PD01CJ02 STRING,PD01CJ03 STRING,PD01CD02 STRING,PD01CS01 STRING,PD01CR02 STRING,PD01CJ04 STRING,PD01CJ05 STRING,PD01CR03 STRING,PD01CS02 STRING,PD01CJ06 STRING,PD01CJ07 STRING,PD01CJ08 STRING,PD01CJ09 STRING,PD01CJ10 STRING,PD01CJ11 STRING,PD01CJ12 STRING,PD01CJ13 STRING,PD01CJ14 STRING,PD01CJ15 STRING,PD01CR04 STRING),
+                    PD01D ROW(PD01DR01 STRING,PD01DR02 STRING,PD01DH ARRAY<ROW(PD01DR03 STRING,PD01DD01 STRING)>),
+                    PD01E ROW(PD01ER01 STRING,PD01ER02 STRING,PD01ES01 STRING,PD01EH ARRAY<ROW(PD01ER03 STRING,PD01ED01 STRING,PD01EJ01 STRING)>),
+                    PD01F ROW(PD01FS01 STRING,PD01FH ARRAY<ROW(PD01FD01 STRING,PD01FR01 STRING,PD01FS02 STRING,PD01FJ01 STRING,PD01FQ01 STRING)>),
+                    PD01G ROW(PD01GS01 STRING,PD01GH ARRAY<ROW(PD01GR01 STRING,PD01GD01 STRING)>),
+                    PD01H ROW(PD01HS01 STRING,PD01HH ARRAY<ROW(PD01HJ01 STRING,PD01HR01 STRING,PD01HR02 STRING,PD01HJ02 STRING)>),
+                    PD01Z ROW(PD01ZS01 STRING,PD01ZH ARRAY<ROW(PD01ZD01 STRING,PD01ZQ01 STRING,PD01ZR01 STRING)>)
+      )
+
+
+select
+t1.report_id                                as report_id,
+info.PD01A.PD01AI01                         as acct_num,
+info.PD01C.PD01CR01                         as mmonth,
+info.PD01C.PD01CD01                         as acct_stat_1m,
+cast(info.PD01C.PD01CJ01 as decimal(18,2))  as loan_bal_1m,
+cast(info.PD01C.PD01CJ02 as decimal(18,2))  as credit_amt_used,
+cast(info.PD01C.PD01CJ03 as decimal(18,2))  as credit_amt_big,
+info.PD01C.PD01CD02                         as five_class_1m,
+cast(info.PD01C.PD01CS01 as bigint)         as repay_period_left,
+info.PD01C.PD01CR02                         as repay_date,
+cast(info.PD01C.PD01CJ04 as bigint)         as repay_amt,
+cast(info.PD01C.PD01CJ05 as bigint)         as repay_amt_act,
+info.PD01C.PD01CR03                         as repay_date_latest,
+cast(info.PD01C.PD01CS02 as bigint)         as overdue_period,
+cast(info.PD01C.PD01CJ06 as decimal(18,2))  as overdue_amt,
+cast(info.PD01C.PD01CJ07 as decimal(18,2))  as overdue_prin_31Amt,
+cast(info.PD01C.PD01CJ08 as decimal(18,2))  as overdue_prin_61Amt,
+cast(info.PD01C.PD01CJ09 as decimal(18,2))  as overdue_prin_91Amt,
+cast(info.PD01C.PD01CJ10 as decimal(18,2))  as overdue_prin_180Amt,
+cast(info.PD01C.PD01CJ11 as decimal(18,2))  as overdraft_prin_180Amt,
+cast(info.PD01C.PD01CJ12 as decimal(18,2))  as credit_6mon_avg,
+cast(info.PD01C.PD01CJ13 as decimal(18,2))  as overdraft_6mon_avg,
+cast(info.PD01C.PD01CJ14 as decimal(18,2))  as max_credit_used,
+cast(info.PD01C.PD01CJ15 as decimal(18,2))  as max_overdraft,
+info.PD01C.PD01CR04                         as report_dt_1mon,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PDA.PD01                                as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+
+
+
+select
+t1.report_id                                as report_id,
+info.PD01A.PD01AI01                         as acct_num,
+info.PD01D.PD01DR01                         as start_dt,
+info.PD01D.PD01DR02                         as end_dt,
+t1.SID                                      as SID,
+t1.STATISTICS_DT                            as STATISTICS_DT
+from(
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PDA.PD01                                as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+
+
+
+select
+t1.report_id as report_id,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT,
+info.PD01A  as PD01A,
+info.PD01B  as PD01B,
+info.PD01C  as PD01C,
+info.PD01D  as PD01D,
+info.PD01E  as PD01E,
+info.PD01F  as PD01F,
+info.PD01G  as PD01G,
+info.PD01H  as PD01H,
+info.PD01Z  as PD01Z
+from(
+select
+PDA.PD01   as data,
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+
+
+select
+t1.report_id                                    as report_id,
+t1.acct_num                                     as acct_num,
+info.PD01DR03                                   as month_24m,
+info.PD01DD01                                   as repay_stat_24m,
+t1.SID  				                        as SID,
+t1.STATISTICS_DT                                as STATISTICS_DT
+from(
+select
+PD01A.PD01AI01 as acct_num,
+report_id as report_id,
+SID as SID,
+STATISTICS_DT as  STATISTICS_DT,
+PD01D.PD01DH as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01DR03,PD01DD01)
+
+
+
+
+
+
+
+select
+report_id as report_id,
+PD01A.PD01AI01 as acct_num,
+PD01E.PD01ER01 as start_dt_5y,
+PD01E.PD01ER02 as end_dt_5y,
+cast(PD01E.PD01ES01 as bigint) as mon_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PDAPD01
+
+
+
+
+
+select
+t1.report_id                                    as report_id,
+t1.acct_num                                     as acct_num,
+info.PD01ER03                                   as month_5y,
+info.PD01ED01                                   as repay_stat_5y,
+cast(info.PD01EJ01 as decimal(18,2))            as amt_5y,
+t1.SID  				                        as SID,
+t1.STATISTICS_DT                                as STATISTICS_DT
+from(
+select
+PD01A.PD01AI01      as acct_num,
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD01E.PD01EH        as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01)
+
+
+
 
 
 

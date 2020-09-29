@@ -2,8 +2,8 @@ package com.otis.scala.work.date20200925解析json
 
 import com.otis.work.date20200925解析json.Json2StringFunction
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.table.api.{EnvironmentSettings, Table}
 import org.apache.flink.table.api.bridge.scala._
+import org.apache.flink.table.api.{EnvironmentSettings, Table}
 import org.apache.flink.types.Row
 
 
@@ -108,7 +108,7 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
+        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
         |'format' = 'json'
         |)
         |""".stripMargin
@@ -545,11 +545,436 @@ object test {
       |""".stripMargin
     createView(tableEnv, ICR_CREDITCARD, "ICR_CREDITCARD")
     //tableEnv.sqlQuery("select * from ICR_CREDITCARD").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUASI_CREDITCARD
+    //===========================================================================================================================================
+    val ICR_QUASI_CREDITCARD =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02I.PC02IS01 as bigint)                 as qua_org_num,
+      |    cast(PCO.PC02.PC02I.PC02IS02 as bigint)                 as qua_acct_cnt,
+      |    cast(PCO.PC02.PC02I.PC02IJ01 as decimal(18,2))                 as qua_credit_amtt,
+      |    cast(PCO.PC02.PC02I.PC02IJ02 as decimal(18,2))                 as qua_max_bal,
+      |    cast(PCO.PC02.PC02I.PC02IJ03 as decimal(18,2))                 as qua_min_bal,
+      |    cast(PCO.PC02.PC02I.PC02IJ04 as decimal(18,2))                 as qua_bal,
+      |    cast(PCO.PC02.PC02I.PC02IJ05 as decimal(18,2))                 as qua_6mon_avg,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_QUASI_CREDITCARD, "ICR_QUASI_CREDITCARD")
+    //tableEnv.sqlQuery("select * from ICR_QUASI_CREDITCARD").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_REPAY_DUTY_NUM
+    //===========================================================================================================================================
+    val ICR_REPAY_DUTY_NUM =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PCO.PC02.PC02K.PC02KS01 as bigint)                 as rep_duty_num,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_REPAY_DUTY_NUM, "ICR_REPAY_DUTY_NUM")
+    //tableEnv.sqlQuery("select * from ICR_REPAY_DUTY_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_POSTPAID_NUM
+    //===========================================================================================================================================
+    val ICR_POSTPAID_NUM =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PNO.PC03.PC030S01 as bigint)                 as pos_type_num,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_POSTPAID_NUM, "ICR_POSTPAID_NUM")
+    //tableEnv.sqlQuery("select * from ICR_POSTPAID_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_PUBLIC_TYPE_NUM
+    //===========================================================================================================================================
+    val ICR_PUBLIC_TYPE_NUM =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PPO.PC04.PC040S01 as bigint)                 as pub_type_num,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_PUBLIC_TYPE_NUM, "ICR_PUBLIC_TYPE_NUM")
+    //tableEnv.sqlQuery("select * from ICR_PUBLIC_TYPE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LAST_QUERY
+    //===========================================================================================================================================
+    val ICR_LAST_QUERY =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    PQO.PC05.PC05A.PC05AR01                 as lastque_dt,
+      |    PQO.PC05.PC05A.PC05AD01                 as lastque_org_type,
+      |    PQO.PC05.PC05A.PC05AI01                 as lastque_org_id,
+      |    PQO.PC05.PC05A.PC05AQ01                 as lastque_reason,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_LAST_QUERY, "ICR_LAST_QUERY")
+    //tableEnv.sqlQuery("select * from ICR_LAST_QUERY").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUERY
+    //===========================================================================================================================================
+    val ICR_QUERY =
+    """
+      |    select
+      |    PRH.PA01.PA01A.PA01AI01                 as report_id,
+      |    cast(PQO.PC05.PC05B.PC05BS01 as bigint)                 as que_1mon_org,
+      |    cast(PQO.PC05.PC05B.PC05BS02 as bigint)                 as que_1mon_org_ccd,
+      |    cast(PQO.PC05.PC05B.PC05BS03 as bigint)                 as que_1mon_cnt,
+      |    cast(PQO.PC05.PC05B.PC05BS04 as bigint)                 as que_1mon_cnt_ccd,
+      |    cast(PQO.PC05.PC05B.PC05BS05 as bigint)                 as que_1mon_cnt_self,
+      |    cast(PQO.PC05.PC05B.PC05BS06 as bigint)                 as que_2year_cnt,
+      |    cast(PQO.PC05.PC05B.PC05BS07 as bigint)                 as que_2year_cnt_guar,
+      |    cast(PQO.PC05.PC05B.PC05BS08 as bigint)                 as que_2year_cnt_mer,
+      |    '2020-09-27'                            as STATISTICS_DT
+      |      from ods_table
+      |""".stripMargin
+    createView(tableEnv, ICR_QUERY, "ICR_QUERY")
+    //tableEnv.sqlQuery("select * from ICR_QUERY").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_REPAYMENT_DUTY
+    //===========================================================================================================================================
+    val ICR_REPAYMENT_DUTY =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC02KD01                           as rep_iden_type,
+      |info.PC02KD02                           as rep_duty_type_cd,
+      |cast(info.PC02KS02 as bigint)           as rep_acct_cnt,
+      |cast(info.PC02KJ01 as decimal(18,2))    as rep_amt,
+      |cast(info.PC02KJ02 as decimal(18,2))    as rep_bal,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PCO.PC02.PC02K.PC02KH         as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PC02KD01,PC02KD02,PC02KS02,PC02KJ01,PC02KJ02)
+      |""".stripMargin
+    createView(tableEnv, ICR_REPAYMENT_DUTY, "ICR_REPAYMENT_DUTY")
+    //tableEnv.sqlQuery("select * from ICR_REPAYMENT_DUTY").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_POSTPAID
+    //===========================================================================================================================================
+    val ICR_POSTPAID =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC030D01                           as    pos_type_cd,
+      |cast(info.PC030S02 as bigint)           as    pos_acct_cnt,
+      |cast(info.PC030J01 as decimal(18,2))    as    pos_bal,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PNO.PC030H         as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PC030D01,PC030S02,PC030J01)
+      |""".stripMargin
+    createView(tableEnv, ICR_POSTPAID, "ICR_POSTPAID")
+    //tableEnv.sqlQuery("select * from ICR_POSTPAID").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_PUBLIC
+    //===========================================================================================================================================
+    val ICR_PUBLIC =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PC040D01                           as pub_type_cd,
+      |cast(info.PC040S02 as bigint)           as pub_cnt,
+      |cast(info.PC040J01 as decimal(18,2))    as pub_amt,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PPO.PC040H         as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PC040D01,PC040S02,PC040J01)
+      |""".stripMargin
+    createView(tableEnv, ICR_PUBLIC, "ICR_PUBLIC")
+    //tableEnv.sqlQuery("select * from ICR_PUBLIC").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUERY_RECORD
+    //===========================================================================================================================================
+    val ICR_QUERY_RECORD =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PH010R01                           as que_dt,
+      |info.PH010D01                           as que_org_type,
+      |info.PH010Q02                           as que_org_id,
+      |info.PH010Q03                           as que_reason,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from (
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |POQ.PH01         as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PH010R01,PH010D01,PH010Q02,PH010Q03)
+      |""".stripMargin
+    createView(tableEnv, ICR_QUERY_RECORD, "ICR_QUERY_RECORD")
+    //tableEnv.sqlQuery("select * from ICR_QUERY_RECORD").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_INFO
+    //===========================================================================================================================================
+    val ICR_LOAN_INFO =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PD01A.PD01AI01                     as acct_num,
+      |info.PD01A.PD01AD01                     as acct_type_cd,
+      |info.PD01A.PD01AD02                     as acct_org_type_cd,
+      |info.PD01A.PD01AI02                     as acct_org_id,
+      |info.PD01A.PD01AI03                     as acct_sign,
+      |info.PD01A.PD01AI04                     as acct_agmt_num,
+      |info.PD01A.PD01AD03                     as busi_spec_cd,
+      |info.PD01A.PD01AR01                     as open_dt,
+      |info.PD01A.PD01AD04                     as currency_cd,
+      |cast(info.PD01A.PD01AJ01 as decimal(18,2)) as due_amt,
+      |cast(info.PD01A.PD01AJ02 as decimal(18,2)) as credit_amt,
+      |cast(info.PD01A.PD01AJ03 as decimal(18,2)) as credit_amt_share,
+      |info.PD01A.PD01AR02                     as due_dt,
+      |info.PD01A.PD01AD05                     as repay_mode_cd,
+      |info.PD01A.PD01AD06                     as repay_frequency_cd,
+      |cast(info.PD01A.PD01AS01 as bigint)     as repay_period,
+      |info.PD01A.PD01AD07                     as grt_mode_cd,
+      |info.PD01A.PD01AD08                     as lending_mode_cd,
+      |info.PD01A.PD01AD09                     as share_sign_cd,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PDA.PD01                                as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_INFO, "ICR_LOAN_INFO")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_LATEST
+    //===========================================================================================================================================
+    val ICR_LOAN_LATEST =
+    """
+      |select
+      |t1.report_id                            as report_id,
+      |info.PD01A.PD01AI01                     as acct_num,
+      |info.PD01B.PD01BD01                     as acct_stat,
+      |info.PD01B.PD01BR01                     as close_dt,
+      |info.PD01B.PD01BR04                     as out_month,
+      |cast(info.PD01B.PD01BJ01 as decimal(18,2))  as loan_bal,
+      |info.PD01B.PD01BR02                     as latest_repay_dt,
+      |cast(info.PD01B.PD01BJ02 as decimal(18,2)) as latest_repay_amt,
+      |info.PD01B.PD01BD03                     as five_class_cd,
+      |info.PD01B.PD01BD04                     as repay_stat,
+      |info.PD01B.PD01BR03                     as report_dt,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PDA.PD01                                as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_LATEST, "ICR_LOAN_LATEST")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_1MONTH
+    //===========================================================================================================================================
+    val ICR_LOAN_1MONTH =
+    """
+      |select
+      |t1.report_id                                as report_id,
+      |info.PD01A.PD01AI01                         as acct_num,
+      |info.PD01C.PD01CR01                         as mmonth,
+      |info.PD01C.PD01CD01                         as acct_stat_1m,
+      |cast(info.PD01C.PD01CJ01 as decimal(18,2))   as loan_bal_1m,
+      |cast(info.PD01C.PD01CJ02 as decimal(18,2))   as credit_amt_used,
+      |cast(info.PD01C.PD01CJ03 as decimal(18,2))   as credit_amt_big,
+      |info.PD01C.PD01CD02                         as five_class_1m,
+      |cast(info.PD01C.PD01CS01 as bigint)         as repay_period_left,
+      |info.PD01C.PD01CR02                         as repay_date,
+      |cast(info.PD01C.PD01CJ04 as bigint)         as repay_amt,
+      |cast(info.PD01C.PD01CJ05 as bigint)         as repay_amt_act,
+      |info.PD01C.PD01CR03                         as repay_date_latest,
+      |cast(info.PD01C.PD01CS02 as bigint)         as overdue_period,
+      |cast(info.PD01C.PD01CJ06 as decimal(18,2))  as overdue_amt,
+      |cast(info.PD01C.PD01CJ07 as decimal(18,2))  as overdue_prin_31Amt,
+      |cast(info.PD01C.PD01CJ08 as decimal(18,2))  as overdue_prin_61Amt,
+      |cast(info.PD01C.PD01CJ09 as decimal(18,2))  as overdue_prin_91Amt,
+      |cast(info.PD01C.PD01CJ10 as decimal(18,2))  as overdue_prin_180Amt,
+      |cast(info.PD01C.PD01CJ11 as decimal(18,2))  as overdraft_prin_180Amt,
+      |cast(info.PD01C.PD01CJ12 as decimal(18,2))  as credit_6mon_avg,
+      |cast(info.PD01C.PD01CJ13 as decimal(18,2))  as overdraft_6mon_avg,
+      |cast(info.PD01C.PD01CJ14 as decimal(18,2))  as max_credit_used,
+      |cast(info.PD01C.PD01CJ15 as decimal(18,2))  as max_overdraft,
+      |info.PD01C.PD01CR04                         as report_dt_1mon,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PDA.PD01                                as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_1MONTH, "ICR_LOAN_1MONTH")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_1MONTH").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_24MONTH_DATE
+    //===========================================================================================================================================
+    val ICR_LOAN_24MONTH_DATE =
+    """
+      |select
+      |t1.report_id                                as report_id,
+      |info.PD01A.PD01AI01                         as acct_num,
+      |info.PD01D.PD01DR01                         as start_dt,
+      |info.PD01D.PD01DR02                         as end_dt,
+      |t1.SID                                      as SID,
+      |t1.STATISTICS_DT                            as STATISTICS_DT
+      |from(
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PDA.PD01                                as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_24MONTH_DATE, "ICR_LOAN_24MONTH_DATE")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_24MONTH_DATE").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PDAPD01
+    //===========================================================================================================================================
+    val PDAPD01 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PD01A  as PD01A,
+      |info.PD01B  as PD01B,
+      |info.PD01C  as PD01C,
+      |info.PD01D  as PD01D,
+      |info.PD01E  as PD01E,
+      |info.PD01F  as PD01F,
+      |info.PD01G  as PD01G,
+      |info.PD01H  as PD01H,
+      |info.PD01Z  as PD01Z
+      |from(
+      |select
+      |PDA.PD01   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
+      |""".stripMargin
+    createView(tableEnv, PDAPD01, "PDAPD01")
+    //tableEnv.sqlQuery("select * from PDAPD01").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_24MONTH
+    //===========================================================================================================================================
+    val ICR_LOAN_24MONTH =
+    """
+      |select
+      |t1.report_id                                    as report_id,
+      |t1.acct_num                                     as acct_num,
+      |info.PD01DR03                                   as month_24m,
+      |info.PD01DD01                                   as repay_stat_24m,
+      |t1.SID  				                        as SID,
+      |t1.STATISTICS_DT                                as STATISTICS_DT
+      |from(
+      |select
+      |PD01A.PD01AI01 as acct_num,
+      |report_id as report_id,
+      |SID as SID,
+      |STATISTICS_DT as  STATISTICS_DT,
+      |PD01D.PD01DH as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01DR03,PD01DD01)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_24MONTH, "ICR_LOAN_24MONTH")
+    //    tableEnv.sqlQuery("select * from ICR_LOAN_24MONTH").toAppendStream[Row].print()
 
 
     //===========================================================================================================================================
-    //                                                          todo 最后
+    //                                                          todo ICR_LOAN_5YEARS_DATE
     //===========================================================================================================================================
+    val ICR_LOAN_5YEARS_DATE =
+    """
+      |select
+      |report_id as report_id,
+      |PD01A.PD01AI01 as acct_num,
+      |PD01E.PD01ER01 as start_dt_5y,
+      |PD01E.PD01ER02 as end_dt_5y,
+      |cast(PD01E.PD01ES01 as bigint) as mon_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PDAPD01
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_5YEARS_DATE, "ICR_LOAN_5YEARS_DATE")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS_DATE").toAppendStream[Row].print()
+
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_5YEARS
+    //===========================================================================================================================================
+    val ICR_LOAN_5YEARS =
+    """
+      |select
+      |t1.report_id                                    as report_id,
+      |t1.acct_num                                     as acct_num,
+      |info.PD01ER03                                   as month_5y,
+      |info.PD01ED01                                   as repay_stat_5y,
+      |cast(info.PD01EJ01 as decimal(18,2))            as amt_5y,
+      |t1.SID  				                        as SID,
+      |t1.STATISTICS_DT                                as STATISTICS_DT
+      |from(
+      |select
+      |PD01A.PD01AI01      as acct_num,
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD01E.PD01EH        as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_5YEARS, "ICR_LOAN_5YEARS")
+    tableEnv.sqlQuery("select * from ICR_LOAN_5YEARS").toAppendStream[Row].print()
+
 
     env.execute()
   }
