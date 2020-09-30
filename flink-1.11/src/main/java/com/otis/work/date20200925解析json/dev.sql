@@ -532,208 +532,483 @@ from PDAPD01
 
 
 
-
-
-
--- todo ICR_QUERYREQ
+select
+t1.report_id as report_id,
+t1.acct_num as acct_num,
+info.PD01FD01 as spe_txn_type_cd,
+info.PD01FR01 as spe_txn_dt,
+cast(info.PD01FS02 as bigint) as spe_end_dt_change,
+cast(info.PD01FJ01 as decimal(18,2)) as spe_amt,
+info.PD01FQ01 as spe_record,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+PD01A.PD01AI01      as acct_num,
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD01F.PD01FH     as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01FD01,PD01FR01,PD01FS02,PD01FJ01,PD01FQ01)
 
 
 select
-PRH.PA01.PA01A.PA01AI01 as report_id,
-PRH.PA01.PA01A.PA01AI01 as report_no,
-PRH.PA01.PA01A.PA01AR01 as report_tm,
-PRH.PA01.PA01B.PA01BQ01 as cust_name,
-PRH.PA01.PA01B.PA01BD01 as query_iden_cd,
-PRH.PA01.PA01B.PA01BI01 as query_iden_id,
-PRH.PA01.PA01B.PA01BI02 as query_org_id,
-PRH.PA01.PA01B.PA01BD02 as query_reason_cd,
-'2020-09-27'            as STATISTICS_DT
-from ods_table;
+report_id as report_id,
+PD01A.PD01AI01      as acct_num,
+cast(PD01G.PD01GS01 as bigint) as spe_event_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PDAPD01
 
-create table ICR_QUERYREQ(
-PRH ROW(PA01 ROW(PA01B ROW(PA01BQ01 string,PA01BD01 string,PA01BI01 string,PA01BI02 string,PA01BD02 string),
-                 PA01A ROW(PA01AI01 string,PA01AR01 string))),
-report_id           AS PRH.PA01.PA01A.PA01AI01,
-report_no           AS PRH.PA01.PA01A.PA01AI01,
-report_tm           AS PRH.PA01.PA01A.PA01AR01,
-cust_name		    AS PRH.PA01.PA01B.PA01BQ01,
-query_iden_cd		AS PRH.PA01.PA01B.PA01BD01,
-query_iden_id       AS PRH.PA01.PA01B.PA01BI01,
-query_org_id        AS PRH.PA01.PA01B.PA01BI02,
-query_reason_cd		AS PRH.PA01.PA01B.PA01BD02,
-STATISTICS_DT	    AS '2020-09-27'
-)with(
-'connector' = 'filesystem',
-'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
-'format' = 'json'
-)
+
+select
+t1.report_id as report_id,
+t1.acct_num as acct_num,
+info.PD01GR01 as spe_event_dt,
+info.PD01GD01 as spe_event_type,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+PD01A.PD01AI01      as acct_num,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD01G.PD01GH     as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01GR01,PD01GD01)
 
 
 
-
-CREATE TABLE ICR_QUERYREQ_print (
-report_id        string,
-report_no        string,
-report_tm        string,
-cust_name		 string,
-query_iden_cd	string,
-query_iden_id    string,
-query_org_id     string,
-query_reason_cd	string,
-STATISTICS_DT	 string
-) WITH (
-'connector' = 'print')
-
--- todo ICR_OTHER_IDEN_NUM
-
-
-create table ICR_OTHER_IDEN_NUM(
-PRH ROW(PA01 ROW(PA01B ROW(PA01BQ01 string,PA01BD01 string,PA01BI01 string,PA01BI02 string,PA01BD02 string),
-                 PA01A ROW(PA01AI01 string,PA01AR01 string),
-                 PA01C ROW(PA01CS01 string))),
-report_id           AS PRH.PA01.PA01A.PA01AI01,
-iden_type_num       AS PRH.PA01.PA01C.PA01CS01,
-STATISTICS_DT	    AS '2020-09-27'
-)WITH(
-'connector' = 'filesystem',
-'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
-'format' = 'json'
-)
-
-CREATE TABLE ICR_OTHER_IDEN_NUM_PRINT(
-report_id           STRING,
-iden_type_num       STRING,
-STATISTICS_DT	    STRING
-)WITH(
-'connector' = 'print'
-)
-
--- todo ICR_OTHER_IDEN
-
-create table ICR_OTHER_IDEN(
-PRH ROW(PA01 ROW(PA01B ROW(PA01BQ01 string,PA01BD01 string,PA01BI01 string,PA01BI02 string,PA01BD02 string),
-                 PA01A ROW(PA01AI01 string,PA01AR01 string),
-                 PA01C ROW(PA01CS01 string))),
-report_id           AS PRH.PA01.PA01A.PA01AI01,
-
-)WITH(
-'connector' = 'filesystem',
-'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
-'format' = 'json'
-)
-
-
-iden_cd	varchar(2)		PA01CD01
-iden_id	varchar(40)		PA01CI01
-SID	varchar(25)	Y
-STATISTICS_DT	string	Y
+select
+report_id as report_id,
+PD01A.PD01AI01      as acct_num,
+cast(PD01H.PD01HS01 as bigint) as large_cnt,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PDAPD01
 
 
 
 
 
+select
+t1.report_id as report_id,
+t1.acct_num as acct_num,
+cast(info.PD01HJ01 as decimal(18,2)) as large_amt,
+info.PD01HR01 as large_eff_dt,
+info.PD01HR02 as large_end_dt,
+cast(info.PD01HJ02 as decimal(18,2)) as large_amt_used,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+PD01A.PD01AI01      as acct_num,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD01H.PD01HH     as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01HJ01,PD01HR01,PD01HR02,PD01HJ02)
 
-create table ods_table(
-PRH ROW(PA01 ROW(
-                  PA01B ROW(PA01BQ01 string,PA01BD01 string,PA01BI01 string,PA01BI02 string,PA01BD02 string),
-                  PA01A ROW(PA01AI01 string,PA01AR01 string),
-                  PA01C ROW(PA01CS01 string,PA01CH ARRAY<ROW(PA01CD01 string,PA01CI01 string)>),
-                  PA01D ROW(PA01DQ01 string,PA01DQ02 string,PA01DR01 string,PA01DR02 string),
-                  PA01E ROW(PA01ES01 STRING)
-                 )),
--- PIM ROW(PB01 ROW(
---                   PB01A ROW(PB01AD01 SREING,PB01AR01 SREING,PB01AD02 SREING,PB01AD03 SREING,PB01AD04 SREING,PB01AQ01 SREING,PB01AQ02 SREING,PB01AD05 SREING,PB01AQ03 SREING),
---                   PB01B ROW(PB01BS01 STRING,PB01BH ARRAY<ROW(PB01BQ01 STRING,PB01BR01 STRING)>)
---         )),
--- PMM ROW(PB02 ROW(PB020D01 STRING,PB020Q01 STRING,PB020D02 STRING,PB020I01 STRING,PB020Q02 STRING,PB020Q03 STRING)),
--- PRM ROW(PB03 ARRAY<ROW(PB030D01 STRING,PB030Q01 STRING,PB030Q02 STRING,PB030R01 STRING)>),
--- POM ROW(PB04 ARRAY<ROW(PB040D01 STRING,PB040Q01 STRING,PB040D02 STRING,PB040D03 STRING,PB040Q02 STRING,PB040Q03 STRING,PB040D04 STRING,PB040D05 STRING,PB040D06 STRING,PB040R01 STRING,PB040R02 STRING)>),
--- PSM ROW(PC01 ROW(PC010Q01 STRING,PC010Q02 STRING,PC010S01 STRING,PC010D01 STRING)),
--- PCO ROW(PC02 ROW(
---                   PC02A ROW(PC02AS01 STRING,PC02AS02 STRING,PC02AH ARRAY<ROW(PC02AD01 STRING,PC02AD02 STRING,PC02AS03 STRING,PC02AR01 STRING)>),
---                   PC02B ROW(PC02BS01 STRING,PC02BJ01 STRING,PC02BS02 STRING,PC02BH ARRAY<ROW(PC02BD01 STRING,PC02BS03 STRING,PC02BJ02 STRING)>),
---                   PC02C ROW(PC02CS01 STRING,PC02CJ01 STRING),
---                   PC02D ROW(PC02DS01 STRING,PC02DH ARRAY<ROW(PC02DD01 STRING,PC02DS02 STRING,PC02DS03 STRING,PC02DJ01 STRING,PC02DS04 STRING)>),
---                   PC02E ROW(PC02ES01 STRING,PC02ES02 STRING,PC02EJ01 STRING,PC02EJ02 STRING,PC02EJ03 STRING),
---                   PC02F ROW(PC02FS01 STRING,PC02FS02 STRING,PC02FJ01 STRING,PC02FJ02 STRING,PC02FJ03 STRING),
---                   PC02G ROW(PC02GS01 STRING,PC02GS02 STRING,PC02GJ01 STRING,PC02GJ02 STRING,PC02GJ03 STRING),
---                   PC02H ROW(PC02HS01 STRING,PC02HS02 STRING,PC02HJ01 STRING,PC02HJ02 STRING,PC02HJ03 STRING,PC02HJ04 STRING,PC02HJ05 STRING),
---                   PC02I ROW(PC02IS01 STRING,PC02IS02 STRING,PC02IJ01 STRING,PC02IJ02 STRING,PC02IJ03 STRING,PC02IJ04 STRING,PC02IJ05 STRING),
---                   PC02K ROW(PC02KS01 STRING,PC02KH ARRAY<ROW(PC02KD01 STRING,PC02KD02 STRING,PC02KS02 STRING,PC02KJ01 STRING,PC02KJ02 STRING)>))
---       ),
--- PNO ROW(PC03 ROW(PC030S01 STRING,PC030H ARRAY<ROW(PC030D01 STRING,PC030S02 STRING,PC030J01 STRING)>)),
--- PPO ROW(PC04 ROW(PC040S01 STRING,PC040H ARRAY<ROW(PC040D01 STRING,PC040S02 STRING,PC040J01 STRING)>)),
--- PQO ROW(PC05 ROW(
---                     PC05A ROW(PC05AR01 STRING,PC05AD01 STRING,PC05AI01 STRING,PC05AQ01 STRING),
---                     PC05B ROW(PC05BS01 STRING,PC05BS02 STRING,PC05BS03 STRING,PC05BS04 STRING,PC05BS05 STRING,PC05BS06 STRING,PC05BS07 STRING,PC05BS08 STRING)
---     )),
--- PDA ROW(PD01 ARRAY<ROW(
---                     PD01A ROW(PD01AI01 STRING,PD01AD01 STRING,PD01AD02 STRING,PD01AI02 STRING,PD01AI03 STRING,PD01AI04 STRING,PD01AD03 STRING,PD01AR01 STRING,PD01AD04 STRING,PD01AJ01 STRING,PD01AJ02 STRING,PD01AJ03 STRING,PD01AR02 STRING,PD01AD05 STRING,PD01AD06 STRING,PD01AS01 STRING,PD01AD07 STRING,PD01AD08 STRING,PD01AD09 STRING,PD01AD10 STRING),
---                     PD01B ROW(PD01BD01 STRING,PD01BR01 STRING,PD01BR04 STRING,PD01BJ01 STRING,PD01BR02 STRING,PD01BJ02 STRING,PD01BD03 STRING,PD01BD04 STRING,PD01BR03 STRING),
---                     PD01C ROW(PD01CR01 STRING,PD01CD01 STRING,PD01CJ01 STRING,PD01CJ02 STRING,PD01CJ03 STRING,PD01CD02 STRING,PD01CS01 STRING,PD01CR02 STRING,PD01CJ04 STRING,PD01CJ05 STRING,PD01CR03 STRING,PD01CS02 STRING,PD01CJ06 STRING,PD01CJ07 STRING,PD01CJ08 STRING,PD01CJ09 STRING,PD01CJ10 STRING,PD01CJ11 STRING,PD01CJ12 STRING,PD01CJ13 STRING,PD01CJ14 STRING,PD01CJ15 STRING,PD01CR04 STRING),
---                     PD01D ROW(PD01DR01 STRING,PD01DR02 STRING,PD01DH ARRAY<ROW(PD01DR03 STRING,PD01DD01 STRING)>),
---                     PD01E ROW(PD01ER01 STRING,PD01ER02 STRING,PD01ES01 STRING,PD01EH ARRAY<ROW(PD01ER03 STRING,PD01ED01 STRING,PD01EJ01 STRING)>),
---                     PD01F ROW(PD01FS01 STRING,PD01FH ARRAY<ROW(PD01FD01 STRING,PD01FR01 STRING,PD01FS02 STRING,PD01FJ01 STRING,PD01FQ01 STRING)>),
---                     PD01G ROW(PD01GS01 STRING,PD01GH ARRAY<ROW(PD01GR01 STRING,PD01GD01 STRING)>),
---                     PD01H ROW(PD01HS01 STRING,PD01HH ARRAY<ROW(PD01HJ01 STRING,PD01HR01 STRING,PD01HR02 STRING,PD01HJ02 STRING)>),
---                     PD01Z ROW(PD01ZS01 STRING,PD01ZH ARRAY<ROW(PD01ZD01 STRING,PD01ZQ01 STRING,PD01ZR01 STRING)>)
---       )>),
--- PCA ROW(PD02 ARRAY<ROW(
---                         PD02A ROW(PD02AI01 STRING,PD02AD01 STRING,PD02AI02 STRING,PD02AI03 STRING,PD02AD02 STRING,PD02AJ01 STRING,PD02AD03 STRING,PD02AR01 STRING,PD02AR02 STRING,PD02AD04 STRING,PD02AJ04 STRING,PD02AJ03 STRING,PD02AI04 STRING),
---                         PD02Z ROW(PD02ZS01 STRING,PD02ZH ARRAY<ROW(PD02ZD01 STRING,PD02ZQ01 STRING,PD02ZR01 STRING)>)
---                         )>),
--- PCR ROW(PD03 ARRAY<ROW(
---                         PD03A ROW(PD03AD08 STRING,PD03AD01 STRING,PD03AQ01 STRING,PD03AD02 STRING,PD03AR01 STRING,PD03AR02 STRING,PD03AD03 STRING,PD03AQ02 STRING,PD03AJ01 STRING,PD03AD04 STRING,PD03AJ02 STRING,PD03AD05 STRING,PD03AD06 STRING,PD03AD07 STRING,PD03AS01 STRING,PD03AR03 STRING),
---                         PD03Z ROW(PD03ZS01 STRING,PD03ZH ARRAY<PD03ZD01 STRING>)
---                       >)),
--- PND ROW(PE01 ARRAY<ROW(
---                         PE01A ROW(PE01AD01 STRING,PE01AQ01 STRING,PE01AD02 STRING,PE01AR01 STRING,PE01AD03 STRING,PE01AJ01 STRING,PE01AR02 STRING,PE01AQ02 STRING),
---                         PE01Z ROW(PE01ZS01 STRING,PE01ZH ARRAY<ROW(PE01ZD01 STRING,PE01ZQ01 STRING,PE01ZR01 STRING)>)
---                 )>),
--- POT ROW(PF01 ARRAY<ROW(
---                         PF01A ROW(PF01AQ01 STRING,PF01AJ01 STRING,PF01AR01 STRING),
---                         PF01Z ROW(PF01ZS01 STRING,PF01ZH ARRAY<ROW(PF01ZD01 STRING,PF01ZQ01 STRING,PF01ZR01 STRING)>))
---                 >),
--- PCJ ROW(PF02 ARRAY<ROW(
---                         PF02A ROW(PF02AQ01 STRING,PF02AQ02 STRING,PF02AR01 STRING,PF02AD01 STRING,PF02AQ03 STRING,PF02AR02 STRING,PF02AQ04 STRING,PF02AJ01 STRING),
---                         PF02Z ROW(PF02ZS01 STRING,PF02ZH ARRAY<ROW(PF02ZD01 STRING,PF02ZQ01 STRING,PF02ZR01 STRING)>)
---                 )>),
--- PCE ROW(PF03 ARRAY<ROW(
---                         PF03A ROW(PF03AQ01 STRING,PF03AQ02 STRING,PF03AR01 STRING,PF03AD01 STRING,PF03AQ03 STRING,PF03AR02 STRING,PF03AQ04 STRING,PF03AJ01 STRING,PF03AQ05 STRING,PF03AJ02 STRING),
---                         PF03Z ROW(PF03ZS01 STRING,PF03ZH ARRAY<ROW(PF03ZD01 STRING,PF03ZQ01 STRING,PF03ZR01 STRING)>)
---                 )>),
--- PAP ROW(PF04 ARRAY<ROW(
---                         PF04A ROW(PF04AQ01 STRING,PF04AQ02 STRING,PF04AJ01 STRING,PF04AR01 STRING,PF04AR02 STRING,PF04AQ03 STRING),
---                         PF04Z ROW(PF04ZS01 STRING,PF04ZH ARRAY<ROW(PF04ZD01 STRING,PF04ZQ01 STRING,PF04ZR01 STRING)>)
---                 )>),
--- PHF ROW(PF05 ARRAY<ROW(
---                         PF05A ROW(PF05AQ01 STRING,PF05AR01 STRING,PF05AD01 STRING,PF05AR02 STRING,PF05AR03 STRING,PF05AQ02 STRING,PF05AQ03 STRING,PF05AJ01 STRING,PF05AQ04 STRING,PF05AR04 STRING),
---                         PF05Z ROW(PF05ZS01 STRING,PF05ZH ARRAY<ROW(PF05ZD01 STRING,PF05ZQ01 STRING,PF05ZR01 STRING)>)
---                 )>),
--- PBS ROW(PF06 ARRAY<ROW(
---                         PF06A ROW(PF06AD01 STRING,PF06AQ01 STRING,PF06AQ02 STRING,PF06AQ03 STRING,PF06AR01 STRING,PF06AR02 STRING,PF06AR03 STRING),
---                         PF06Z ROW(PF06ZS01 STRING,PF06ZH ARRAY<ROW(PF06ZD01 STRING,PF06ZQ01 STRING,PF06ZR01 STRING)>)
---                 )>),
--- PPQ ROW(PF07 ARRAY<ROW(
---                         PF07A ROW(PF07AQ01 STRING,PF07AQ02 STRING,PF07AD01 STRING,PF07AD02 STRING,PF07AR01 STRING,PF07AR02 STRING,PF07AR03 STRING),
---                         PF07Z ROW(PF07ZS01 STRING,PF07ZH ARRAY<ROW(PF07ZD01 STRING,PF07ZQ01 STRING,PF07ZR01 STRING)>)
---                 )>),
--- PAH ROW(PF08 ARRAY<ROW(
---                         PF08A ROW(PF08AQ01 STRING,PF08AQ02 STRING,PF08AR01 STRING,PF08AR02 STRING),
---                         PF08Z ROW(PF08ZS01 STRING,PF08ZH ARRAY<ROW(PF08ZD01 STRING,PF08ZQ01 STRING,PF08ZR01 STRING)>)
---                 )>),
--- POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),
--- POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
-)WITH(
-'connector' = 'filesystem',
-'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
-'format' = 'json'
-)
+
+select
+report_id as report_id,
+PD01A.PD01AI01      as acct_num,
+cast(PD01Z.PD01ZS01 as bgiint) as declare_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PDAPD01
+
+
+
+select
+t1.report_id as report_id,
+t1.acct_num as acct_num,
+info.PD01ZD01 as declare_type_cd,
+info.PD01ZQ01 as declare_content,
+info.PD01ZR01 as declare_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+PD01A.PD01AI01      as acct_num,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD01Z.PD01ZH     as data
+from PDAPD01
+)t1,unnest(t1.data) as info(PD01ZD01,PD01ZQ01,PD01ZR01)
 
 
 
 
 
+select
+report_id as report_id,
+PD02A.PD02AI01 as agmt_num,
+cast(PD02Z.PD02ZS01 as bigint) as agmt_dec_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PCAPD02
+
+
+select
+report_id as report_id,
+PD02A.PD02AI01 as agmt_num,
+PD02A.PD02AD01  as agmt_org_type,
+PD02A.PD02AI02  as agmt_org_id,
+PD02A.PD02AI03  as agmt_sign,
+PD02A.PD02AD02  as agmt_use_cd,
+cast(PD02A.PD02AJ01 as decimal(18,2))  as agmt_amt,
+PD02A.PD02AD03  as agmt_currency_cd,
+PD02A.PD02AR01  as agmt_eff_dt,
+PD02A.PD02AR02  as agmt_due_dt,
+PD02A.PD02AD04  as agmt_stat_cd,
+cast(PD02A.PD02AJ04 as decimal(18,2))  as agmt_amt_used,
+PD02A.PD02AI04  as agmt_limit_id,
+cast(PD02A.PD02AJ03 as decimal(18,2))  as agmt_limit,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PCAPD02
+
+
+
+select
+t1.report_id as report_id,
+t1.agmt_num as agmt_num,
+info.PD02ZD01 as agmt_decl_type,
+info.PD02ZQ01 as agmt_decl_cont,
+info.PD02ZR01 as agmt_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+PD02A.PD02AI01      as agmt_num,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PD02Z.PD02ZH     as data
+from PCAPD02
+)t1,unnest(t1.data) as info(PD02ZD01,PD02ZQ01,PD02ZR01)
+
+
+select
+report_id as report_id,
+PE01.PE01AD01 as postpaid_acct_type_cd,
+PE01.PE01AQ01 as postpaid_org_name,
+PE01.PE01AD02 as postpaid_busi_type_cd,
+PE01.PE01AR01 as postpaid_open_dt,
+PE01.PE01AD03 as postpaid_stat_cd,
+cast(PE01.PE01AJ01 as decimal(18,2)) as postpaid_owe_amt,
+PE01.PE01AR02 as postpaid_acct_mon,
+PE01.PE01AQ02 as postpaid_24mon,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PNDPE01
+
+
+
+select
+report_id as report_id,
+PF01A.PF01AQ01 as tax_org_id,
+cast(PF01A.PF01AJ01 as decimal(18,2)) as tax_owe_amt,
+PF01A.PF01AR01 as tax_owe_dt,
+STATISTICS_DT as STATISTICS_DT
+from POTPF01
+
+
+
+select
+report_id as report_id,
+cast(PF01Z.PF01ZS01 as bigint) as tax_owe_amt,
+STATISTICS_DT as STATISTICS_DT
+from POTPF01
+
+
+select
+report_id as report_id,
+PF02A.PF02AQ01 as civ_court_id,
+PF02A.PF02AQ02 as civ_reason,
+PF02A.PF02AR01 as civ_reg_dt,
+PF02A.PF02AD01 as civ_closed_cd,
+PF02A.PF02AQ03 as civ_result,
+PF02A.PF02AR02 as civ_eff_dt,
+PF02A.PF02AQ04 as civ_target,
+cast(PF02A.PF02AJ01 as decimal(18,2)) as civ_amt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PCJPF02
+
+
+select
+report_id as report_id,
+cast(PF02Z.PF02ZS01 as bigint) as civ_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PCJPF02
+
+
+
+select
+report_id as report_id,
+PF03A.PF03AQ01 as   enf_court_id,
+PF03A.PF03AQ02 as   enf_reason,
+PF03A.PF03AR01 as   enf_reg_dt,
+PF03A.PF03AD01 as   enf_closed_cd,
+PF03A.PF03AQ03 as   enf_stat,
+PF03A.PF03AR02 as   enf_closed_dt,
+PF03A.PF03AQ04 as   enf_apply_target,
+cast(PF03A.PF03AJ01 as decimal(18,2)) as   enf_apply_amt,
+PF03A.PF03AQ05 as   enf_execute_target,
+cast(PF03A.PF03AJ02 as decimal(18,2)) as   enf_execute_amt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PCEPF03
+
+
+
+
+select
+report_id as report_id,
+cast(PF03Z.PF03ZS01 as decimal(18,2)) as enf_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PCEPF03
+
+PAP ROW(PF04 ARRAY<ROW(
+                        PF04A ROW(PF04AQ01 STRING,PF04AQ02 STRING,PF04AJ01 STRING,PF04AR01 STRING,PF04AR02 STRING,PF04AQ03 STRING),
+                        PF04Z ROW(PF04ZS01 STRING,PF04ZH ARRAY<ROW(PF04ZD01 STRING,PF04ZQ01 STRING,PF04ZR01 STRING)>)
+                )>)
+
+select
+report_id as report_id,
+PF04A.PF04AQ01 as punish_org_id,
+PF04A.PF04AQ02 as punish_cont,
+cast(PF04A.PF04AJ01 as decimal(18,2)) as punish_amt,
+PF04A.PF04AR01 as punish_eff_dt,
+PF04A.PF04AR02 as punish_end_dt,
+PF04A.PF04AQ03 as punish_result,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PAPPF04
+
+
+
+select
+report_id as report_id,
+cast(PF04Z.PF04ZS01 as bigint) as punish_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PAPPF04
+
+
+PHF ROW(PF05 ARRAY<ROW(
+                        PF05A ROW(PF05AQ01 STRING,PF05AR01 STRING,PF05AD01 STRING,PF05AR02 STRING,PF05AR03 STRING,PF05AQ02 STRING,PF05AQ03 STRING,PF05AJ01 STRING,PF05AQ04 STRING,PF05AR04 STRING),
+                        PF05Z ROW(PF05ZS01 STRING,PF05ZH ARRAY<ROW(PF05ZD01 STRING,PF05ZQ01 STRING,PF05ZR01 STRING)>)
+                )>),
+
+select
+report_id as report_id,
+PF05A.PF05AQ01 as housing_area,
+PF05A.PF05AR01 as housing_dt,
+PF05A.PF05AD01 as housing_stat_cd,
+PF05A.PF05AR02 as housing_start_dt,
+PF05A.PF05AR03 as housing_last_dt,
+cast(PF05A.PF05AQ02 as bigint) as housing_prop,
+cast(PF05A.PF05AQ03 as bigint) as housing_prop_indiv,
+cast(PF05A.PF05AJ01 as bigint) as housing_amt,
+PF05A.PF05AQ04 as housing_unit,
+PF05A.PF05AR04 as housing_update_dt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PHFPF05
+
+select
+report_id as report_id,
+cast(PF05Z.PF05ZS01 as bigint) as housing_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PHFPF05
+
+
+
+
+PBS ROW(PF06 ARRAY<ROW(
+                        PF06A ROW(PF06AD01 STRING,PF06AQ01 STRING,PF06AQ02 STRING,PF06AQ03 STRING,PF06AR01 STRING,PF06AR02 STRING,PF06AR03 STRING),
+                        PF06Z ROW(PF06ZS01 STRING,PF06ZH ARRAY<ROW(PF06ZD01 STRING,PF06ZQ01 STRING,PF06ZR01 STRING)>)
+                )>),
+
+
+select
+report_id as report_id,
+PF06A.PF06AD01 as   allowance_type_cd,
+PF06A.PF06AQ01 as   allowance_area,
+PF06A.PF06AQ02 as   allowance_unit,
+cast(PF06A.PF06AQ03 as bigint) as   allowance_income,
+PF06A.PF06AR01 as   allowance_sup_dt,
+PF06A.PF06AR02 as   allowance_app_dt,
+PF06A.PF06AR03 as   allowance_update_dt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PBSPF06
+
+
+
+select
+report_id as report_id,
+cast(PF06Z.PF06ZS01 as bigint) as allowance_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PBSPF06
+
+
+PPQ ROW(PF07 ARRAY<ROW(
+                        PF07A ROW(PF07AQ01 STRING,PF07AQ02 STRING,PF07AD01 STRING,PF07AD02 STRING,PF07AR01 STRING,PF07AR02 STRING,PF07AR03 STRING),
+                        PF07Z ROW(PF07ZS01 STRING,PF07ZH ARRAY<ROW(PF07ZD01 STRING,PF07ZQ01 STRING,PF07ZR01 STRING)>)
+                )>),
+
+select
+report_id      as report_id,
+PF07A.PF07AQ01 as   qual_name,
+PF07A.PF07AQ02 as   qual_org,
+PF07A.PF07AD01 as   qual_level_cd,
+PF07A.PF07AD02 as   qual_area,
+PF07A.PF07AR01 as   qual_get_dt,
+PF07A.PF07AR02 as   qual_due_dt,
+PF07A.PF07AR03 as   qual_revoke_dt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PPQPF07
+
+select
+report_id as report_id,
+cast(PF07Z.PF07ZS01 as bigint) as allowance_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PPQPF07
+
+
+
+PAH ROW(PF08 ARRAY<ROW(
+                        PF08A ROW(PF08AQ01 STRING,PF08AQ02 STRING,PF08AR01 STRING,PF08AR02 STRING),
+                        PF08Z ROW(PF08ZS01 STRING,PF08ZH ARRAY<ROW(PF08ZD01 STRING,PF08ZQ01 STRING,PF08ZR01 STRING)>)
+                )>),
+
+
+select
+report_id      as   report_id,
+PF08A.PF08AQ01 as   rew_org,
+PF08A.PF08AQ02 as   rew_cont,
+PF08A.PF08AR01 as   rew_eff_dt,
+PF08A.PF08AR02 as   rew_end_dt,
+STATISTICS_DT as STATISTICS_DT,
+SID as SID
+from PAHPF08
+
+
+select
+report_id as report_id,
+cast(PF08Z.PF08ZS01 as bigint) as allowance_decl_num,
+STATISTICS_DT as STATISTICS_DT
+from PAHPF08
+
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PE01ZD01 as  postpaid_decl_type,
+info.PE01ZQ01 as  postpaid_decl_cont,
+info.PE01ZR01 as  postpaid_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PE01Z.PE01ZH     as data
+from PNDPE01
+)t1,unnest(t1.data) as info(PE01ZD01,PE01ZQ01,PE01ZR01)
+
+
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF01ZD01 as tax_decl_type,
+info.PF01ZQ01 as tax_decl_cont,
+info.PF01ZR01 as tax_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF01Z.PF01ZH     as data
+from POTPF01
+)t1,unnest(t1.data) as info(PF01ZD01,PF01ZQ01,PF01ZR01)
+
+
+
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF02ZD01 as civ_decl_type,
+info.PF02ZQ01 as civ_decl_cont,
+info.PF02ZR01 as civ_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF02Z.PF02ZH     as data
+from PCJPF02
+)t1,unnest(t1.data) as info(PF02ZD01,PF02ZQ01,PF02ZR01)
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF03ZD01 as enf_decl_type,
+info.PF03ZQ01 as enf_decl_cont,
+info.PF03ZR01 as enf_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF03Z.PF03ZH        as data
+from PCEPF03
+)t1,unnest(t1.data) as info(PF03ZD01,PF03ZQ01,PF03ZR01)
+
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF04ZD01 as punish_decl_type,
+info.PF04ZQ01 as punish_decl_cont,
+info.PF04ZR01 as punish_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF04Z.PF04ZH     as data
+from PAPPF04
+)t1,unnest(t1.data) as info(PF04ZD01,PF04ZQ01,PF04ZR01)
 
 
 
@@ -742,3 +1017,89 @@ PRH ROW(PA01 ROW(
 
 
 
+
+select
+t1.report_id  as  report_id,
+info.PF05ZD01 as housing_decl_type,
+info.PF05ZQ01 as housing_decl_cont,
+info.PF05ZR01 as housing_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF05Z.PF05ZH     as data
+from PHFPF05
+)t1,unnest(t1.data) as info(PF05ZD01,PF05ZQ01,PF05ZR01)
+
+
+
+
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF06ZD01 as allowance_decl_type,
+info.PF06ZQ01 as allowance_decl_cont,
+info.PF06ZR01 as allowance_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF06Z.PF06ZH     as data
+from PBSPF06
+)t1,unnest(t1.data) as info(PF06ZD01,PF06ZQ01,PF06ZR01)
+
+
+
+
+
+
+
+
+
+
+
+
+-- 模板
+select
+t1.report_id  as  report_id,
+info.PF07ZD01 as qual_decl_type,
+info.PF07ZQ01 as qual_decl_cont,
+info.PF07ZR01 as qual_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF07Z.PF07ZH     as data
+from PPQPF07
+)t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01)
+
+
+
+
+select
+t1.report_id  as  report_id,
+info.PF08ZD01 as rew_decl_type,
+info.PF08ZQ01 as rew_decl_cont,
+info.PF08ZR01 as rew_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id 			as report_id,
+SID 				as SID,
+STATISTICS_DT 		as STATISTICS_DT,
+PF08Z.PF08ZH     as data
+from PAHPF08
+)t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)

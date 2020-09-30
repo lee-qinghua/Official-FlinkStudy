@@ -108,7 +108,7 @@ object test {
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'filesystem',
-        |'path' = 'file:///D:\project\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\c.json',
+        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\test.json',
         |'format' = 'json'
         |)
         |""".stripMargin
@@ -190,7 +190,7 @@ object test {
         |from ods_table
         |""".stripMargin)
     tableEnv.createTemporaryView("ICR_FRAUD", ICR_FRAUD_table)
-    //    tableEnv.sqlQuery("""select * from ICR_FRAUD""").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("""select * from ICR_FRAUD""").toAppendStream[Row].print()
 
     //===========================================================================================================================================
     //                                                          todo ICR_IDENTITY
@@ -903,6 +903,246 @@ object test {
       |""".stripMargin
     createView(tableEnv, PDAPD01, "PDAPD01")
     //tableEnv.sqlQuery("select * from PDAPD01").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PCAPD02
+    //===========================================================================================================================================
+    val PCAPD02 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PD02A as PD02A,
+      |info.PD02Z as PD02Z
+      |from(
+      |select
+      |PCA.PD02   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD02A,PD02Z)
+      |""".stripMargin
+
+    createView(tableEnv, PCAPD02, "PCAPD02")
+    //tableEnv.sqlQuery("select * from PCAPD02").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PCRPD03
+    //===========================================================================================================================================
+    val PCRPD03 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PD03A as PD03A,
+      |info.PD03Z as PD03Z
+      |from(
+      |select
+      |PCR.PD03   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PD03A,PD03Z)
+      |""".stripMargin
+
+    createView(tableEnv, PCRPD03, "PCRPD03")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PNDPE01
+    //===========================================================================================================================================
+    val PNDPE01 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PE01A as PE01A,
+      |info.PE01Z as PE01Z
+      |from(
+      |select
+      |PND.PE01   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PE01A,PE01Z)
+      |""".stripMargin
+    createView(tableEnv, PNDPE01, "PNDPE01")
+
+    //===========================================================================================================================================
+    //                                                          todo 中间表 POTPF01
+    //===========================================================================================================================================
+    val POTPF01 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF01A as PF01A,
+      |info.PF01Z as PF01Z
+      |from(
+      |select
+      |POT.PF01   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF01A,PF01Z)
+      |""".stripMargin
+    createView(tableEnv, POTPF01, "POTPF01")
+
+
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PCJPF02
+    //===========================================================================================================================================
+    val PCJPF02 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF02A as PF02A,
+      |info.PF02Z as PF02Z
+      |from(
+      |select
+      |PCJ.PF02   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF02A,PF02Z)
+      |""".stripMargin
+    createView(tableEnv, PCJPF02, "PCJPF02")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PCEPF03
+    //===========================================================================================================================================
+    val PCEPF03 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF03A as PF03A,
+      |info.PF03Z as PF03Z
+      |from(
+      |select
+      |PCE.PF03   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF03A,PF03Z)
+      |""".stripMargin
+    createView(tableEnv, PCEPF03, "PCEPF03")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PAPPF04
+    //===========================================================================================================================================
+    val PAPPF04 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF04A as PF04A,
+      |info.PF04Z as PF04Z
+      |from(
+      |select
+      |PAP.PF04   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF04A,PF04Z)
+      |""".stripMargin
+    createView(tableEnv, PAPPF04, "PAPPF04")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PHFPF05
+    //===========================================================================================================================================
+    val PHFPF05 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF05A as PF05A,
+      |info.PF05Z as PF05Z
+      |from(
+      |select
+      |PHF.PF05   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF05A,PF05Z)
+      |""".stripMargin
+    createView(tableEnv, PHFPF05, "PHFPF05")
+
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PBSPF06
+    //===========================================================================================================================================
+
+    val PBSPF06 =
+      """
+        |select
+        |t1.report_id as report_id,
+        |t1.SID as SID,
+        |t1.STATISTICS_DT as STATISTICS_DT,
+        |info.PF06A as PF06A,
+        |info.PF06Z as PF06Z
+        |from(
+        |select
+        |PBS.PF06   as data,
+        |PRH.PA01.PA01A.PA01AI01  				as report_id,
+        |PRH.PA01.PA01A.PA01AI01  				as SID,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |)t1,unnest(t1.data) as info(PF06A,PF06Z)
+        |""".stripMargin
+    createView(tableEnv, PBSPF06, "PBSPF06")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PPQPF07
+    //===========================================================================================================================================
+
+    val PPQPF07 =
+      """
+        |select
+        |t1.report_id as report_id,
+        |t1.SID as SID,
+        |t1.STATISTICS_DT as STATISTICS_DT,
+        |info.PF07A as PF07A,
+        |info.PF07Z as PF07Z
+        |from(
+        |select
+        |PPQ.PF07   as data,
+        |PRH.PA01.PA01A.PA01AI01  				as report_id,
+        |PRH.PA01.PA01A.PA01AI01  				as SID,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |)t1,unnest(t1.data) as info(PF07A,PF07Z)
+        |""".stripMargin
+    createView(tableEnv, PPQPF07, "PPQPF07")
+    //===========================================================================================================================================
+    //                                                          todo 中间表 PAHPF08
+    //===========================================================================================================================================
+    val PAHPF08 =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT,
+      |info.PF08A as PF08A,
+      |info.PF08Z as PF08Z
+      |from(
+      |select
+      |PAH.PF08   as data,
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PF08A,PF08Z)
+      |""".stripMargin
+    createView(tableEnv, PAHPF08, "PAHPF08")
 
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_24MONTH
@@ -988,9 +1228,728 @@ object test {
       |from PDAPD01
       |""".stripMargin
     createView(tableEnv, ICR_SPECIAL_TXN_NUM, "ICR_SPECIAL_TXN_NUM")
-    tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN_NUM").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SPECIAL_TXN
+    //===========================================================================================================================================
+    val ICR_SPECIAL_TXN =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.acct_num as acct_num,
+      |info.PD01FD01 as spe_txn_type_cd,
+      |info.PD01FR01 as spe_txn_dt,
+      |cast(info.PD01FS02 as bigint) as spe_end_dt_change,
+      |cast(info.PD01FJ01 as decimal(18,2)) as spe_amt,
+      |info.PD01FQ01 as spe_record,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |PD01A.PD01AI01      as acct_num,
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD01F.PD01FH     as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01FD01,PD01FR01,PD01FS02,PD01FJ01,PD01FQ01)
+      |""".stripMargin
+    createView(tableEnv, ICR_SPECIAL_TXN, "ICR_SPECIAL_TXN")
+    //tableEnv.sqlQuery("select * from ICR_SPECIAL_TXN").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SPECIAL_EVENT_NUM
+    //===========================================================================================================================================
+    val ICR_SPECIAL_EVENT_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |cast(PD01G.PD01GS01 as bigint) as spe_event_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PDAPD01
+      |""".stripMargin
+    createView(tableEnv, ICR_SPECIAL_EVENT_NUM, "ICR_SPECIAL_EVENT_NUM")
+    //tableEnv.sqlQuery("select * from ICR_SPECIAL_EVENT_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_SPECIAL_EVENT
+    //===========================================================================================================================================
+    val ICR_SPECIAL_EVENT =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.acct_num as acct_num,
+      |info.PD01GR01 as spe_event_dt,
+      |info.PD01GD01 as spe_event_type,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD01G.PD01GH     as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01GR01,PD01GD01)
+      |""".stripMargin
+    createView(tableEnv, ICR_SPECIAL_EVENT, "ICR_SPECIAL_EVENT")
+    //tableEnv.sqlQuery("select * from ICR_SPECIAL_EVENT").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LARGE_INSTALMENTS_NUM
+    //===========================================================================================================================================
+    val ICR_LARGE_INSTALMENTS_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |cast(PD01H.PD01HS01 as bigint) as large_cnt,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PDAPD01
+      |""".stripMargin
+    createView(tableEnv, ICR_LARGE_INSTALMENTS_NUM, "ICR_LARGE_INSTALMENTS_NUM")
+    //tableEnv.sqlQuery("select * from ICR_LARGE_INSTALMENTS_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LARGE_INSTALMENTS
+    //===========================================================================================================================================
+    val ICR_LARGE_INSTALMENTS =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.acct_num as acct_num,
+      |cast(info.PD01HJ01 as decimal(18,2)) as large_amt,
+      |info.PD01HR01 as large_eff_dt,
+      |info.PD01HR02 as large_end_dt,
+      |cast(info.PD01HJ02 as decimal(18,2)) as large_amt_used,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD01H.PD01HH     as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01HJ01,PD01HR01,PD01HR02,PD01HJ02)
+      |""".stripMargin
+    createView(tableEnv, ICR_LARGE_INSTALMENTS, "ICR_LARGE_INSTALMENTS")
+    //tableEnv.sqlQuery("select * from ICR_LARGE_INSTALMENTS").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_LOAN_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |cast(PD01Z.PD01ZS01 as bigint) as declare_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PDAPD01
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_DECLARE_NUM, "ICR_LOAN_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_LOAN_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_LOAN_DECLARE
+    //===========================================================================================================================================
+    val ICR_LOAN_DECLARE =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.acct_num as acct_num,
+      |info.PD01ZD01 as declare_type_cd,
+      |info.PD01ZQ01 as declare_content,
+      |info.PD01ZR01 as declare_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |PD01A.PD01AI01      as acct_num,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD01Z.PD01ZH     as data
+      |from PDAPD01
+      |)t1,unnest(t1.data) as info(PD01ZD01,PD01ZQ01,PD01ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_LOAN_DECLARE, "ICR_LOAN_DECLARE")
+    //tableEnv.sqlQuery("select * from ICR_LOAN_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_CREDIT_AGREEMENT
+    //===========================================================================================================================================
+    val ICR_CREDIT_AGREEMENT =
+    """
+      |select
+      |report_id as report_id,
+      |PD02A.PD02AI01 as agmt_num,
+      |PD02A.PD02AD01  as agmt_org_type,
+      |PD02A.PD02AI02  as agmt_org_id,
+      |PD02A.PD02AI03  as agmt_sign,
+      |PD02A.PD02AD02  as agmt_use_cd,
+      |cast(PD02A.PD02AJ01 as decimal(18,2))  as agmt_amt,
+      |PD02A.PD02AD03  as agmt_currency_cd,
+      |PD02A.PD02AR01  as agmt_eff_dt,
+      |PD02A.PD02AR02  as agmt_due_dt,
+      |PD02A.PD02AD04  as agmt_stat_cd,
+      |cast(PD02A.PD02AJ04 as decimal(18,2))  as agmt_amt_used,
+      |PD02A.PD02AI04  as agmt_limit_id,
+      |cast(PD02A.PD02AJ03 as decimal(18,2))  as agmt_limit,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCAPD02
+      |""".stripMargin
+    createView(tableEnv, ICR_CREDIT_AGREEMENT, "ICR_CREDIT_AGREEMENT")
+    //    tableEnv.sqlQuery("select * from ICR_CREDIT_AGREEMENT").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_AGREEMENT_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_AGREEMENT_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |PD02A.PD02AI01 as agmt_num,
+      |cast(PD02Z.PD02ZS01 as bigint) as agmt_dec_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCAPD02
+      |""".stripMargin
+    createView(tableEnv, ICR_AGREEMENT_DECLARE_NUM, "ICR_AGREEMENT_DECLARE_NUM")
+    //tableEnv.sqlQuery("select * from ICR_AGREEMENT_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_AGREEMENT_DECLARE
+    //===========================================================================================================================================
+    val ICR_AGREEMENT_DECLARE =
+    """
+      |select
+      |t1.report_id as report_id,
+      |t1.agmt_num as agmt_num,
+      |info.PD02ZD01 as agmt_decl_type,
+      |info.PD02ZQ01 as agmt_decl_cont,
+      |info.PD02ZR01 as agmt_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |PD02A.PD02AI01      as agmt_num,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PD02Z.PD02ZH     as data
+      |from PCAPD02
+      |)t1,unnest(t1.data) as info(PD02ZD01,PD02ZQ01,PD02ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_AGREEMENT_DECLARE, "ICR_AGREEMENT_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_AGREEMENT_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_POSTPAID_INFO
+    //===========================================================================================================================================
+    val ICR_POSTPAID_INFO =
+    """
+      |select
+      |report_id as report_id,
+      |PE01A.PE01AD01 as postpaid_acct_type_cd,
+      |PE01A.PE01AQ01 as postpaid_org_name,
+      |PE01A.PE01AD02 as postpaid_busi_type_cd,
+      |PE01A.PE01AR01 as postpaid_open_dt,
+      |PE01A.PE01AD03 as postpaid_stat_cd,
+      |cast(PE01A.PE01AJ01 as decimal(18,2)) as postpaid_owe_amt,
+      |PE01A.PE01AR02 as postpaid_acct_mon,
+      |PE01A.PE01AQ02 as postpaid_24mon,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PNDPE01
+      |""".stripMargin
+    createView(tableEnv, ICR_POSTPAID_INFO, "ICR_POSTPAID_INFO")
+    //tableEnv.sqlQuery("select * from ICR_POSTPAID_INFO").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_POSTPAID_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_POSTPAID_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PE01Z.PE01ZS01 as bigint) as postpaid_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PNDPE01
+      |""".stripMargin
+    createView(tableEnv, ICR_POSTPAID_DECLARE_NUM, "ICR_POSTPAID_DECLARE_NUM")
+    //tableEnv.sqlQuery("select * from ICR_POSTPAID_DECLARE_NUM").toAppendStream[Row].print()
 
+    //===========================================================================================================================================
+    //                                                          todo ICR_TAX_INFO
+    //===========================================================================================================================================
+    val ICR_TAX_INFO =
+    """
+      |select
+      |report_id as report_id,
+      |PF01A.PF01AQ01 as tax_org_id,
+      |cast(PF01A.PF01AJ01 as decimal(18,2)) as tax_owe_amt,
+      |PF01A.PF01AR01 as tax_owe_dt,
+      |STATISTICS_DT as STATISTICS_DT
+      |from POTPF01
+      |""".stripMargin
+    createView(tableEnv, ICR_TAX_INFO, "ICR_TAX_INFO")
+    //tableEnv.sqlQuery("select * from ICR_TAX_INFO").toAppendStream[Row].print()
 
+    //===========================================================================================================================================
+    //                                                          todo ICR_TAX_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_TAX_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF01Z.PF01ZS01 as bigint) as tax_owe_amt,
+      |STATISTICS_DT as STATISTICS_DT
+      |from POTPF01
+      |""".stripMargin
+    createView(tableEnv, ICR_TAX_DECLARE_NUM, "ICR_TAX_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_TAX_DECLARE_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_CIVIL_JUDGEMENT
+    //===========================================================================================================================================
+    val ICR_CIVIL_JUDGEMENT =
+    """
+      |select
+      |report_id as report_id,
+      |PF02A.PF02AQ01 as civ_court_id,
+      |PF02A.PF02AQ02 as civ_reason,
+      |PF02A.PF02AR01 as civ_reg_dt,
+      |PF02A.PF02AD01 as civ_closed_cd,
+      |PF02A.PF02AQ03 as civ_result,
+      |PF02A.PF02AR02 as civ_eff_dt,
+      |PF02A.PF02AQ04 as civ_target,
+      |cast(PF02A.PF02AJ01 as decimal(18,2)) as civ_amt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PCJPF02
+      |""".stripMargin
+    createView(tableEnv, ICR_CIVIL_JUDGEMENT, "ICR_CIVIL_JUDGEMENT")
+    //    tableEnv.sqlQuery("select * from ICR_CIVIL_JUDGEMENT_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_CIV_JUDGE_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_CIV_JUDGE_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF02Z.PF02ZS01 as bigint) as civ_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCJPF02
+      |""".stripMargin
+    createView(tableEnv, ICR_CIV_JUDGE_DECLARE_NUM, "ICR_CIV_JUDGE_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_CIV_JUDGE_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ENFORCEMENT
+    //===========================================================================================================================================
+    val ICR_ENFORCEMENT =
+    """
+      |select
+      |report_id as report_id,
+      |PF03A.PF03AQ01 as   enf_court_id,
+      |PF03A.PF03AQ02 as   enf_reason,
+      |PF03A.PF03AR01 as   enf_reg_dt,
+      |PF03A.PF03AD01 as   enf_closed_cd,
+      |PF03A.PF03AQ03 as   enf_stat,
+      |PF03A.PF03AR02 as   enf_closed_dt,
+      |PF03A.PF03AQ04 as   enf_apply_target,
+      |cast(PF03A.PF03AJ01 as decimal(18,2)) as   enf_apply_amt,
+      |PF03A.PF03AQ05 as   enf_execute_target,
+      |cast(PF03A.PF03AJ02 as decimal(18,2)) as   enf_execute_amt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PCEPF03
+      |""".stripMargin
+    createView(tableEnv, ICR_ENFORCEMENT, "ICR_ENFORCEMENT")
+    // tableEnv.sqlQuery("select * from ICR_ENFORCEMENT").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ENFORCEMENT_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_ENFORCEMENT_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF03Z.PF03ZS01 as decimal(18,2)) as enf_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCEPF03
+      |""".stripMargin
+    createView(tableEnv, ICR_ENFORCEMENT_DECLARE_NUM, "ICR_ENFORCEMENT_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_ENFORCEMENT_DECLARE_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_ADMINPUNISHMENT
+    //===========================================================================================================================================
+    val ICR_ADMINPUNISHMENT =
+    """
+      |select
+      |report_id as report_id,
+      |PF04A.PF04AQ01 as punish_org_id,
+      |PF04A.PF04AQ02 as punish_cont,
+      |cast(PF04A.PF04AJ01 as decimal(18,2)) as punish_amt,
+      |PF04A.PF04AR01 as punish_eff_dt,
+      |PF04A.PF04AR02 as punish_end_dt,
+      |PF04A.PF04AQ03 as punish_result,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PAPPF04
+      |""".stripMargin
+    createView(tableEnv, ICR_ADMINPUNISHMENT, "ICR_ADMINPUNISHMENT")
+    //   tableEnv.sqlQuery("select * from ICR_ADMINPUNISHMENT").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_PUNISHMENT_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_PUNISHMENT_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF04Z.PF04ZS01 as bigint) as punish_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PAPPF04
+      |""".stripMargin
+    createView(tableEnv, ICR_PUNISHMENT_DECLARE_NUM, "ICR_PUNISHMENT_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_PUNISHMENT_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_HOUSINGFUND
+    //===========================================================================================================================================
+    val ICR_HOUSINGFUND =
+    """
+      |select
+      |report_id as report_id,
+      |PF05A.PF05AQ01 as housing_area,
+      |PF05A.PF05AR01 as housing_dt,
+      |PF05A.PF05AD01 as housing_stat_cd,
+      |PF05A.PF05AR02 as housing_start_dt,
+      |PF05A.PF05AR03 as housing_last_dt,
+      |cast(PF05A.PF05AQ02 as bigint) as housing_prop,
+      |cast(PF05A.PF05AQ03 as bigint) as housing_prop_indiv,
+      |cast(PF05A.PF05AJ01 as bigint) as housing_amt,
+      |PF05A.PF05AQ04 as housing_unit,
+      |PF05A.PF05AR04 as housing_update_dt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PHFPF05
+      |""".stripMargin
+    createView(tableEnv, ICR_HOUSINGFUND, "ICR_HOUSINGFUND")
+    //    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_HOUSINGFUND_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_HOUSINGFUND_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF05Z.PF05ZS01 as bigint) as housing_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PHFPF05
+      |""".stripMargin
+    createView(tableEnv, ICR_HOUSINGFUND_DECLARE_NUM, "ICR_HOUSINGFUND_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ALLOWANCE
+    //===========================================================================================================================================
+    val ICR_ALLOWANCE =
+    """
+      |select
+      |report_id as report_id,
+      |PF06A.PF06AD01 as   allowance_type_cd,
+      |PF06A.PF06AQ01 as   allowance_area,
+      |PF06A.PF06AQ02 as   allowance_unit,
+      |cast(PF06A.PF06AQ03 as bigint) as   allowance_income,
+      |PF06A.PF06AR01 as   allowance_sup_dt,
+      |PF06A.PF06AR02 as   allowance_app_dt,
+      |PF06A.PF06AR03 as   allowance_update_dt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PBSPF06
+      |""".stripMargin
+    createView(tableEnv, ICR_ALLOWANCE, "ICR_ALLOWANCE")
+    //    tableEnv.sqlQuery("select * from ICR_ALLOWANCE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ALLOWANCE_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_ALLOWANCE_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF06Z.PF06ZS01 as bigint) as allowance_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PBSPF06
+      |""".stripMargin
+    createView(tableEnv, ICR_ALLOWANCE_DECLARE_NUM, "ICR_ALLOWANCE_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUALIFICATION
+    //===========================================================================================================================================
+    val ICR_QUALIFICATION =
+    """
+      |select
+      |report_id      as report_id,
+      |PF07A.PF07AQ01 as   qual_name,
+      |PF07A.PF07AQ02 as   qual_org,
+      |PF07A.PF07AD01 as   qual_level_cd,
+      |PF07A.PF07AD02 as   qual_area,
+      |PF07A.PF07AR01 as   qual_get_dt,
+      |PF07A.PF07AR02 as   qual_due_dt,
+      |PF07A.PF07AR03 as   qual_revoke_dt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PPQPF07
+      |""".stripMargin
+    createView(tableEnv, ICR_QUALIFICATION, "ICR_QUALIFICATION")
+    //    tableEnv.sqlQuery("select * from ICR_QUALIFICATION").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUALFICATION_DECL_NUM
+    //===========================================================================================================================================
+    val ICR_QUALFICATION_DECL_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF07Z.PF07ZS01 as bigint) as allowance_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PPQPF07
+      |""".stripMargin
+    createView(tableEnv, ICR_QUALFICATION_DECL_NUM, "ICR_QUALFICATION_DECL_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_QUALFICATION_DECL_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_REWARD
+    //===========================================================================================================================================
+    val ICR_REWARD =
+    """
+      |select
+      |report_id      as   report_id,
+      |PF08A.PF08AQ01 as   rew_org,
+      |PF08A.PF08AQ02 as   rew_cont,
+      |PF08A.PF08AR01 as   rew_eff_dt,
+      |PF08A.PF08AR02 as   rew_end_dt,
+      |STATISTICS_DT as STATISTICS_DT,
+      |SID as SID
+      |from PAHPF08
+      |""".stripMargin
+    createView(tableEnv, ICR_REWARD, "ICR_REWARD")
+    //    tableEnv.sqlQuery("select * from ICR_REWARD").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_REWARD_DECLARE_NUM
+    //===========================================================================================================================================
+    val ICR_REWARD_DECLARE_NUM =
+    """
+      |select
+      |report_id as report_id,
+      |cast(PF08Z.PF08ZS01 as bigint) as allowance_decl_num,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PAHPF08
+      |""".stripMargin
+    createView(tableEnv, ICR_REWARD_DECLARE_NUM, "ICR_REWARD_DECLARE_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE_NUM").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_POSTPAID_DECLARE
+    //===========================================================================================================================================
+    val ICR_POSTPAID_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PE01ZD01 as  postpaid_decl_type,
+      |info.PE01ZQ01 as  postpaid_decl_cont,
+      |info.PE01ZR01 as  postpaid_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PE01Z.PE01ZH     as data
+      |from PNDPE01
+      |)t1,unnest(t1.data) as info(PE01ZD01,PE01ZQ01,PE01ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_POSTPAID_DECLARE, "ICR_POSTPAID_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_POSTPAID_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_TAX_DECLARE
+    //===========================================================================================================================================
+    val ICR_TAX_DECLARE =
+    """
+      |
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF01ZD01 as tax_decl_type,
+      |info.PF01ZQ01 as tax_decl_cont,
+      |info.PF01ZR01 as tax_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF01Z.PF01ZH     as data
+      |from POTPF01
+      |)t1,unnest(t1.data) as info(PF01ZD01,PF01ZQ01,PF01ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_TAX_DECLARE, "ICR_TAX_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_TAX_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_CIVIL_JUDGEMENT_DECLARE
+    //===========================================================================================================================================
+    val ICR_CIVIL_JUDGEMENT_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF02ZD01 as civ_decl_type,
+      |info.PF02ZQ01 as civ_decl_cont,
+      |info.PF02ZR01 as civ_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF02Z.PF02ZH     as data
+      |from PCJPF02
+      |)t1,unnest(t1.data) as info(PF02ZD01,PF02ZQ01,PF02ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_CIVIL_JUDGEMENT_DECLARE, "ICR_CIVIL_JUDGEMENT_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_CIVIL_JUDGEMENT_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ENFORCEMENT_DECLARE
+    //===========================================================================================================================================
+    val ICR_ENFORCEMENT_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF03ZD01 as enf_decl_type,
+      |info.PF03ZQ01 as enf_decl_cont,
+      |info.PF03ZR01 as enf_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF03Z.PF03ZH        as data
+      |from PCEPF03
+      |)t1,unnest(t1.data) as info(PF03ZD01,PF03ZQ01,PF03ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_ENFORCEMENT_DECLARE, "ICR_ENFORCEMENT_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_ENFORCEMENT_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ADMINPUNISHMENT_DECLARE
+    //===========================================================================================================================================
+    val ICR_ADMINPUNISHMENT_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF04ZD01 as punish_decl_type,
+      |info.PF04ZQ01 as punish_decl_cont,
+      |info.PF04ZR01 as punish_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF04Z.PF04ZH     as data
+      |from PAPPF04
+      |)t1,unnest(t1.data) as info(PF04ZD01,PF04ZQ01,PF04ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_ADMINPUNISHMENT_DECLARE, "ICR_ADMINPUNISHMENT_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_ADMINPUNISHMENT_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_HOUSINGFUND_DECLARE
+    //===========================================================================================================================================
+    val ICR_HOUSINGFUND_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF05ZD01 as housing_decl_type,
+      |info.PF05ZQ01 as housing_decl_cont,
+      |info.PF05ZR01 as housing_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF05Z.PF05ZH     as data
+      |from PHFPF05
+      |)t1,unnest(t1.data) as info(PF05ZD01,PF05ZQ01,PF05ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_HOUSINGFUND_DECLARE, "ICR_HOUSINGFUND_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_HOUSINGFUND_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_ALLOWANCE_DECLARE
+    //===========================================================================================================================================
+    val ICR_ALLOWANCE_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF06ZD01 as allowance_decl_type,
+      |info.PF06ZQ01 as allowance_decl_cont,
+      |info.PF06ZR01 as allowance_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF06Z.PF06ZH     as data
+      |from PBSPF06
+      |)t1,unnest(t1.data) as info(PF06ZD01,PF06ZQ01,PF06ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_ALLOWANCE_DECLARE, "ICR_ALLOWANCE_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_QUALIFICATION_DECLARE
+    //===========================================================================================================================================
+    val ICR_QUALIFICATION_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF07ZD01 as qual_decl_type,
+      |info.PF07ZQ01 as qual_decl_cont,
+      |info.PF07ZR01 as qual_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF07Z.PF07ZH     as data
+      |from PPQPF07
+      |)t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_QUALIFICATION_DECLARE, "ICR_QUALIFICATION_DECLARE")
+    //    tableEnv.sqlQuery("select * from ICR_QUALIFICATION_DECLARE").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_REWARD_DECLARE
+    //===========================================================================================================================================
+    val ICR_REWARD_DECLARE =
+    """
+      |select
+      |t1.report_id  as  report_id,
+      |info.PF08ZD01 as rew_decl_type,
+      |info.PF08ZQ01 as rew_decl_cont,
+      |info.PF08ZR01 as rew_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id 			as report_id,
+      |SID 				as SID,
+      |STATISTICS_DT 		as STATISTICS_DT,
+      |PF08Z.PF08ZH     as data
+      |from PAHPF08
+      |)t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)
+      |""".stripMargin
+    createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE")
+    tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
     env.execute()
   }
 
