@@ -1949,7 +1949,7 @@ object test {
       |)t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)
       |""".stripMargin
     createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE")
-    tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
     env.execute()
   }
 
