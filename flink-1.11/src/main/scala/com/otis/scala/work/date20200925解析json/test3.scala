@@ -15,8 +15,8 @@ object test3 {
     val ods_table =
       """
         |create table ods_table(
-        |a string,
-        |b string
+        |event_id string,
+        |card_num string
         |)
         |with(
         |'connector' = 'kafka',

@@ -123,7 +123,7 @@ object test2 {
         |    )
         |    WITH (
         |      'connector' = 'kafka',
-        |      'topic' = 'qinghuatest-001',
+        |      'topic' = 'qinghuatest-004',
         |      'properties.group.id'='dev_flink',
         |      'properties.zookeeper.connect'='10.1.30.6:2181',
         |      'properties.bootstrap.servers' = '10.1.30.8:9092',
