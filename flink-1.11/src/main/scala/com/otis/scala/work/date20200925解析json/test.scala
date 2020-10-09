@@ -12,7 +12,6 @@ object test {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val bsSettings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env, bsSettings)
-    tableEnv.createFunction("jsonarray2string", classOf[Json2StringFunction])
     val ods_table =
       """
         |create table ods_table(
@@ -107,11 +106,17 @@ object test {
         |POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
-        |'connector' = 'filesystem',
-        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\test.json',
-        |'format' = 'json'
+        |'connector' = 'kafka',
+        |'topic' = 'odsTable',
+        |'properties.bootstrap.servers' = '10.1.30.8:9092',
+        |'properties.group.id' = 'topic.group1',
+        |'format' = 'json',
+        |'scan.startup.mode' = 'earliest-offset'
         |)
         |""".stripMargin
+    //    'connector' = 'filesystem',
+    //    'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\test.json',
+    //    'format' = 'json'
     tableEnv.executeSql(ods_table)
     //===========================================================================================================================================
     //                                                          todo ICR_QUERYREQ
@@ -236,7 +241,29 @@ object test {
         |FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01)
         |""".stripMargin)
     tableEnv.createTemporaryView("ICR_TEL", ICR_TEL)
-    //    tableEnv.sqlQuery("select * from ICR_TEL").toAppendStream[Row].print()
+    tableEnv.sqlQuery("select * from ICR_TEL").toAppendStream[Row].print()
+    //    val sink_table4 =
+    //      """
+    //        |CREATE TABLE sink_table4 (
+    //        |    a1 string,
+    //        |    a2 string,
+    //        |    a3 string,
+    //        |    a4 string,
+    //        |    a5 string
+    //        |    )
+    //        |    WITH (
+    //        |      'connector' = 'kafka',
+    //        |      'topic' = 'qinghuatest-001',
+    //        |      'properties.group.id'='dev_flink',
+    //        |      'properties.zookeeper.connect'='10.1.30.6:2181',
+    //        |      'properties.bootstrap.servers' = '10.1.30.8:9092',
+    //        |      'format' = 'json',
+    //        |      'scan.startup.mode' = 'latest-offset'
+    //        |      )
+    //        |""".stripMargin
+    //    tableEnv.executeSql(sink_table4)
+    //    print(tableEnv.explainSql("insert into sink_table4 select * from ICR_TEL"))
+    //    tableEnv.sqlUpdate("insert into sink_table4 select * from ICR_TEL")
     //===========================================================================================================================================
     //                                                          todo ICR_SPOUSE
     //===========================================================================================================================================
@@ -1949,7 +1976,51 @@ object test {
       |)t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)
       |""".stripMargin
     createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE")
-    //tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
+
+
+    val sink_table3 =
+      """
+        |CREATE TABLE sink_table3 (
+        |    a1 string,
+        |    a2 string,
+        |    a3 string,
+        |    a4 string,
+        |    a5 string,
+        |    a6 string
+        |    )
+        |    WITH (
+        |      'connector' = 'print'
+        |      )
+        |""".stripMargin
+    tableEnv.executeSql(sink_table3)
+    tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE")
+    //tableEnv.sqlUpdate("insert into sink_table3 select * from ICR_REWARD_DECLARE")
+    //
+    //    val sink_table =
+    //      """
+    //        |CREATE TABLE source_table_2 (
+    //        |    a1 string,
+    //        |    a2 string,
+    //        |    a3 string,
+    //        |    a4 string,
+    //        |    a5 string,
+    //        |    a6 string
+    //        |    )
+    //        |    WITH (
+    //        |      'connector' = 'kafka',
+    //        |      'topic' = 'qinghuatest001',
+    //        |      'properties.group.id'='dev_flink',
+    //        |      'properties.zookeeper.connect'='10.1.30.6:2181',
+    //        |      'properties.bootstrap.servers' = '10.1.30.8:9092',
+    //        |      'format' = 'json',
+    //        |      'scan.startup.mode' = 'latest-offset'
+    //        |      )
+    //        |""".stripMargin
+    //
+    //    tableEnv.executeSql(sink_table)
+    //    tableEnv.executeSql("insert into source_table_2 select '1','2','3','4','5','6' from ICR_REWARD_DECLARE")
+    // tableEnv.sqlQuery("select * from ICR_REWARD_DECLARE").toAppendStream[Row].print()
+//    tableEnv.execute("haha")
     env.execute()
   }
 

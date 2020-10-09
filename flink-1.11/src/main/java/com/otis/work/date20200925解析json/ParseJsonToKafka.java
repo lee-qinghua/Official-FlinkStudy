@@ -15,7 +15,7 @@ import static sun.misc.Version.print;
  */
 
 public class ParseJsonToKafka {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().useBlinkPlanner().build();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
@@ -112,9 +112,12 @@ public class ParseJsonToKafka {
                 "POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),\n" +
                 "POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)\n" +
                 ")WITH(\n" +
-                "'connector' = 'filesystem',\n" +
-                "'path' = 'file:///D:\\\\peoject\\\\Official-FlinkStudy\\\\flink-1.11\\\\src\\\\main\\\\java\\\\com\\\\otis\\\\work\\\\date20200925解析json\\\\c.json',\n" +
-                "'format' = 'json'\n" +
+                "'connector' = 'kafka'," +
+                "'topic' = 'odsTable'," +
+                "'properties.bootstrap.servers' = '10.1.30.8:9092'," +
+                "'properties.group.id' = 'topic.group1'," +
+                "'format' = 'json'," +
+                "'scan.startup.mode' = 'earliest-offset'" +
                 ")\n";
         tableEnv.executeSql(ods_table);
         //===========================================================================================================================================
@@ -144,45 +147,16 @@ public class ParseJsonToKafka {
                 "query_reason_cd  string,\n" +
                 "STATISTICS_DT    string\n" +
                 ") WITH (" +
-                "'connector' = 'print')";
+                "'connector' = 'kafka',"+
+                "'topic' = 'qinghuatest-001',"+
+                "'properties.group.id'='dev_flink',"+
+                "'properties.zookeeper.connect'='10.1.30.6:2181',"+
+                "'properties.bootstrap.servers' = '10.1.30.8:9092',"+
+                "'format' = 'json',"+
+                "'scan.startup.mode' = 'latest-offset'"+
+                ")";
         tableEnv.executeSql(a);
-//        tableEnv.executeSql("insert into ICR_QUERYREQ_print select * from ICR_QUERYREQ");
-        //===========================================================================================================================================
-        //                                                          todo ICR_OTHER_IDEN
-        //===========================================================================================================================================
-        Table ICR_OTHER_IDEN_table = null;
-//        try {
-            ICR_OTHER_IDEN_table = tableEnv.sqlQuery("select\n" +
-                    "report_id as report_id,\n" +
-                    "t2.a      as iden_cd,\n" +
-                    "t2.b      as iden_id,\n" +
-                    "SID\t\t  as SID,\n" +
-                    "STATISTICS_DT as STATISTICS_DT\n" +
-                    "from\n" +
-                    "(select\n" +
-                    "PRH.PA01.PA01A.PA01AI01 as SID,\n" +
-                    "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
-                    "PRH.PA01.PA01C.PA01CH as ok,\n" +
-                    "'2020-09-27'            as STATISTICS_DT\n" +
-                    "from ods_table)t1,\n" +
-                    "unnest(t1.ok) as t2(a,b)");
-//        } catch (Exception e) {
-//            System.out.println("aaaaaaaaaaaaaaaa");
-//            ICR_OTHER_IDEN_table = tableEnv.sqlQuery("select\n" +
-//                    "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
-//                    "'aaa'      as iden_cd,\n" +
-//                    "'bbb'      as iden_id,\n" +
-//                    "PRH.PA01.PA01A.PA01AI01 as SID,\n" +
-//                    "'2020-09-27'            as STATISTICS_DT\n" +
-//                    "from\n" +
-//                    "ods_table");
-//        }
-        String b = "CREATE TABLE ICR_OTHER_IDEN_print (\n" +
-                "report_id        string\n" +
-                ") WITH (" +
-                "'connector' = 'print')";
-        tableEnv.executeSql(b);
-        tableEnv.createTemporaryView("ICR_OTHER_IDEN", ICR_OTHER_IDEN_table);
-        tableEnv.executeSql("insert into ICR_OTHER_IDEN_print select report_id from ICR_OTHER_IDEN");
+        tableEnv.executeSql("insert into ICR_QUERYREQ_print select * from ICR_QUERYREQ");
+        tableEnv.execute("aa");
     }
 }
