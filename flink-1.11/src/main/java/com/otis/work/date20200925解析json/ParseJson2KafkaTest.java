@@ -158,17 +158,6 @@ class ParseJson2KafkaTest {
                 "      )";
         tableEnv.executeSql(sink);
         tableEnv.executeSql("insert into sink_table3 select * from ICR_CREDIT_CUE_NUM");
-
-
-
-
-
-
-
-
-
-
-
         tableEnv.execute("haha");
     }
 

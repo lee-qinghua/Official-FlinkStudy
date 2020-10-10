@@ -1,4 +1,4 @@
-package com.otis.work.date20200925解析json;
+package com.otis.work.date20200925解析json.files;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -7,7 +7,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import javax.print.DocFlavor;
 import java.util.HashMap;
 
-public class Test {
+public class 解析jsonDemo {
     public static void main(String[] args) throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 

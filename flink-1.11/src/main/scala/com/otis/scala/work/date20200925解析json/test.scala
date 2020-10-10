@@ -1,6 +1,6 @@
 package com.otis.scala.work.date20200925解析json
 
-import com.otis.work.date20200925解析json.Json2StringFunction
+import com.otis.work.date20200925解析json.files.Json2StringFunction
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.table.api.{EnvironmentSettings, Table}
@@ -103,7 +103,7 @@ object test {
         |                        PF08A ROW(PF08AQ01 STRING,PF08AQ02 STRING,PF08AR01 STRING,PF08AR02 STRING),
         |                        PF08Z ROW(PF08ZS01 STRING,PF08ZH ARRAY<ROW(PF08ZD01 STRING,PF08ZQ01 STRING,PF08ZR01 STRING)>)
         |                )>),
-        |POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),
+        |POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING,PG010S01 STRING,PG010H ARRAY<ROW(PG010D03 STRING,PG010Q01 STRING,PG010R01 STRING)>)>),
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
         |'connector' = 'kafka',
@@ -112,8 +112,9 @@ object test {
         |'properties.group.id' = 'topic.group1',
         |'format' = 'json',
         |'scan.startup.mode' = 'earliest-offset'
-        |)
+        |);
         |""".stripMargin
+
     //    'connector' = 'filesystem',
     //    'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\test.json',
     //    'format' = 'json'
@@ -784,6 +785,57 @@ object test {
       |""".stripMargin
     createView(tableEnv, ICR_QUERY_RECORD, "ICR_QUERY_RECORD")
     //tableEnv.sqlQuery("select * from ICR_QUERY_RECORD").toAppendStream[Row].print()
+    //===========================================================================================================================================
+    //                                                          todo ICR_OTHER_DECLARE_NUM
+    //===========================================================================================================================================
+
+    val ICR_OTHER_DECLARE_NUM =
+      """
+        |select
+        |t1.report_id                            as report_id,
+        |info.PG010D01                           as oth_type_cd,
+        |info.PG010D02                           as oth_sign_cd,
+        |cast(info.PG010S01 as bigint)           as oth_decl_num,
+        |t1.STATISTICS_DT                        as STATISTICS_DT
+        |from (
+        |select
+        |PRH.PA01.PA01A.PA01AI01  				as report_id,
+        |POS.PG01         as data,
+        |'2020-09-27'                            as STATISTICS_DT
+        |from ods_table
+        |)t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)
+        |""".stripMargin
+    createView(tableEnv, ICR_OTHER_DECLARE_NUM, "ICR_OTHER_DECLARE_NUM")
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_OTHER_DECLARE
+    //===========================================================================================================================================
+    val ICR_OTHER_DECLARE =
+    """
+      |select
+      |t2.report_id                            as report_id,
+      |info2.PG010D03                          as oth_decl_type_cd,
+      |info2.PG010Q01                          as oth_decl_cont,
+      |info2.PG010R01                          as oth_decl_dt,
+      |t2.SID                                  as SID,
+      |t2.STATISTICS_DT                        as STATISTICS_DT
+      |from(
+      |select
+      |t1.report_id                            as report_id,
+      |info.PG010H                             as data2,
+      |t1.SID                                  as SID,
+      |t1.STATISTICS_DT                        as STATISTICS_DT
+      |from (
+      |select
+      |PRH.PA01.PA01A.PA01AI01  				as report_id,
+      |POS.PG01         as data,
+      |PRH.PA01.PA01A.PA01AI01  				as SID,
+      |'2020-09-27'                            as STATISTICS_DT
+      |from ods_table
+      |)t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)
+      |)t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01)
+      |""".stripMargin
+    createView(tableEnv, ICR_OTHER_DECLARE, "ICR_OTHER_DECLARE")
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_INFO
     //===========================================================================================================================================
@@ -2020,7 +2072,7 @@ object test {
         |""".stripMargin
     tableEnv.executeSql(sink_table3)
     tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE")
-//    env.execute()
+    //    env.execute()
   }
 
   /**

@@ -1103,3 +1103,52 @@ STATISTICS_DT 		as STATISTICS_DT,
 PF08Z.PF08ZH     as data
 from PAHPF08
 )t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)
+
+
+
+
+
+select
+t1.report_id                            as report_id,
+info.PG010D01                           as oth_type_cd,
+info.PG010D02                           as oth_sign_cd,
+cast(info.PG010S01 as bigint)           as oth_decl_num,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from (
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+POS.PG01         as data,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)
+
+
+
+
+select
+t2.report_id                            as report_id,
+info2.PG010D03                          as oth_decl_type_cd,
+info2.PG010Q01                          as oth_decl_cont,
+info2.PG010R01                          as oth_decl_dt,
+t2.SID                                  as SID,
+t2.STATISTICS_DT                        as STATISTICS_DT
+from(
+select
+t1.report_id                            as report_id,
+info.PG010H                             as data2,
+t1.SID                                  as SID,
+t1.STATISTICS_DT                        as STATISTICS_DT
+from (
+select
+PRH.PA01.PA01A.PA01AI01  				as report_id,
+POS.PG01         as data,
+PRH.PA01.PA01A.PA01AI01  				as SID,
+'2020-09-27'                            as STATISTICS_DT
+from ods_table
+)t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)
+)t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01)
+
+
+
+
+

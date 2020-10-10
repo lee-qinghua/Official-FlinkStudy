@@ -106,19 +106,34 @@ public class ParseJson2Kafka {
                 "                        PF08A ROW(PF08AQ01 STRING,PF08AQ02 STRING,PF08AR01 STRING,PF08AR02 STRING),\n" +
                 "                        PF08Z ROW(PF08ZS01 STRING,PF08ZH ARRAY<ROW(PF08ZD01 STRING,PF08ZQ01 STRING,PF08ZR01 STRING)>)\n" +
                 "                )>),\n" +
-                "POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),\n" +
+                "POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING,PG010S01 STRING,PG010H ARRAY<ROW(PG010D03 STRING,PG010Q01 STRING,PG010R01 STRING)>)>),\n" +
                 "POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)\n" +
                 ")WITH(\n" +
-                "'connector' = 'kafka'," +
-                "'topic' = 'odsTable'," +
-                "'properties.bootstrap.servers' = '10.1.30.8:9092'," +
-                "'properties.group.id' = 'topic.group1'," +
-                "'format' = 'json'," +
-                "'scan.startup.mode' = 'earliest-offset'" +
-                ")\n";
+                "'connector' = 'kafka',\n" +
+                "'topic' = 'odsTable',\n" +
+                "'properties.bootstrap.servers' = '10.1.30.8:9092',\n" +
+                "'properties.group.id' = 'topic.group1',\n" +
+                "'format' = 'json',\n" +
+                "'scan.startup.mode' = 'earliest-offset'\n" +
+                ")";
+
         tableEnv.executeSql(ods_table);
+        //===========================================================================================================================================
+        //                                                          todo ICR_QUERYREQ
+        //===========================================================================================================================================
 
-
+        String ICR_QUERYREQ = "select\n" +
+                "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
+                "PRH.PA01.PA01A.PA01AI01 as report_no,\n" +
+                "PRH.PA01.PA01A.PA01AR01 as report_tm,\n" +
+                "PRH.PA01.PA01B.PA01BQ01 as cust_name,\n" +
+                "PRH.PA01.PA01B.PA01BD01 as query_iden_cd,\n" +
+                "PRH.PA01.PA01B.PA01BI01 as query_iden_id,\n" +
+                "PRH.PA01.PA01B.PA01BI02 as query_org_id,\n" +
+                "PRH.PA01.PA01B.PA01BD02 as query_reason_cd,\n" +
+                "'2020-09-27'            as STATISTICS_DT\n" +
+                "from ods_table";
+        createView(tableEnv, ICR_QUERYREQ, "ICR_QUERYREQ");
         //===========================================================================================================================================
         //                                                          todo ICR_OTHER_IDEN_NUM
         //===========================================================================================================================================
@@ -1755,6 +1770,11 @@ public class ParseJson2Kafka {
         createView(tableEnv, ICR_QUALIFICATION_DECLARE, "ICR_QUALIFICATION_DECLARE");
         //    tableEnv.sqlQuery("select * from ICR_QUALIFICATION_DECLARE").toAppendStream[Row].print()
         //===========================================================================================================================================
+        //                                                          todo ICR_OTHER_DECLARE_NUM
+        //===========================================================================================================================================
+
+
+        //===========================================================================================================================================
         //                                                          todo ICR_REWARD_DECLARE
         //===========================================================================================================================================
         String ICR_REWARD_DECLARE = " select\n" +
@@ -1775,7 +1795,51 @@ public class ParseJson2Kafka {
 
 
         createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE");
+        //===========================================================================================================================================
+        //                                                          todo ICR_OTHER_DECLARE_NUM
+        //===========================================================================================================================================
 
+        String ICR_OTHER_DECLARE_NUM = "select\n" +
+                "t1.report_id                            as report_id,\n" +
+                "info.PG010D01                           as oth_type_cd,\n" +
+                "info.PG010D02                           as oth_sign_cd,\n" +
+                "cast(info.PG010S01 as bigint)           as oth_decl_num,\n" +
+                "t1.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from (\n" +
+                "select\n" +
+                "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
+                "POS.PG01         as data,\n" +
+                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "from ods_table\n" +
+                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)";
+
+        createView(tableEnv, ICR_OTHER_DECLARE_NUM, "ICR_OTHER_DECLARE_NUM");
+        //===========================================================================================================================================
+        //                                                          todo ICR_OTHER_DECLARE
+        //===========================================================================================================================================
+        String ICR_OTHER_DECLARE = "select\n" +
+                "t2.report_id                            as report_id,\n" +
+                "info2.PG010D03                          as oth_decl_type_cd,\n" +
+                "info2.PG010Q01                          as oth_decl_cont,\n" +
+                "info2.PG010R01                          as oth_decl_dt,\n" +
+                "t2.SID                                  as SID,\n" +
+                "t2.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from(\n" +
+                "select\n" +
+                "t1.report_id                            as report_id,\n" +
+                "info.PG010H                             as data2,\n" +
+                "t1.SID                                  as SID,\n" +
+                "t1.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from (\n" +
+                "select\n" +
+                "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
+                "POS.PG01         as data,\n" +
+                "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
+                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "from ods_table\n" +
+                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)\n" +
+                ")t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01)";
+        createView(tableEnv, ICR_OTHER_DECLARE, "ICR_OTHER_DECLARE");
         //todo 测试输出到kafka
 //        String sink_table3 = " CREATE TABLE sink_table3 (\n" +
 //                "                      a1 string,\n" +

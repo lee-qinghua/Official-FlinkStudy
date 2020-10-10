@@ -87,10 +87,20 @@ PAH ROW(PF08 ARRAY<ROW(
                         PF08A ROW(PF08AQ01 STRING,PF08AQ02 STRING,PF08AR01 STRING,PF08AR02 STRING),
                         PF08Z ROW(PF08ZS01 STRING,PF08ZH ARRAY<ROW(PF08ZD01 STRING,PF08ZQ01 STRING,PF08ZR01 STRING)>)
                 )>),
-POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING)>),
+POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING,PG010S01 STRING,PG010H ARRAY<ROW(PG010D03 STRING,PG010Q01 STRING,PG010R01 STRING)>)>),
 POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
 )WITH(
-'connector' = 'filesystem',
-'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
-'format' = 'json'
+'connector' = 'kafka',
+'topic' = 'odsTable',
+'properties.bootstrap.servers' = '10.1.30.8:9092',
+'properties.group.id' = 'topic.group1',
+'format' = 'json',
+'scan.startup.mode' = 'earliest-offset'
 );
+
+
+-- )WITH(
+-- 'connector' = 'filesystem',
+-- 'path' = 'file:///D:\\peoject\\Official-FlinkStudy\\flink-1.11\\src\\main\\java\\com\\otis\\work\\date20200925解析json\\c.json',
+-- 'format' = 'json'
+-- );

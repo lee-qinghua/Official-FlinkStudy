@@ -1,4 +1,4 @@
-package com.otis.work.date20200925解析json;
+package com.otis.work.date20200925解析json.files;
 
 import com.alibaba.fastjson.JSONArray;
 import org.apache.flink.table.functions.ScalarFunction;
