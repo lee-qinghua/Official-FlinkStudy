@@ -1,12 +1,9 @@
 package com.otis.work.date20200925解析json;
 
-import org.apache.flink.api.java.operators.translation.PlanRightUnwrappingCoGroupOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
-
-import static sun.misc.Version.print;
 
 /**
  * 作者：李清华
@@ -14,7 +11,7 @@ import static sun.misc.Version.print;
  * 日期：2020/9/25-13:48
  */
 
-public class ParseJsonToKafka {
+class ParseJson2KafkaTest {
     public static void main(String[] args) throws Exception {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().useBlinkPlanner().build();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -121,42 +118,69 @@ public class ParseJsonToKafka {
                 ")\n";
         tableEnv.executeSql(ods_table);
         //===========================================================================================================================================
-        //                                                          todo ICR_QUERYREQ
+        //                                                          todo ICR_SCORE_DESC
         //===========================================================================================================================================
-        Table ICR_QUERYREQ_table = tableEnv.sqlQuery("select \n" +
-                "PRH.PA01.PA01A.PA01AI01 as report_id,      \n" +
-                "PRH.PA01.PA01A.PA01AI01 as report_no,      \n" +
-                "PRH.PA01.PA01A.PA01AR01 as report_tm,      \n" +
-                "PRH.PA01.PA01B.PA01BQ01 as cust_name,\t\n" +
-                "PRH.PA01.PA01B.PA01BD01 as query_iden_cd,\n" +
-                "PRH.PA01.PA01B.PA01BI01 as query_iden_id,  \n" +
-                "PRH.PA01.PA01B.PA01BI02 as query_org_id,   \n" +
-                "PRH.PA01.PA01B.PA01BD02 as query_reason_cd,\n" +
-                "'2020-09-27'            as STATISTICS_DT\n" +
-                "from ods_table");
+        String ICR_SCORE_DESC = " select\n" +
+                "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "                  PSM.PC01.PC010D01                       as score_cd,\n" +
+                "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
+                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  from ods_table";
 
-        tableEnv.createTemporaryView("ICR_QUERYREQ", ICR_QUERYREQ_table);
-        String a = "CREATE TABLE ICR_QUERYREQ_print (\n" +
-                "report_id        string,\n" +
-                "report_no        string,\n" +
-                "report_tm        string,\n" +
-                "cust_name        string,\n" +
-                "query_iden_cd    string,\n" +
-                "query_iden_id    string,\n" +
-                "query_org_id     string,\n" +
-                "query_reason_cd  string,\n" +
-                "STATISTICS_DT    string\n" +
-                ") WITH (" +
-                "'connector' = 'kafka',"+
-                "'topic' = 'qinghuatest-001',"+
-                "'properties.group.id'='dev_flink',"+
-                "'properties.zookeeper.connect'='10.1.30.6:2181',"+
-                "'properties.bootstrap.servers' = '10.1.30.8:9092',"+
-                "'format' = 'json',"+
-                "'scan.startup.mode' = 'latest-offset'"+
-                ")";
-        tableEnv.executeSql(a);
-        tableEnv.executeSql("insert into ICR_QUERYREQ_print select * from ICR_QUERYREQ");
-        tableEnv.execute("aa");
+
+        createView(tableEnv, ICR_SCORE_DESC, "ICR_SCORE_DESC");
+        //===========================================================================================================================================
+        //                                                          todo ICR_CREDIT_CUE_NUM
+        //===========================================================================================================================================
+        String ICR_CREDIT_CUE_NUM = " select\n" +
+                "        PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
+                "                PCO.PC02.PC02A.PC02AS01 as acct_total_cnt,\n" +
+                "        PCO.PC02.PC02A.PC02AS02 as busi_type_num,\n" +
+                "                '2020-09-27' as STATISTICS_DT\n" +
+                "        from ods_table";
+
+
+        createView(tableEnv, ICR_CREDIT_CUE_NUM, "ICR_CREDIT_CUE_NUM");
+
+        String sink = "CREATE TABLE sink_table3 (\n" +
+                "    a1 string,\n" +
+                "    a2 string,\n" +
+                "    a3 string,\n" +
+                "    a4 string\n" +
+                "    )\n" +
+                "    WITH (\n" +
+                "      'connector' = 'kafka',\n" +
+                "      'topic' = 'qinghuatest-011',\n" +
+                "      'properties.group.id'='dev_flink',\n" +
+                "      'properties.zookeeper.connect'='10.1.30.6:2181',\n" +
+                "      'properties.bootstrap.servers' = '10.1.30.8:9092',\n" +
+                "      'format' = 'json'\n" +
+                "      )";
+        tableEnv.executeSql(sink);
+        tableEnv.executeSql("insert into sink_table3 select * from ICR_CREDIT_CUE_NUM");
+
+
+
+
+
+
+
+
+
+
+
+        tableEnv.execute("haha");
+    }
+
+    /**
+     * 创建view的方法
+     *
+     * @param tableEnv
+     * @param sql
+     * @param tableName
+     */
+    public static void createView(StreamTableEnvironment tableEnv, String sql, String tableName) {
+        Table table = tableEnv.sqlQuery(sql);
+        tableEnv.createTemporaryView(tableName, table);
     }
 }
