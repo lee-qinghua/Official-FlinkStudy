@@ -146,9 +146,136 @@ public class ParseJson2Kafka {
                 "                                '2020-09-27'            as STATISTICS_DT\n" +
                 "                                from ods_table)t1,\n" +
                 "                unnest(t1.ok) as t2(a,b)";
-
-
         createView(tableEnv, ICR_OTHER_IDEN, "ICR_OTHER_IDEN");
+        //===========================================================================================================================================
+        //                                                          todo ICR_FRAUD
+        //===========================================================================================================================================
+
+        String ICR_FRAUD = " select\n" +
+                " PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
+                " PRH.PA01.PA01D.PA01DQ01 as fraud_cd,\n" +
+                " PRH.PA01.PA01D.PA01DQ02 as fraud_tel,\n" +
+                " PRH.PA01.PA01D.PA01DR01 as fraud_start_dt,\n" +
+                " PRH.PA01.PA01D.PA01DR02 as fraud_end_dt,\n" +
+                " cast(PRH.PA01.PA01E.PA01ES01 as bigint) as objection_num,\n" +
+                " '2020-09-27'            as STATISTICS_DT\n" +
+                " from ods_table";
+
+        createView(tableEnv, ICR_FRAUD, "ICR_FRAUD");
+
+        //===========================================================================================================================================
+        //                                                          todo ICR_IDENTITY
+        //===========================================================================================================================================
+
+        String ICR_IDENTITY = "select\n" +
+                "PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "PIM.PB01.PB01A.PB01AD01                 as gender_cd,\n" +
+                "PIM.PB01.PB01A.PB01AR01                 as birth_date,\n" +
+                "PIM.PB01.PB01A.PB01AD02                 as edu_level_cd,\n" +
+                "PIM.PB01.PB01A.PB01AD03                 as edu_degree_cd,\n" +
+                "PIM.PB01.PB01A.PB01AD04                 as employment_cd,\n" +
+                "PIM.PB01.PB01A.PB01AQ01                 as email,\n" +
+                "PIM.PB01.PB01A.PB01AQ02                 as comm_addr,\n" +
+                "PIM.PB01.PB01A.PB01AD05                 as nationality,\n" +
+                "PIM.PB01.PB01A.PB01AQ03                 as reg_addr,\n" +
+                "cast(PIM.PB01.PB01B.PB01BS01 as bigint) as tel_cnt,\n" +
+                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "from ods_table";
+        createView(tableEnv, ICR_IDENTITY, "ICR_IDENTITY");
+
+        //===========================================================================================================================================
+        //                                                          todo ICR_TEL
+        //===========================================================================================================================================
+        String ICR_TEL = "select\n" +
+                "t1.report_id                            as report_id,\n" +
+                "info.PB01BQ01                           as tel_num,\n" +
+                "info.PB01BR01                           as update_dt,\n" +
+                "t1.SID                                  as SID,\n" +
+                "t1.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from(\n" +
+                "        SELECT\n" +
+                "        PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "        PIM.PB01.PB01B.PB01BH                   as data,\n" +
+                "        PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
+                "        '2020-09-27'                            as STATISTICS_DT\n" +
+                "        FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01)";
+        createView(tableEnv, ICR_TEL, "ICR_TEL");
+        //===========================================================================================================================================
+        //                                                          todo ICR_SPOUSE
+        //===========================================================================================================================================
+        String ICR_SPOUSE = "SELECT\n" +
+                "PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "PMM.PB02.PB020D01                       as marital_stat_cd,\n" +
+                "PMM.PB02.PB020Q01                       as spo_name,\n" +
+                "PMM.PB02.PB020D02                       as spo_iden_cd,\n" +
+                "PMM.PB02.PB020I01                       as spo_iden_id,\n" +
+                "PMM.PB02.PB020Q02                       as spo_unit,\n" +
+                "PMM.PB02.PB020Q03                       as spo_tel_num,\n" +
+                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "FROM ods_table";
+        createView(tableEnv, ICR_SPOUSE, "ICR_SPOUSE");
+        //===========================================================================================================================================
+        //                                                          todo ICR_RESIDENCE
+        //===========================================================================================================================================
+
+        String ICR_RESIDENCE = "select\n" +
+                "t1.report_id                            as report_id,\n" +
+                "info.PB030D01                           as res_cd,\n" +
+                "info.PB030Q01                           as res_addr,\n" +
+                "info.PB030Q02                           as res_tel,\n" +
+                "info.PB030R01                           as res_update_dt,\n" +
+                "t1.SID                                  as SID,\n" +
+                "t1.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from\n" +
+                "        (\n" +
+                "                select\n" +
+                "                PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "                PRM.PB03                                as data,\n" +
+                "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
+                "                '2020-09-27'                            as STATISTICS_DT\n" +
+                "                from ods_table\n" +
+                "        )t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)";
+        createView(tableEnv, ICR_RESIDENCE, "ICR_RESIDENCE");
+        //===========================================================================================================================================
+        //                                                          todo ICR_PROFESSION
+        //===========================================================================================================================================
+        String ICR_PROFESSION = "select\n" +
+                "t1.report_id                            as report_id,\n" +
+                "info.PB040D01                           as work_situation,\n" +
+                "info.PB040Q01                           as work_unit,\n" +
+                "info.PB040D02                           as unit_property_cd,\n" +
+                "info.PB040D03                           as industry_cd,\n" +
+                "info.PB040Q02                           as unit_addr,\n" +
+                "info.PB040Q03                           as unit_tel,\n" +
+                "info.PB040D04                           as occupation_cd,\n" +
+                "info.PB040D05                           as position_cd,\n" +
+                "info.PB040D06                           as title_cd,\n" +
+                "info.PB040R01                           as int_year,\n" +
+                "info.PB040R02                           as pro_update_date,\n" +
+                "t1.SID                                  as SID,\n" +
+                "t1.STATISTICS_DT                        as STATISTICS_DT\n" +
+                "from\n" +
+                "        (\n" +
+                "                select\n" +
+                "                PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "                POM.PB04                                as data,\n" +
+                "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
+                "                '2020-09-27'                            as STATISTICS_DT\n" +
+                "                from ods_table\n" +
+                "        )t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02)";
+
+        createView(tableEnv, ICR_PROFESSION, "ICR_PROFESSION");
+        //===========================================================================================================================================
+        //                                                          todo ICR_CREDITSCORE
+        //===========================================================================================================================================
+        String ICR_CREDITSCORE = "select\n" +
+                "PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
+                "PSM.PC01.PC010Q01                       as score,\n" +
+                "PSM.PC01.PC010Q02                       as score_level,\n" +
+                "PSM.PC01.PC010S01                       as score_desc_num,\n" +
+                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "from ods_table";
+        createView(tableEnv, ICR_CREDITSCORE, "ICR_CREDITSCORE");
         //===========================================================================================================================================
         //                                                          todo ICR_SCORE_DESC
         //===========================================================================================================================================
