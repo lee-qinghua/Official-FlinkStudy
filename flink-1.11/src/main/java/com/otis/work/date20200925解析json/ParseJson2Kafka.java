@@ -68,7 +68,7 @@ public class ParseJson2Kafka {
                 "                        )>),\n" +
                 "PCR ROW(PD03 ARRAY<ROW(\n" +
                 "                        PD03A ROW(PD03AD08 STRING,PD03AD01 STRING,PD03AQ01 STRING,PD03AD02 STRING,PD03AR01 STRING,PD03AR02 STRING,PD03AD03 STRING,PD03AQ02 STRING,PD03AJ01 STRING,PD03AD04 STRING,PD03AJ02 STRING,PD03AD05 STRING,PD03AD06 STRING,PD03AD07 STRING,PD03AS01 STRING,PD03AR03 STRING),\n" +
-                "                        PD03Z ROW(PD03ZS01 STRING,PD03ZH ARRAY<ROW(PD03ZD01 STRING)>)\n" +
+                "                        PD03Z ROW(PD03ZS01 STRING,PD03ZH ARRAY<ROW(PD03ZD01 STRING,PD03ZQ01 STRING,PD03ZR01 STRING)>)\n" +
                 "                      )>),\n" +
                 "PND ROW(PE01 ARRAY<ROW(\n" +
                 "                        PE01A ROW(PE01AD01 STRING,PE01AQ01 STRING,PE01AD02 STRING,PE01AR01 STRING,PE01AD03 STRING,PE01AJ01 STRING,PE01AR02 STRING,PE01AQ02 STRING),\n" +
@@ -131,7 +131,7 @@ public class ParseJson2Kafka {
                 "PRH.PA01.PA01B.PA01BI01 as query_iden_id,\n" +
                 "PRH.PA01.PA01B.PA01BI02 as query_org_id,\n" +
                 "PRH.PA01.PA01B.PA01BD02 as query_reason_cd,\n" +
-                "'2020-09-27'            as STATISTICS_DT\n" +
+                "CURRENT_DATE            as STATISTICS_DT\n" +
                 "from ods_table";
         createView(tableEnv, ICR_QUERYREQ, "ICR_QUERYREQ");
         //===========================================================================================================================================
@@ -140,7 +140,7 @@ public class ParseJson2Kafka {
         String ICR_OTHER_IDEN_NUM_table = "select\n" +
                 "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
                 "PRH.PA01.PA01C.PA01CS01 as iden_type_num,\n" +
-                "'2020-09-27'            as STATISTICS_DT\n" +
+                "CURRENT_DATE            as STATISTICS_DT\n" +
                 "from ods_table";
         createView(tableEnv, ICR_OTHER_IDEN_NUM_table, "ICR_OTHER_IDEN_NUM_table");
         //===========================================================================================================================================
@@ -158,7 +158,7 @@ public class ParseJson2Kafka {
                 "                                PRH.PA01.PA01A.PA01AI01 as SID,\n" +
                 "                                PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
                 "                                PRH.PA01.PA01C.PA01CH as ok,\n" +
-                "                                '2020-09-27'            as STATISTICS_DT\n" +
+                "                                CURRENT_DATE            as STATISTICS_DT\n" +
                 "                                from ods_table)t1,\n" +
                 "                unnest(t1.ok) as t2(a,b)";
         createView(tableEnv, ICR_OTHER_IDEN, "ICR_OTHER_IDEN");
@@ -173,7 +173,7 @@ public class ParseJson2Kafka {
                 " PRH.PA01.PA01D.PA01DR01 as fraud_start_dt,\n" +
                 " PRH.PA01.PA01D.PA01DR02 as fraud_end_dt,\n" +
                 " cast(PRH.PA01.PA01E.PA01ES01 as bigint) as objection_num,\n" +
-                " '2020-09-27'            as STATISTICS_DT\n" +
+                " CURRENT_DATE            as STATISTICS_DT\n" +
                 " from ods_table";
 
         createView(tableEnv, ICR_FRAUD, "ICR_FRAUD");
@@ -194,7 +194,7 @@ public class ParseJson2Kafka {
                 "PIM.PB01.PB01A.PB01AD05                 as nationality,\n" +
                 "PIM.PB01.PB01A.PB01AQ03                 as reg_addr,\n" +
                 "cast(PIM.PB01.PB01B.PB01BS01 as bigint) as tel_cnt,\n" +
-                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table";
         createView(tableEnv, ICR_IDENTITY, "ICR_IDENTITY");
 
@@ -212,7 +212,7 @@ public class ParseJson2Kafka {
                 "        PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "        PIM.PB01.PB01B.PB01BH                   as data,\n" +
                 "        PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "        '2020-09-27'                            as STATISTICS_DT\n" +
+                "        CURRENT_DATE                            as STATISTICS_DT\n" +
                 "        FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01)";
         createView(tableEnv, ICR_TEL, "ICR_TEL");
         //===========================================================================================================================================
@@ -226,7 +226,7 @@ public class ParseJson2Kafka {
                 "PMM.PB02.PB020I01                       as spo_iden_id,\n" +
                 "PMM.PB02.PB020Q02                       as spo_unit,\n" +
                 "PMM.PB02.PB020Q03                       as spo_tel_num,\n" +
-                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "FROM ods_table";
         createView(tableEnv, ICR_SPOUSE, "ICR_SPOUSE");
         //===========================================================================================================================================
@@ -247,7 +247,7 @@ public class ParseJson2Kafka {
                 "                PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                PRM.PB03                                as data,\n" +
                 "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                '2020-09-27'                            as STATISTICS_DT\n" +
+                "                CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                from ods_table\n" +
                 "        )t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)";
         createView(tableEnv, ICR_RESIDENCE, "ICR_RESIDENCE");
@@ -275,7 +275,7 @@ public class ParseJson2Kafka {
                 "                PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                POM.PB04                                as data,\n" +
                 "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                '2020-09-27'                            as STATISTICS_DT\n" +
+                "                CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                from ods_table\n" +
                 "        )t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02)";
 
@@ -288,7 +288,7 @@ public class ParseJson2Kafka {
                 "PSM.PC01.PC010Q01                       as score,\n" +
                 "PSM.PC01.PC010Q02                       as score_level,\n" +
                 "PSM.PC01.PC010S01                       as score_desc_num,\n" +
-                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table";
         createView(tableEnv, ICR_CREDITSCORE, "ICR_CREDITSCORE");
         //===========================================================================================================================================
@@ -298,7 +298,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  PSM.PC01.PC010D01                       as score_cd,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table";
         createView(tableEnv, ICR_SCORE_DESC, "ICR_SCORE_DESC");
         //===========================================================================================================================================
@@ -308,7 +308,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  PCO.PC02.PC02A.PC02AS01                 as acct_total_cnt,\n" +
                 "                  PCO.PC02.PC02A.PC02AS02                 as busi_type_num,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table";
         createView(tableEnv, ICR_CREDIT_CUE_NUM, "ICR_CREDIT_CUE_NUM");
         //===========================================================================================================================================
@@ -327,7 +327,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  PCO.PC02.PC02A.PC02AH                   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table)t1,unnest(t1.data) as info(PC02AD01,PC02AD02,PC02AS03,PC02AR01)";
 
 
@@ -341,7 +341,7 @@ public class ParseJson2Kafka {
                 "                  PCO.PC02.PC02B.PC02BS01                 as rec_total_cnt,\n" +
                 "                  PCO.PC02.PC02B.PC02BJ01                 as rec_total_bal,\n" +
                 "                  PCO.PC02.PC02B.PC02BS02                 as rec_type_num,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table";
 
 
@@ -363,7 +363,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  PCO.PC02.PC02B.PC02BH                   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02)";
 
@@ -378,7 +378,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                         as report_id,\n" +
                 "                  cast(PCO.PC02.PC02C.PC02CS01 as bigint)         as deadacct_cnt,\n" +
                 "                  cast(PCO.PC02.PC02C.PC02CJ01 as decimal(18,2))  as deadacct_bal,\n" +
-                "                  '2020-09-27'                                    as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                                    as STATISTICS_DT\n" +
                 "                  from ods_table";
         createView(tableEnv, ICR_DEADACCOUNT, "ICR_DEADACCOUNT");
         //===========================================================================================================================================
@@ -387,7 +387,7 @@ public class ParseJson2Kafka {
         String ICR_OVERDUE_NUM = " select\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  cast(PCO.PC02D.PC02DS01 as bigint)      as ove_type_num,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table";
 
 
@@ -410,7 +410,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                  PCO.PC02.PC02D.PC02DH                   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)";
         createView(tableEnv, ICR_OVERDUE, "ICR_OVERDUE");
         //===========================================================================================================================================
@@ -423,7 +423,7 @@ public class ParseJson2Kafka {
                 "                      cast(PCO.PC02.PC02E.PC02EJ01 as decimal(18,2))                 as oneoff_credit_amt,\n" +
                 "                      cast(PCO.PC02.PC02E.PC02EJ02 as decimal(18,2))                 as oneoff_bal,\n" +
                 "                      cast(PCO.PC02.PC02E.PC02EJ03 as decimal(18,2))                 as oneoff_6mon_avg,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_ONEOFF, "ICR_ONEOFF");
         //===========================================================================================================================================
@@ -436,7 +436,7 @@ public class ParseJson2Kafka {
                 "                      cast(PCO.PC02.PC02F.PC02FJ01 as decimal(18,2))                 as revacct_credit_amt,\n" +
                 "                      cast(PCO.PC02.PC02F.PC02FJ02 as decimal(18,2))                 as revacct_bal,\n" +
                 "                      cast(PCO.PC02.PC02F.PC02FJ03 as decimal(18,2))                 as revacct_6mon_avg,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_REVOLVING_ACCT, "ICR_REVOLVING_ACCT");
         //    tableEnv.sqlQuery("select * from ICR_REVOLVING_ACCT").toAppendStream[Row].print()
@@ -450,7 +450,7 @@ public class ParseJson2Kafka {
                 "                      cast(PCO.PC02.PC02G.PC02GJ01 as decimal(18,2))                 as rev_credit_amt,\n" +
                 "                      cast(PCO.PC02.PC02G.PC02GJ02 as decimal(18,2))                 as rev_bal,\n" +
                 "                      cast(PCO.PC02.PC02G.PC02GJ03 as decimal(18,2))                 as rev_6mon_avg,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_REVOLVING, "ICR_REVOLVING");
         //===========================================================================================================================================
@@ -465,7 +465,7 @@ public class ParseJson2Kafka {
                 "                      cast(PCO.PC02.PC02H.PC02HJ03 as decimal(18,2))                 as ccd_min_bal,\n" +
                 "                      cast(PCO.PC02.PC02H.PC02HJ04 as decimal(18,2))                 as ccd_bal,\n" +
                 "                      cast(PCO.PC02.PC02H.PC02HJ05 as decimal(18,2))                 as ccd_6mon_avg,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
 
         createView(tableEnv, ICR_CREDITCARD, "ICR_CREDITCARD");
@@ -481,7 +481,7 @@ public class ParseJson2Kafka {
                 "                      cast(PCO.PC02.PC02I.PC02IJ03 as decimal(18,2))                 as qua_min_bal,\n" +
                 "                      cast(PCO.PC02.PC02I.PC02IJ04 as decimal(18,2))                 as qua_bal,\n" +
                 "                      cast(PCO.PC02.PC02I.PC02IJ05 as decimal(18,2))                 as qua_6mon_avg,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_QUASI_CREDITCARD, "ICR_QUASI_CREDITCARD");
         //===========================================================================================================================================
@@ -490,7 +490,7 @@ public class ParseJson2Kafka {
         String ICR_REPAY_DUTY_NUM = "select\n" +
                 "                      PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                      cast(PCO.PC02.PC02K.PC02KS01 as bigint)                 as rep_duty_num,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
 
         createView(tableEnv, ICR_REPAY_DUTY_NUM, "ICR_REPAY_DUTY_NUM");
@@ -500,7 +500,7 @@ public class ParseJson2Kafka {
         String ICR_POSTPAID_NUM = " select\n" +
                 "                      PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                      cast(PNO.PC03.PC030S01 as bigint)                 as pos_type_num,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
 
         createView(tableEnv, ICR_POSTPAID_NUM, "ICR_POSTPAID_NUM");
@@ -511,7 +511,7 @@ public class ParseJson2Kafka {
         String ICR_PUBLIC_TYPE_NUM = "select\n" +
                 "                      PRH.PA01.PA01A.PA01AI01                 as report_id,\n" +
                 "                      cast(PPO.PC04.PC040S01 as bigint)                 as pub_type_num,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_PUBLIC_TYPE_NUM, "ICR_PUBLIC_TYPE_NUM");
         //tableEnv.sqlQuery("select * from ICR_PUBLIC_TYPE_NUM").toAppendStream[Row].print()
@@ -524,7 +524,7 @@ public class ParseJson2Kafka {
                 "                      PQO.PC05.PC05A.PC05AD01                 as lastque_org_type,\n" +
                 "                      PQO.PC05.PC05A.PC05AI01                 as lastque_org_id,\n" +
                 "                      PQO.PC05.PC05A.PC05AQ01                 as lastque_reason,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
         createView(tableEnv, ICR_LAST_QUERY, "ICR_LAST_QUERY");
         //tableEnv.sqlQuery("select * from ICR_LAST_QUERY").toAppendStream[Row].print()
@@ -541,7 +541,7 @@ public class ParseJson2Kafka {
                 "                      cast(PQO.PC05.PC05B.PC05BS06 as bigint)                 as que_2year_cnt,\n" +
                 "                      cast(PQO.PC05.PC05B.PC05BS07 as bigint)                 as que_2year_cnt_guar,\n" +
                 "                      cast(PQO.PC05.PC05B.PC05BS08 as bigint)                 as que_2year_cnt_mer,\n" +
-                "                      '2020-09-27'                            as STATISTICS_DT\n" +
+                "                      CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                        from ods_table";
 
         createView(tableEnv, ICR_QUERY, "ICR_QUERY");
@@ -564,7 +564,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PCO.PC02.PC02K.PC02KH         as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PC02KD01,PC02KD02,PC02KS02,PC02KJ01,PC02KJ02)";
 
@@ -586,7 +586,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PNO.PC030H         as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PC030D01,PC030S02,PC030J01)";
 
@@ -607,7 +607,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PPO.PC040H         as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PC040D01,PC040S02,PC040J01)";
 
@@ -630,7 +630,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  POQ.PH01         as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PH010R01,PH010D01,PH010Q02,PH010Q03)";
 
@@ -668,7 +668,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PDA.PD01                                as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
 
@@ -697,7 +697,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PDA.PD01                                as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
 
@@ -741,7 +741,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PDA.PD01                                as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
 
@@ -763,7 +763,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PDA.PD01                                as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
 
@@ -792,7 +792,7 @@ public class ParseJson2Kafka {
                 "                  PDA.PD01   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
 
@@ -813,7 +813,7 @@ public class ParseJson2Kafka {
                 "                  PCA.PD02   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD02A,PD02Z)";
 
@@ -834,7 +834,7 @@ public class ParseJson2Kafka {
                 "                  PCR.PD03   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PD03A,PD03Z)";
 
@@ -854,7 +854,7 @@ public class ParseJson2Kafka {
                 "                  PND.PE01   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PE01A,PE01Z)";
 
@@ -875,7 +875,7 @@ public class ParseJson2Kafka {
                 "                  POT.PF01   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF01A,PF01Z)";
 
@@ -897,7 +897,7 @@ public class ParseJson2Kafka {
                 "                  PCJ.PF02   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF02A,PF02Z)";
 
@@ -917,7 +917,7 @@ public class ParseJson2Kafka {
                 "                  PCE.PF03   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF03A,PF03Z)";
 
@@ -937,7 +937,7 @@ public class ParseJson2Kafka {
                 "                  PAP.PF04   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF04A,PF04Z)";
 
@@ -957,7 +957,7 @@ public class ParseJson2Kafka {
                 "                  PHF.PF05   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF05A,PF05Z)";
 
@@ -979,7 +979,7 @@ public class ParseJson2Kafka {
                 "                  PBS.PF06   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF06A,PF06Z)";
 
@@ -1000,7 +1000,7 @@ public class ParseJson2Kafka {
                 "                  PPQ.PF07   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF07A,PF07Z)";
 
@@ -1020,7 +1020,7 @@ public class ParseJson2Kafka {
                 "                  PAH.PF08   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "                  '2020-09-27'                            as STATISTICS_DT\n" +
+                "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
                 "                  )t1,unnest(t1.data) as info(PF08A,PF08Z)";
 
@@ -1809,7 +1809,7 @@ public class ParseJson2Kafka {
                 "select\n" +
                 "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "POS.PG01         as data,\n" +
-                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table\n" +
                 ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)";
 
@@ -1835,11 +1835,79 @@ public class ParseJson2Kafka {
                 "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas report_id,\n" +
                 "POS.PG01         as data,\n" +
                 "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
-                "'2020-09-27'                            as STATISTICS_DT\n" +
+                "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table\n" +
                 ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)\n" +
                 ")t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01)";
         createView(tableEnv, ICR_OTHER_DECLARE, "ICR_OTHER_DECLARE");
+
+
+
+        //===========================================================================================================================================
+        //                                                          todo ICR_REPAYMENTDUTY_INFO
+        //===========================================================================================================================================
+        String ICR_REPAYMENTDUTY_INFO="select\n" +
+                "report_id as report_id,\n" +
+                "'' as acct_num,\n" +
+                "PD03A.PD03AD08 as repduty_iden_type,\n" +
+                "PD03A.PD03AD01 as repduty_org_type,\n" +
+                "PD03A.PD03AQ01 as repduty_org_id,\n" +
+                "PD03A.PD03AD02 as repduty_busi_type,\n" +
+                "PD03A.PD03AR01 as repduty_open_dt,\n" +
+                "PD03A.PD03AR02 as repduty_due_dt,\n" +
+                "PD03A.PD03AD03 as repduty_type_cd,\n" +
+                "PD03A.PD03AQ02 as contruct_id,\n" +
+                "cast(PD03A.PD03AJ01 as decimal(18,2)) as repduty_amt,\n" +
+                "cast(PD03A.PD03AD04 as bigint) as repduty_currency_cd,\n" +
+                "cast(PD03A.PD03AJ02 as decimal(18,2)) as repduty_bal,\n" +
+                "PD03A.PD03AD05 as repduty_5class,\n" +
+                "PD03A.PD03AD06 as repduty_acct_stat,\n" +
+                "PD03A.PD03AD07 as repduty_repay_stat,\n" +
+                "cast(PD03A.PD03AS01 as bigint) as repduty_overdue_mon,\n" +
+                "PD03A.PD03AR03 as repduty_report_dt,\n" +
+                "SID as SID,\n" +
+                "STATISTICS_DT as STATISTICS_DT\n" +
+                "from PCRPD03";
+        createView(tableEnv,ICR_REPAYMENTDUTY_INFO,"ICR_REPAYMENTDUTY_INFO");
+
+
+        //===========================================================================================================================================
+        //                                                          todo ICR_REPAYMENTDUTY_DECL_NUM
+        //===========================================================================================================================================
+        String ICR_REPAYMENTDUTY_DECL_NUM="select\n" +
+                "report_id as report_id,\n" +
+                "'' as acct_num,\n" +
+                "cast(PD03Z.PD03ZS01 as bigint) as repduty_decl_num,\n" +
+                "SID as SID,\n" +
+                "STATISTICS_DT as STATISTICS_DT\n" +
+                "from PCRPD03";
+        createView(tableEnv,ICR_REPAYMENTDUTY_DECL_NUM,"ICR_REPAYMENTDUTY_DECL_NUM");
+        //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL_NUM").toAppendStream[Row].print()
+
+        //===========================================================================================================================================
+        //                                                          todo ICR_REPAYMENTDUTY_DECL
+        //===========================================================================================================================================
+        String ICR_REPAYMENTDUTY_DECL="select\n" +
+                "t1.report_id as report_id,\n" +
+                "'' as acct_num,\n" +
+                "info.PD03ZD01 as repduty_decl_type,\n" +
+                "info.PD03ZQ01 as repduty_decl_cont,\n" +
+                "info.PD03ZR01 as repduty_decl_dt,\n" +
+                "t1.SID as SID,\n" +
+                "t1.STATISTICS_DT as STATISTICS_DT\n" +
+                "from(\n" +
+                "select\n" +
+                "report_id as report_id,\n" +
+                "PD03Z.PD03ZH as data,\n" +
+                "SID as SID,\n" +
+                "STATISTICS_DT as STATISTICS_DT\n" +
+                "from PCRPD03\n" +
+                ")t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01)";
+        createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL");
+        //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
+
+
+
         //todo 测试输出到kafka
 //        String sink_table3 = " CREATE TABLE sink_table3 (\n" +
 //                "                      a1 string,\n" +

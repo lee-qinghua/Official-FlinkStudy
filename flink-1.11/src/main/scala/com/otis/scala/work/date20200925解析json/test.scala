@@ -65,7 +65,7 @@ object test {
         |                        )>),
         |PCR ROW(PD03 ARRAY<ROW(
         |                        PD03A ROW(PD03AD08 STRING,PD03AD01 STRING,PD03AQ01 STRING,PD03AD02 STRING,PD03AR01 STRING,PD03AR02 STRING,PD03AD03 STRING,PD03AQ02 STRING,PD03AJ01 STRING,PD03AD04 STRING,PD03AJ02 STRING,PD03AD05 STRING,PD03AD06 STRING,PD03AD07 STRING,PD03AS01 STRING,PD03AR03 STRING),
-        |                        PD03Z ROW(PD03ZS01 STRING,PD03ZH ARRAY<ROW(PD03ZD01 STRING)>)
+        |                        PD03Z ROW(PD03ZS01 STRING,PD03ZH ARRAY<ROW(PD03ZD01 STRING,PD03ZQ01 STRING,PD03ZR01 STRING)>)
         |                      )>),
         |PND ROW(PE01 ARRAY<ROW(
         |                        PE01A ROW(PE01AD01 STRING,PE01AQ01 STRING,PE01AD02 STRING,PE01AR01 STRING,PE01AD03 STRING,PE01AJ01 STRING,PE01AR02 STRING,PE01AQ02 STRING),
@@ -106,13 +106,10 @@ object test {
         |POS ROW(PG01 ARRAY<ROW(PG010D01 STRING,PG010D02 STRING,PG010S01 STRING,PG010H ARRAY<ROW(PG010D03 STRING,PG010Q01 STRING,PG010R01 STRING)>)>),
         |POQ ROW(PH01 ARRAY<ROW(PH010R01 STRING,PH010D01 STRING,PH010Q02 STRING,PH010Q03 STRING)>)
         |)WITH(
-        |'connector' = 'kafka',
-        |'topic' = 'odsTable',
-        |'properties.bootstrap.servers' = '10.1.30.8:9092',
-        |'properties.group.id' = 'topic.group1',
-        |'format' = 'json',
-        |'scan.startup.mode' = 'earliest-offset'
-        |);
+        |'connector' = 'filesystem',
+        |'path' = 'file:///D:\peoject\Official-FlinkStudy\flink-1.11\src\main\java\com\otis\work\date20200925解析json\test.json',
+        |'format' = 'json'
+        |)
         |""".stripMargin
 
     //    'connector' = 'filesystem',
@@ -2003,6 +2000,82 @@ object test {
       |)t1,unnest(t1.data) as info(PF06ZD01,PF06ZQ01,PF06ZR01)
       |""".stripMargin
     createView(tableEnv, ICR_ALLOWANCE_DECLARE, "ICR_ALLOWANCE_DECLARE")
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_REPAYMENTDUTY_INFO
+    //===========================================================================================================================================
+    val ICR_REPAYMENTDUTY_INFO=
+    """
+      |select
+      |report_id as report_id,
+      |'' as acct_num,
+      |PD03A.PD03AD08 as repduty_iden_type,
+      |PD03A.PD03AD01 as repduty_org_type,
+      |PD03A.PD03AQ01 as repduty_org_id,
+      |PD03A.PD03AD02 as repduty_busi_type,
+      |PD03A.PD03AR01 as repduty_open_dt,
+      |PD03A.PD03AR02 as repduty_due_dt,
+      |PD03A.PD03AD03 as repduty_type_cd,
+      |PD03A.PD03AQ02 as contruct_id,
+      |cast(PD03A.PD03AJ01 as decimal(18,2)) as repduty_amt,
+      |cast(PD03A.PD03AD04 as bigint) as repduty_currency_cd,
+      |cast(PD03A.PD03AJ02 as decimal(18,2)) as repduty_bal,
+      |PD03A.PD03AD05 as repduty_5class,
+      |PD03A.PD03AD06 as repduty_acct_stat,
+      |PD03A.PD03AD07 as repduty_repay_stat,
+      |cast(PD03A.PD03AS01 as bigint) as repduty_overdue_mon,
+      |PD03A.PD03AR03 as repduty_report_dt,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCRPD03
+      |""".stripMargin
+    createView(tableEnv,ICR_REPAYMENTDUTY_INFO,"ICR_REPAYMENTDUTY_INFO")
+
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_REPAYMENTDUTY_DECL_NUM
+    //===========================================================================================================================================
+    val ICR_REPAYMENTDUTY_DECL_NUM=
+    """
+      |select
+      |report_id as report_id,
+      |'' as acct_num,
+      |cast(PD03Z.PD03ZS01 as bigint) as repduty_decl_num,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCRPD03
+      |""".stripMargin
+    createView(tableEnv,ICR_REPAYMENTDUTY_DECL_NUM,"ICR_REPAYMENTDUTY_DECL_NUM")
+    //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL_NUM").toAppendStream[Row].print()
+
+    //===========================================================================================================================================
+    //                                                          todo ICR_REPAYMENTDUTY_DECL
+    //===========================================================================================================================================
+    val ICR_REPAYMENTDUTY_DECL=
+    """
+      |select
+      |t1.report_id as report_id,
+      |'' as acct_num,
+      |info.PD03ZD01 as repduty_decl_type,
+      |info.PD03ZQ01 as repduty_decl_cont,
+      |info.PD03ZR01 as repduty_decl_dt,
+      |t1.SID as SID,
+      |t1.STATISTICS_DT as STATISTICS_DT
+      |from(
+      |select
+      |report_id as report_id,
+      |PD03Z.PD03ZH as data,
+      |SID as SID,
+      |STATISTICS_DT as STATISTICS_DT
+      |from PCRPD03
+      |)t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01)
+      |""".stripMargin
+    createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL")
+    //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
+
+
+
+
     //    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_QUALIFICATION_DECLARE

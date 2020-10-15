@@ -1152,3 +1152,57 @@ from ods_table
 
 
 
+
+select
+report_id as report_id,
+'' as acct_num,
+PD03A.PD03AD08 as repduty_iden_type,
+PD03A.PD03AD01 as repduty_org_type,
+PD03A.PD03AQ01 as repduty_org_id,
+PD03A.PD03AD02 as repduty_busi_type,
+PD03A.PD03AR01 as repduty_open_dt,
+PD03A.PD03AR02 as repduty_due_dt,
+PD03A.PD03AD03 as repduty_type_cd,
+PD03A.PD03AQ02 as contruct_id,
+cast(PD03A.PD03AJ01 as decimal(18,2)) as repduty_amt,
+cast(PD03A.PD03AD04 as bigint) as repduty_currency_cd,
+cast(PD03A.PD03AJ02 as decimal(18,2)) as repduty_bal,
+PD03A.PD03AD05 as repduty_5class,
+PD03A.PD03AD06 as repduty_acct_stat,
+PD03A.PD03AD07 as repduty_repay_stat,
+cast(PD03A.PD03AS01 as bigint) as repduty_overdue_mon,
+PD03A.PD03AR03 as repduty_report_dt,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PCRPD03
+
+
+
+
+select
+report_id as report_id,
+'' as acct_num,
+cast(PD03Z.PD03ZS01 as bigint) as repduty_decl_num,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PCRPD03
+
+
+
+
+select
+t1.report_id as report_id,
+'' as acct_num,
+info.PD03ZD01 as repduty_decl_type,
+info.PD03ZQ01 as repduty_decl_cont,
+info.PD03ZR01 as repduty_decl_dt,
+t1.SID as SID,
+t1.STATISTICS_DT as STATISTICS_DT
+from(
+select
+report_id as report_id,
+PD03Z.PD03ZH as data,
+SID as SID,
+STATISTICS_DT as STATISTICS_DT
+from PCRPD03
+)t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01)
