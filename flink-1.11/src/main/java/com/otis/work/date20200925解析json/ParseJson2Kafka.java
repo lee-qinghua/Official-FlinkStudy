@@ -1906,16 +1906,13 @@ public class ParseJson2Kafka {
         createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL");
         //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
 
-
-
         //todo 测试输出到kafka
 //        String sink_table3 = " CREATE TABLE sink_table3 (\n" +
 //                "                      a1 string,\n" +
 //                "                      a2 string,\n" +
 //                "                      a3 string,\n" +
 //                "                      a4 string,\n" +
-//                "                      a5 string,\n" +
-//                "                      a6 string\n" +
+//                "                      a6 DATE\n" +
 //                "                      )\n" +
 //                "                      WITH (\n" +
 //                "                        'connector' = 'kafka',\n" +
@@ -1928,7 +1925,11 @@ public class ParseJson2Kafka {
 //
 //
 //        tableEnv.executeSql(sink_table3);
-//        tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE");
+//        tableEnv.executeSql("insert into sink_table3 select * from ICR_CREDITSCORE");
+
+        //===========================================================================================================================================
+        //                                                          todo 开始测试特征sql
+        //===========================================================================================================================================
         tableEnv.execute("aa");
     }
 

@@ -135,7 +135,7 @@ object test {
         |from ods_table
         |""".stripMargin)
 
-    //    ICR_QUERYREQ_table.toAppendStream[Row].print()
+    ICR_QUERYREQ_table.toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_OTHER_IDEN_NUM
     //===========================================================================================================================================
@@ -871,7 +871,7 @@ object test {
       |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_INFO, "ICR_LOAN_INFO")
-    //tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
+    tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_LATEST
     //===========================================================================================================================================
@@ -901,7 +901,7 @@ object test {
       |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_LATEST, "ICR_LOAN_LATEST")
-    //tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
+    tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
 
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_1MONTH
@@ -946,7 +946,7 @@ object test {
       |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_1MONTH, "ICR_LOAN_1MONTH")
-    //tableEnv.sqlQuery("select * from ICR_LOAN_1MONTH").toAppendStream[Row].print()
+    tableEnv.sqlQuery("select * from ICR_LOAN_1MONTH").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_24MONTH_DATE
     //===========================================================================================================================================
@@ -2004,7 +2004,7 @@ object test {
     //===========================================================================================================================================
     //                                                          todo ICR_REPAYMENTDUTY_INFO
     //===========================================================================================================================================
-    val ICR_REPAYMENTDUTY_INFO=
+    val ICR_REPAYMENTDUTY_INFO =
     """
       |select
       |report_id as report_id,
@@ -2029,13 +2029,13 @@ object test {
       |STATISTICS_DT as STATISTICS_DT
       |from PCRPD03
       |""".stripMargin
-    createView(tableEnv,ICR_REPAYMENTDUTY_INFO,"ICR_REPAYMENTDUTY_INFO")
+    createView(tableEnv, ICR_REPAYMENTDUTY_INFO, "ICR_REPAYMENTDUTY_INFO")
 
 
     //===========================================================================================================================================
     //                                                          todo ICR_REPAYMENTDUTY_DECL_NUM
     //===========================================================================================================================================
-    val ICR_REPAYMENTDUTY_DECL_NUM=
+    val ICR_REPAYMENTDUTY_DECL_NUM =
     """
       |select
       |report_id as report_id,
@@ -2045,13 +2045,13 @@ object test {
       |STATISTICS_DT as STATISTICS_DT
       |from PCRPD03
       |""".stripMargin
-    createView(tableEnv,ICR_REPAYMENTDUTY_DECL_NUM,"ICR_REPAYMENTDUTY_DECL_NUM")
+    createView(tableEnv, ICR_REPAYMENTDUTY_DECL_NUM, "ICR_REPAYMENTDUTY_DECL_NUM")
     //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL_NUM").toAppendStream[Row].print()
 
     //===========================================================================================================================================
     //                                                          todo ICR_REPAYMENTDUTY_DECL
     //===========================================================================================================================================
-    val ICR_REPAYMENTDUTY_DECL=
+    val ICR_REPAYMENTDUTY_DECL =
     """
       |select
       |t1.report_id as report_id,
@@ -2070,10 +2070,8 @@ object test {
       |from PCRPD03
       |)t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01)
       |""".stripMargin
-    createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL")
+    createView(tableEnv, ICR_REPAYMENTDUTY_DECL, "ICR_REPAYMENTDUTY_DECL")
     //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
-
-
 
 
     //    tableEnv.sqlQuery("select * from ICR_ALLOWANCE_DECLARE").toAppendStream[Row].print()
@@ -2145,7 +2143,7 @@ object test {
         |""".stripMargin
     tableEnv.executeSql(sink_table3)
     tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE")
-    //    env.execute()
+    env.execute()
   }
 
   /**

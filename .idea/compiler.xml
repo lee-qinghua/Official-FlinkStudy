@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="hive-flink" />
         <module name="flink-1.11" />
+        <module name="hive-flink" />
+        <module name="flink-udfs" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="flink-1.11" target="8" />
+      <module name="flink-udfs" target="8" />
       <module name="hive-flink" target="1.5" />
     </bytecodeTargetLevel>
   </component>
