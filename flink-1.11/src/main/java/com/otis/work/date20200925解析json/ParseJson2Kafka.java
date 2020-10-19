@@ -160,7 +160,7 @@ public class ParseJson2Kafka {
                 "                                PRH.PA01.PA01C.PA01CH as ok,\n" +
                 "                                CURRENT_DATE            as STATISTICS_DT\n" +
                 "                                from ods_table)t1,\n" +
-                "                unnest(t1.ok) as t2(a,b)";
+                "                unnest(t1.ok) as t2(a,b) where t1.ok is not null";
         createView(tableEnv, ICR_OTHER_IDEN, "ICR_OTHER_IDEN");
         //===========================================================================================================================================
         //                                                          todo ICR_FRAUD
@@ -213,7 +213,7 @@ public class ParseJson2Kafka {
                 "        PIM.PB01.PB01B.PB01BH                   as data,\n" +
                 "        PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "        CURRENT_DATE                            as STATISTICS_DT\n" +
-                "        FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01)";
+                "        FROM ods_table)t1,unnest(t1.data) as info(PB01BQ01,PB01BR01) where t1.data is not null";
         createView(tableEnv, ICR_TEL, "ICR_TEL");
         //===========================================================================================================================================
         //                                                          todo ICR_SPOUSE
@@ -249,7 +249,7 @@ public class ParseJson2Kafka {
                 "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "                CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                from ods_table\n" +
-                "        )t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01)";
+                "        )t1,unnest(t1.data) as info(PB030D01,PB030Q01,PB030Q02,PB030R01) where t1.data is not null";
         createView(tableEnv, ICR_RESIDENCE, "ICR_RESIDENCE");
         //===========================================================================================================================================
         //                                                          todo ICR_PROFESSION
@@ -277,7 +277,7 @@ public class ParseJson2Kafka {
                 "                PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "                CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                from ods_table\n" +
-                "        )t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02)";
+                "        )t1,unnest(t1.data) as info(PB040D01,PB040Q01,PB040D02,PB040D03,PB040Q02,PB040Q03,PB040D04,PB040D05,PB040D06,PB040R01,PB040R02) where t1.data is not null";
 
         createView(tableEnv, ICR_PROFESSION, "ICR_PROFESSION");
         //===========================================================================================================================================
@@ -328,7 +328,7 @@ public class ParseJson2Kafka {
                 "                  PCO.PC02.PC02A.PC02AH                   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
-                "                  from ods_table)t1,unnest(t1.data) as info(PC02AD01,PC02AD02,PC02AS03,PC02AR01)";
+                "                  from ods_table)t1,unnest(t1.data) as info(PC02AD01,PC02AD02,PC02AS03,PC02AR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_CREDIT_CUE, "ICR_CREDIT_CUE");
@@ -365,7 +365,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02)";
+                "                  )t1,unnest(t1.data) as info(PC02BD01,PC02BS03,PC02BJ02) where t1.data is not null";
 
 
         createView(tableEnv, ICR_RECOUPED_INFO, "ICR_RECOUPED_INFO");
@@ -411,7 +411,7 @@ public class ParseJson2Kafka {
                 "                  PCO.PC02.PC02D.PC02DH                   as data,\n" +
                 "                  PRH.PA01.PA01A.PA01AI01                 as SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
-                "                  from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04)";
+                "                  from ods_table)t1,unnest(t1.data) as info(PC02DD01,PC02DS02,PC02DS03,PC02DJ01,PC02DS04) where t1.data is not null";
         createView(tableEnv, ICR_OVERDUE, "ICR_OVERDUE");
         //===========================================================================================================================================
         //                                                          todo ICR_ONEOFF
@@ -566,7 +566,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PC02KD01,PC02KD02,PC02KS02,PC02KJ01,PC02KJ02)";
+                "                  )t1,unnest(t1.data) as info(PC02KD01,PC02KD02,PC02KS02,PC02KJ01,PC02KJ02) where t1.data is not null";
 
 
         createView(tableEnv, ICR_REPAYMENT_DUTY, "ICR_REPAYMENT_DUTY");
@@ -588,7 +588,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PC030D01,PC030S02,PC030J01)";
+                "                  )t1,unnest(t1.data) as info(PC030D01,PC030S02,PC030J01) where t1.data is not null";
 
         createView(tableEnv, ICR_POSTPAID, "ICR_POSTPAID");
         //tableEnv.sqlQuery("select * from ICR_POSTPAID").toAppendStream[Row].print()
@@ -609,7 +609,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PC040D01,PC040S02,PC040J01)";
+                "                  )t1,unnest(t1.data) as info(PC040D01,PC040S02,PC040J01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_PUBLIC, "ICR_PUBLIC");
@@ -632,7 +632,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PH010R01,PH010D01,PH010Q02,PH010Q03)";
+                "                  )t1,unnest(t1.data) as info(PH010R01,PH010D01,PH010Q02,PH010Q03) where t1.data is not null";
 
 
         createView(tableEnv, ICR_QUERY_RECORD, "ICR_QUERY_RECORD");
@@ -670,7 +670,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
+                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_INFO, "ICR_LOAN_INFO");
@@ -699,7 +699,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
+                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_LATEST, "ICR_LOAN_LATEST");
@@ -743,7 +743,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
+                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_1MONTH, "ICR_LOAN_1MONTH");
@@ -765,7 +765,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
+                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_24MONTH_DATE, "ICR_LOAN_24MONTH_DATE");
@@ -794,7 +794,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)";
+                "                  )t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z) where t1.data is not null";
 
 
         createView(tableEnv, PDAPD01, "PDAPD01");
@@ -815,7 +815,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD02A,PD02Z)";
+                "                  )t1,unnest(t1.data) as info(PD02A,PD02Z) where t1.data is not null";
 
 
         createView(tableEnv, PCAPD02, "PCAPD02");
@@ -836,7 +836,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PD03A,PD03Z)";
+                "                  )t1,unnest(t1.data) as info(PD03A,PD03Z) where t1.data is not null";
 
 
         createView(tableEnv, PCRPD03, "PCRPD03");
@@ -856,7 +856,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PE01A,PE01Z)";
+                "                  )t1,unnest(t1.data) as info(PE01A,PE01Z) where t1.data is not null";
 
 
         createView(tableEnv, PNDPE01, "PNDPE01");
@@ -877,7 +877,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF01A,PF01Z)";
+                "                  )t1,unnest(t1.data) as info(PF01A,PF01Z) where t1.data is not null";
 
 
         createView(tableEnv, POTPF01, "POTPF01");
@@ -899,7 +899,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF02A,PF02Z)";
+                "                  )t1,unnest(t1.data) as info(PF02A,PF02Z) where t1.data is not null";
 
 
         createView(tableEnv, PCJPF02, "PCJPF02");
@@ -919,7 +919,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF03A,PF03Z)";
+                "                  )t1,unnest(t1.data) as info(PF03A,PF03Z) where t1.data is not null";
 
 
         createView(tableEnv, PCEPF03, "PCEPF03");
@@ -939,7 +939,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF04A,PF04Z)";
+                "                  )t1,unnest(t1.data) as info(PF04A,PF04Z) where t1.data is not null";
 
 
         createView(tableEnv, PAPPF04, "PAPPF04");
@@ -959,7 +959,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF05A,PF05Z)";
+                "                  )t1,unnest(t1.data) as info(PF05A,PF05Z) where t1.data is not null";
 
 
         createView(tableEnv, PHFPF05, "PHFPF05");
@@ -981,7 +981,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF06A,PF06Z)";
+                "                  )t1,unnest(t1.data) as info(PF06A,PF06Z) where t1.data is not null";
 
 
         createView(tableEnv, PBSPF06, "PBSPF06");
@@ -1002,7 +1002,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF07A,PF07Z)";
+                "                  )t1,unnest(t1.data) as info(PF07A,PF07Z) where t1.data is not null";
 
 
         createView(tableEnv, PPQPF07, "PPQPF07");
@@ -1022,7 +1022,7 @@ public class ParseJson2Kafka {
                 "                  PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "                  CURRENT_DATE                            as STATISTICS_DT\n" +
                 "                  from ods_table\n" +
-                "                  )t1,unnest(t1.data) as info(PF08A,PF08Z)";
+                "                  )t1,unnest(t1.data) as info(PF08A,PF08Z) where t1.data is not null";
 
 
         createView(tableEnv, PAHPF08, "PAHPF08");
@@ -1045,7 +1045,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT as  STATISTICS_DT,\n" +
                 "                  PD01D.PD01DH as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01DR03,PD01DD01)";
+                "                  )t1,unnest(t1.data) as info(PD01DR03,PD01DD01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_24MONTH, "ICR_LOAN_24MONTH");
@@ -1089,7 +1089,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD01E.PD01EH        as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01)";
+                "                  )t1,unnest(t1.data) as info(PD01ER03,PD01ED01,PD01EJ01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_5YEARS, "ICR_LOAN_5YEARS");
@@ -1129,7 +1129,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD01F.PD01FH     as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01FD01,PD01FR01,PD01FS02,PD01FJ01,PD01FQ01)";
+                "                  )t1,unnest(t1.data) as info(PD01FD01,PD01FR01,PD01FS02,PD01FJ01,PD01FQ01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_SPECIAL_TXN, "ICR_SPECIAL_TXN");
@@ -1166,7 +1166,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD01G.PD01GH     as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01GR01,PD01GD01)";
+                "                  )t1,unnest(t1.data) as info(PD01GR01,PD01GD01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_SPECIAL_EVENT, "ICR_SPECIAL_EVENT");
@@ -1205,7 +1205,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD01H.PD01HH     as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01HJ01,PD01HR01,PD01HR02,PD01HJ02)";
+                "                  )t1,unnest(t1.data) as info(PD01HJ01,PD01HR01,PD01HR02,PD01HJ02) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LARGE_INSTALMENTS, "ICR_LARGE_INSTALMENTS");
@@ -1243,7 +1243,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD01Z.PD01ZH     as data\n" +
                 "                  from PDAPD01\n" +
-                "                  )t1,unnest(t1.data) as info(PD01ZD01,PD01ZQ01,PD01ZR01)";
+                "                  )t1,unnest(t1.data) as info(PD01ZD01,PD01ZQ01,PD01ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_LOAN_DECLARE, "ICR_LOAN_DECLARE");
@@ -1306,7 +1306,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PD02Z.PD02ZH     as data\n" +
                 "                  from PCAPD02\n" +
-                "                  )t1,unnest(t1.data) as info(PD02ZD01,PD02ZQ01,PD02ZR01)";
+                "                  )t1,unnest(t1.data) as info(PD02ZD01,PD02ZQ01,PD02ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_AGREEMENT_DECLARE, "ICR_AGREEMENT_DECLARE");
@@ -1610,7 +1610,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PE01Z.PE01ZH     as data\n" +
                 "                  from PNDPE01\n" +
-                "                  )t1,unnest(t1.data) as info(PE01ZD01,PE01ZQ01,PE01ZR01)";
+                "                  )t1,unnest(t1.data) as info(PE01ZD01,PE01ZQ01,PE01ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_POSTPAID_DECLARE, "ICR_POSTPAID_DECLARE");
@@ -1632,7 +1632,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF01Z.PF01ZH     as data\n" +
                 "                  from POTPF01\n" +
-                "                  )t1,unnest(t1.data) as info(PF01ZD01,PF01ZQ01,PF01ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF01ZD01,PF01ZQ01,PF01ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_TAX_DECLARE, "ICR_TAX_DECLARE");
@@ -1654,7 +1654,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF02Z.PF02ZH     as data\n" +
                 "                  from PCJPF02\n" +
-                "                  )t1,unnest(t1.data) as info(PF02ZD01,PF02ZQ01,PF02ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF02ZD01,PF02ZQ01,PF02ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_CIVIL_JUDGEMENT_DECLARE, "ICR_CIVIL_JUDGEMENT_DECLARE");
@@ -1676,7 +1676,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF03Z.PF03ZH        as data\n" +
                 "                  from PCEPF03\n" +
-                "                  )t1,unnest(t1.data) as info(PF03ZD01,PF03ZQ01,PF03ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF03ZD01,PF03ZQ01,PF03ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_ENFORCEMENT_DECLARE, "ICR_ENFORCEMENT_DECLARE");
@@ -1698,7 +1698,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF04Z.PF04ZH     as data\n" +
                 "                  from PAPPF04\n" +
-                "                  )t1,unnest(t1.data) as info(PF04ZD01,PF04ZQ01,PF04ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF04ZD01,PF04ZQ01,PF04ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_ADMINPUNISHMENT_DECLARE, "ICR_ADMINPUNISHMENT_DECLARE");
@@ -1720,7 +1720,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF05Z.PF05ZH     as data\n" +
                 "                  from PHFPF05\n" +
-                "                  )t1,unnest(t1.data) as info(PF05ZD01,PF05ZQ01,PF05ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF05ZD01,PF05ZQ01,PF05ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_HOUSINGFUND_DECLARE, "ICR_HOUSINGFUND_DECLARE");
@@ -1742,7 +1742,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF06Z.PF06ZH     as data\n" +
                 "                  from PBSPF06\n" +
-                "                  )t1,unnest(t1.data) as info(PF06ZD01,PF06ZQ01,PF06ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF06ZD01,PF06ZQ01,PF06ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_ALLOWANCE_DECLARE, "ICR_ALLOWANCE_DECLARE");
@@ -1764,7 +1764,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF07Z.PF07ZH     as data\n" +
                 "                  from PPQPF07\n" +
-                "                  )t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_QUALIFICATION_DECLARE, "ICR_QUALIFICATION_DECLARE");
@@ -1791,7 +1791,7 @@ public class ParseJson2Kafka {
                 "                  STATISTICS_DT \t\tas STATISTICS_DT,\n" +
                 "                  PF08Z.PF08ZH     as data\n" +
                 "                  from PAHPF08\n" +
-                "                  )t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01)";
+                "                  )t1,unnest(t1.data) as info(PF08ZD01,PF08ZQ01,PF08ZR01) where t1.data is not null";
 
 
         createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE");
@@ -1811,7 +1811,7 @@ public class ParseJson2Kafka {
                 "POS.PG01         as data,\n" +
                 "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table\n" +
-                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)";
+                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H) where t1.data is not null";
 
         createView(tableEnv, ICR_OTHER_DECLARE_NUM, "ICR_OTHER_DECLARE_NUM");
         //===========================================================================================================================================
@@ -1837,8 +1837,8 @@ public class ParseJson2Kafka {
                 "PRH.PA01.PA01A.PA01AI01  \t\t\t\tas SID,\n" +
                 "CURRENT_DATE                            as STATISTICS_DT\n" +
                 "from ods_table\n" +
-                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H)\n" +
-                ")t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01)";
+                ")t1,unnest(t1.data) as info(PG010D01,PG010D02,PG010S01,PG010H) where t1.data is not null\n" +
+                ")t2,unnest(t2.data2) as info2(PG010D03,PG010Q01,PG010R01) where t2.data2 is not null";
         createView(tableEnv, ICR_OTHER_DECLARE, "ICR_OTHER_DECLARE");
 
 
@@ -1902,7 +1902,7 @@ public class ParseJson2Kafka {
                 "SID as SID,\n" +
                 "STATISTICS_DT as STATISTICS_DT\n" +
                 "from PCRPD03\n" +
-                ")t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01)";
+                ")t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01) where t1.data is not null";
         createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL");
         //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
 

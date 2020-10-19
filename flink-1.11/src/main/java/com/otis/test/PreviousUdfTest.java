@@ -33,13 +33,13 @@ public class PreviousUdfTest {
         tableEnv.createTemporaryView("mytable", parsed);
 
         //注册函数
-        tableEnv.createFunction("myFunction", PreviousUdf.class);
+        tableEnv.createFunction("myFunction", MonthsBetween.class);
 
         //输出表
         String print_table = "" +
                 "create TABLE print_table(" +
-                " rulecode string," +
-                " amount1 int," +
+//                " rulecode string," +
+//                " amount1 int," +
                 " amount2 int" +
                 "        ) WITH (" +
                 "          'connector' = 'print'" +
@@ -48,7 +48,7 @@ public class PreviousUdfTest {
 
 
         //执行sql
-        tableEnv.sqlQuery("insert into print_table select * from mytable");
+        tableEnv.executeSql("insert into print_table select myFunction(to_date('2020-09-09'),to_date('2020-02-02')) from mytable");
 
 
         env.execute();

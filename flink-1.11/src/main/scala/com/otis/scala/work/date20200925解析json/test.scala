@@ -1,6 +1,7 @@
 package com.otis.scala.work.date20200925解析json
 
 import com.otis.work.date20200925解析json.files.Json2StringFunction
+import com.otis.work.date20200925解析json.udf.NVLFunction
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.table.api.{EnvironmentSettings, Table}
@@ -12,6 +13,8 @@ object test {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     val bsSettings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env, bsSettings)
+
+    tableEnv.createFunction("flink_nvl", classOf[NVLFunction])
     val ods_table =
       """
         |create table ods_table(
@@ -135,7 +138,7 @@ object test {
         |from ods_table
         |""".stripMargin)
 
-    ICR_QUERYREQ_table.toAppendStream[Row].print()
+    //ICR_QUERYREQ_table.toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_OTHER_IDEN_NUM
     //===========================================================================================================================================
@@ -871,7 +874,7 @@ object test {
       |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_INFO, "ICR_LOAN_INFO")
-    tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("select * from ICR_LOAN_INFO").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_LATEST
     //===========================================================================================================================================
@@ -901,7 +904,7 @@ object test {
       |)t1,unnest(t1.data) as info(PD01A,PD01B,PD01C,PD01D,PD01E,PD01F,PD01G,PD01H,PD01Z)
       |""".stripMargin
     createView(tableEnv, ICR_LOAN_LATEST, "ICR_LOAN_LATEST")
-    tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
+    //tableEnv.sqlQuery("select * from ICR_LOAN_LATEST").toAppendStream[Row].print()
 
     //===========================================================================================================================================
     //                                                          todo ICR_LOAN_1MONTH
@@ -1216,9 +1219,10 @@ object test {
         |PRH.PA01.PA01A.PA01AI01  				as SID,
         |'2020-09-27'                            as STATISTICS_DT
         |from ods_table
-        |)t1,unnest(t1.data) as info(PF07A,PF07Z)
+        |)t1,unnest(t1.data) as info(PF07A,PF07Z) where t1.data is not null
         |""".stripMargin
     createView(tableEnv, PPQPF07, "PPQPF07")
+    tableEnv.sqlQuery("select * from PPQPF07").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo 中间表 PAHPF08
     //===========================================================================================================================================
@@ -2094,10 +2098,10 @@ object test {
       |STATISTICS_DT 		as STATISTICS_DT,
       |PF07Z.PF07ZH     as data
       |from PPQPF07
-      |)t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01)
+      |)t1,unnest(t1.data) as info(PF07ZD01,PF07ZQ01,PF07ZR01) where t1.data is not null
       |""".stripMargin
     createView(tableEnv, ICR_QUALIFICATION_DECLARE, "ICR_QUALIFICATION_DECLARE")
-    //    tableEnv.sqlQuery("select * from ICR_QUALIFICATION_DECLARE").toAppendStream[Row].print()
+    tableEnv.sqlQuery("select * from ICR_QUALIFICATION_DECLARE").toAppendStream[Row].print()
     //===========================================================================================================================================
     //                                                          todo ICR_REWARD_DECLARE
     //===========================================================================================================================================
@@ -2122,27 +2126,27 @@ object test {
     createView(tableEnv, ICR_REWARD_DECLARE, "ICR_REWARD_DECLARE")
 
 
-    val sink_table3 =
-      """
-        |CREATE TABLE sink_table3 (
-        |    a1 string,
-        |    a2 string,
-        |    a3 string,
-        |    a4 string,
-        |    a5 string,
-        |    a6 string
-        |    )
-        |    WITH (
-        |      'connector' = 'kafka',
-        |      'topic' = 'qinghuatest-011',
-        |      'properties.group.id'='dev_flink',
-        |      'properties.zookeeper.connect'='10.1.30.6:2181',
-        |      'properties.bootstrap.servers' = '10.1.30.8:9092',
-        |      'format' = 'json'
-        |      )
-        |""".stripMargin
-    tableEnv.executeSql(sink_table3)
-    tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE")
+    //    val sink_table3 =
+    //      """
+    //        |CREATE TABLE sink_table3 (
+    //        |    a1 string,
+    //        |    a2 string,
+    //        |    a3 string,
+    //        |    a4 string,
+    //        |    a5 string,
+    //        |    a6 string
+    //        |    )
+    //        |    WITH (
+    //        |      'connector' = 'kafka',
+    //        |      'topic' = 'qinghuatest-011',
+    //        |      'properties.group.id'='dev_flink',
+    //        |      'properties.zookeeper.connect'='10.1.30.6:2181',
+    //        |      'properties.bootstrap.servers' = '10.1.30.8:9092',
+    //        |      'format' = 'json'
+    //        |      )
+    //        |""".stripMargin
+    //    tableEnv.executeSql(sink_table3)
+    //    tableEnv.executeSql("insert into sink_table3 select * from ICR_REWARD_DECLARE")
     env.execute()
   }
 

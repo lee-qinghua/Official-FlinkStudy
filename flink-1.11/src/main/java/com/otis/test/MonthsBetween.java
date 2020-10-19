@@ -1,4 +1,4 @@
-package com.otis.udfs;
+package com.otis.test;
 
 import org.apache.flink.table.functions.ScalarFunction;
 
@@ -7,7 +7,6 @@ import java.util.Calendar;
 
 /**
  * 功能和hive 里边的 months_between相似，date1>date2 不然会出现负数
- * 测试成功 ok
  */
 public class MonthsBetween extends ScalarFunction {
 
