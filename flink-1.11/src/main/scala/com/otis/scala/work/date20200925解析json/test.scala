@@ -1,7 +1,6 @@
 package com.otis.scala.work.date20200925解析json
 
-import com.otis.work.date20200925解析json.files.Json2StringFunction
-import com.otis.work.date20200925解析json.udf.NVLFunction
+
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.table.api.{EnvironmentSettings, Table}
@@ -14,7 +13,6 @@ object test {
     val bsSettings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env, bsSettings)
 
-    tableEnv.createFunction("flink_nvl", classOf[NVLFunction])
     val ods_table =
       """
         |create table ods_table(

@@ -9,7 +9,7 @@ import java.util.Calendar;
  * 功能和hive 里边的 months_between相似，date1>date2 不然会出现负数
  * 测试成功 ok
  */
-public class MonthsBetween extends ScalarFunction {
+public class MonthsBetweenDate extends ScalarFunction {
 
     public int eval(Date date1, Date date2) {
         Calendar d1 = Calendar.getInstance();
