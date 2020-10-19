@@ -1,5 +1,6 @@
 package com.otis.work.date20200925解析json;
 
+import com.otis.work.date20200925解析json.udf.MonthsBetweenStr;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
@@ -121,7 +122,7 @@ public class ParseJson2Kafka {
         //===========================================================================================================================================
         //                                                          todo ICR_QUERYREQ
         //===========================================================================================================================================
-
+        tableEnv.createFunction("flink_months_between_str", MonthsBetweenStr.class);
         String ICR_QUERYREQ = "select\n" +
                 "PRH.PA01.PA01A.PA01AI01 as report_id,\n" +
                 "PRH.PA01.PA01A.PA01AI01 as report_no,\n" +
@@ -1842,11 +1843,10 @@ public class ParseJson2Kafka {
         createView(tableEnv, ICR_OTHER_DECLARE, "ICR_OTHER_DECLARE");
 
 
-
         //===========================================================================================================================================
         //                                                          todo ICR_REPAYMENTDUTY_INFO
         //===========================================================================================================================================
-        String ICR_REPAYMENTDUTY_INFO="select\n" +
+        String ICR_REPAYMENTDUTY_INFO = "select\n" +
                 "report_id as report_id,\n" +
                 "'' as acct_num,\n" +
                 "PD03A.PD03AD08 as repduty_iden_type,\n" +
@@ -1868,26 +1868,26 @@ public class ParseJson2Kafka {
                 "SID as SID,\n" +
                 "STATISTICS_DT as STATISTICS_DT\n" +
                 "from PCRPD03";
-        createView(tableEnv,ICR_REPAYMENTDUTY_INFO,"ICR_REPAYMENTDUTY_INFO");
+        createView(tableEnv, ICR_REPAYMENTDUTY_INFO, "ICR_REPAYMENTDUTY_INFO");
 
 
         //===========================================================================================================================================
         //                                                          todo ICR_REPAYMENTDUTY_DECL_NUM
         //===========================================================================================================================================
-        String ICR_REPAYMENTDUTY_DECL_NUM="select\n" +
+        String ICR_REPAYMENTDUTY_DECL_NUM = "select\n" +
                 "report_id as report_id,\n" +
                 "'' as acct_num,\n" +
                 "cast(PD03Z.PD03ZS01 as bigint) as repduty_decl_num,\n" +
                 "SID as SID,\n" +
                 "STATISTICS_DT as STATISTICS_DT\n" +
                 "from PCRPD03";
-        createView(tableEnv,ICR_REPAYMENTDUTY_DECL_NUM,"ICR_REPAYMENTDUTY_DECL_NUM");
+        createView(tableEnv, ICR_REPAYMENTDUTY_DECL_NUM, "ICR_REPAYMENTDUTY_DECL_NUM");
         //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL_NUM").toAppendStream[Row].print()
 
         //===========================================================================================================================================
         //                                                          todo ICR_REPAYMENTDUTY_DECL
         //===========================================================================================================================================
-        String ICR_REPAYMENTDUTY_DECL="select\n" +
+        String ICR_REPAYMENTDUTY_DECL = "select\n" +
                 "t1.report_id as report_id,\n" +
                 "'' as acct_num,\n" +
                 "info.PD03ZD01 as repduty_decl_type,\n" +
@@ -1903,7 +1903,7 @@ public class ParseJson2Kafka {
                 "STATISTICS_DT as STATISTICS_DT\n" +
                 "from PCRPD03\n" +
                 ")t1,unnest(t1.data) as info(PD03ZD01,PD03ZQ01,PD03ZR01) where t1.data is not null";
-        createView(tableEnv,ICR_REPAYMENTDUTY_DECL,"ICR_REPAYMENTDUTY_DECL");
+        createView(tableEnv, ICR_REPAYMENTDUTY_DECL, "ICR_REPAYMENTDUTY_DECL");
         //    tableEnv.sqlQuery("select * from ICR_REPAYMENTDUTY_DECL").toAppendStream[Row].print()
 
         //todo 测试输出到kafka
@@ -1930,6 +1930,61 @@ public class ParseJson2Kafka {
         //===========================================================================================================================================
         //                                                          todo 开始测试特征sql
         //===========================================================================================================================================
+
+        String TEMP_CREDITCARD_INFO = "" +
+                "create view TEMP_CREDITCARD_INFO as\n" +
+                "select \n" +
+                "    a.report_id,\n" +
+                "    a.acct_num,\n" +
+                "    a.acct_type_cd,\n" +
+                "    a.currency_cd,\n" +
+                "    if(b.acct_stat_1m is not null,b.acct_stat_1m,c.acct_stat) as acct_stat_final,\n" +
+                "    a.credit_amt,\n" +
+                "    a.credit_amt_share,\n" +
+                "    a.open_dt,\n" +
+                "    a.acct_org_id,\n" +
+                "    if(b.credit_6mon_avg is not null,b.credit_6mon_avg,b.overdraft_6mon_avg) as bal_6mon_avg,\n" +
+                "    if(b.max_credit_used is not null,b.max_credit_used,b.max_overdraft) as max_bal_used, \n" +
+                "    b.overdraft_prin_180Amt,\n" +
+                "    if(c.loan_bal is not null,c.loan_bal,b.loan_bal_1m) as loan_bal_final,                \n" +
+                "    b.overdue_period,\n" +
+                "    b.overdue_amt,    \n" +
+                "    c.repay_stat,\n" +
+                "    d.report_no as report_no,\n" +
+                "    substr(d.report_tm,1,10) as report_tm\n" +
+                "from \n" +
+                "(SELECT \n" +
+                "    report_id    \n" +
+                "    ,report_no as report_no\n" +
+                "    ,report_tm AS report_tm\n" +
+                "    ,cust_name\n" +
+                "    ,query_iden_cd\n" +
+                "    ,query_iden_id\n" +
+                "    ,query_org_id\n" +
+                "    ,query_reason_cd as query_reason_cd\n" +
+                "    ,STATISTICS_DT\n" +
+                "FROM \n" +
+                "    ICR_QUERYREQ) d\n" +
+                "left join\n" +
+                "(select * from ICR_LOAN_INFO  where acct_type_cd in ('R2','R3') and open_dt is distinct from '1900-09-09') a\n" +
+                "on  d.report_id = a.report_id\n" +
+                "left join \n" +
+                "(select * from ICR_LOAN_1MONTH) b\n" +
+                "on d.report_id = b.report_id and a.acct_num=b.acct_num\n" +
+                "left join \n" +
+                "(select * from ICR_LOAN_LATEST) c\n" +
+                "on d.report_id = c.report_id and a.acct_num=c.acct_num";
+
+//        createView(tableEnv, TEMP_CREDITCARD_INFO, "TEMP_CREDITCARD_INFO");
+        tableEnv.executeSql(TEMP_CREDITCARD_INFO);
+        String print_t = "create table print_t(\n" +
+                "a int\n" +
+                ")with(\n" +
+                "'connector'='print'\n" +
+                ")";
+        tableEnv.executeSql(print_t);
+
+        tableEnv.executeSql("insert into print_t select flink_months_between_str(from_unixtime(unix_timestamp('20200811','yyyyMMdd'),'yyyy-MM-dd'),open_dt) from TEMP_CREDITCARD_INFO");
         tableEnv.execute("aa");
     }
 
