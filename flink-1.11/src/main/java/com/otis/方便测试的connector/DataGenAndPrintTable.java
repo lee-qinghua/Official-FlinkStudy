@@ -1,4 +1,4 @@
-package com.otis.connector;
+package com.otis.方便测试的connector;
 
 import com.otis.udfs.SortRuleFunction;
 import org.apache.flink.api.common.functions.MapFunction;

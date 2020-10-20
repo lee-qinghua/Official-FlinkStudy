@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Official-FlinkStudy.iml" filepath="$PROJECT_DIR$/.idea/Official-FlinkStudy.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.11/flink-1.11.iml" filepath="$PROJECT_DIR$/flink-1.11/flink-1.11.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flink-test/flink-test.iml" filepath="$PROJECT_DIR$/flink-test/flink-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-udfs/flink-udfs.iml" filepath="$PROJECT_DIR$/flink-udfs/flink-udfs.iml" />
       <module fileurl="file://$PROJECT_DIR$/hive-flink/hive-flink.iml" filepath="$PROJECT_DIR$/hive-flink/hive-flink.iml" />
     </modules>

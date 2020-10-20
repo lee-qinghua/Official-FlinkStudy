@@ -32,8 +32,6 @@ public class PreviousUdfTest {
         //创建视图
         tableEnv.createTemporaryView("mytable", parsed);
 
-        //注册函数
-        tableEnv.createFunction("myFunction", MonthsBetween.class);
 
         //输出表
         String print_table = "" +

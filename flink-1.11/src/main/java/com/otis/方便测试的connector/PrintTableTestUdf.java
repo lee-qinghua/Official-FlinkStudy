@@ -1,4 +1,4 @@
-package com.otis.work.test;
+package com.otis.方便测试的connector;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

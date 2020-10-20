@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/flink-1.11/pom.xml" />
         <option value="$PROJECT_DIR$/hive-flink/pom.xml" />
         <option value="$PROJECT_DIR$/flink-udfs/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-test/pom.xml" />
       </list>
     </option>
   </component>

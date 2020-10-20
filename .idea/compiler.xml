@@ -9,10 +9,12 @@
         <module name="flink-1.11" />
         <module name="hive-flink" />
         <module name="flink-udfs" />
+        <module name="flink-test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="flink-1.11" target="8" />
+      <module name="flink-test" target="8" />
       <module name="flink-udfs" target="8" />
       <module name="hive-flink" target="1.5" />
     </bytecodeTargetLevel>
