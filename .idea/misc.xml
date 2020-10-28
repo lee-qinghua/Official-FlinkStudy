@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/hive-flink/pom.xml" />
         <option value="$PROJECT_DIR$/flink-udfs/pom.xml" />
         <option value="$PROJECT_DIR$/flink-test/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-DataStream/pom.xml" />
       </list>
     </option>
   </component>

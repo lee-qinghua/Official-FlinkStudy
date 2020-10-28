@@ -6,16 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="flink-1.11" />
-        <module name="hive-flink" />
-        <module name="flink-udfs" />
         <module name="flink-test" />
+        <module name="hive-flink" />
+        <module name="flink-1.11" />
+        <module name="flink-udfs" />
+        <module name="flink-DataStream" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="flink-1.11" target="8" />
-      <module name="flink-test" target="8" />
-      <module name="flink-udfs" target="8" />
+      <module name="flink-DataStream" target="1.5" />
+      <module name="flink-test" target="1.5" />
+      <module name="flink-udfs" target="1.5" />
       <module name="hive-flink" target="1.5" />
     </bytecodeTargetLevel>
   </component>
