@@ -6,6 +6,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.table.api.{EnvironmentSettings, Table}
+import org.apache.flink.table.utils.PrintUtils
 import org.apache.flink.types.Row
 import org.junit._
 

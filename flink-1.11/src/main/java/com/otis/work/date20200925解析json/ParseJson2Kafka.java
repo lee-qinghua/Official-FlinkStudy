@@ -1,10 +1,16 @@
 package com.otis.work.date20200925解析json;
 
 import com.otis.work.date20200925解析json.udf.MonthsBetweenStr;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.streaming.api.datastream.IterativeStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.table.utils.PrintUtils;
+import org.apache.flink.types.Row;
+
+import java.io.PrintWriter;
 
 /**
  * 作者：李清华
@@ -1984,8 +1990,14 @@ public class ParseJson2Kafka {
                 ")";
         tableEnv.executeSql(print_t);
 
-        tableEnv.executeSql("insert into print_t select flink_months_between_str(from_unixtime(unix_timestamp('20200811','yyyyMMdd'),'yyyy-MM-dd'),open_dt) from TEMP_CREDITCARD_INFO");
+        //tableEnv.executeSql("insert into print_t select flink_months_between_str(from_unixtime(unix_timestamp('20200811','yyyyMMdd'),'yyyy-MM-dd'),open_dt) from TEMP_CREDITCARD_INFO");
+
+        Table table = tableEnv.sqlQuery("select flink_months_between_str(from_unixtime(unix_timestamp('20200811','yyyyMMdd'),'yyyy-MM-dd'),open_dt) from TEMP_CREDITCARD_INFO");
+
+
+        tableEnv.toRetractStream(table, Row.class).iterate().print();
         tableEnv.execute("aa");
+        env.execute();
     }
 
     /**

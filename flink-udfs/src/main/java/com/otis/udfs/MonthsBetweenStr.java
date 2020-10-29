@@ -13,6 +13,17 @@ import java.util.Date;
  */
 public class MonthsBetweenStr extends ScalarFunction {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    //todo 这里可以使用方法的重载 根据传递参数类型的不同，调用不同的方法
+//    Calendar d1 = Calendar.getInstance();
+//    Calendar d2 = Calendar.getInstance();
+
+//    public int eval(java.sql.Date date1, java.sql.Date date2) {
+//        d1.setTime(date1);
+//        d2.setTime(date2);
+//        int diff1 = d1.get(Calendar.MONTH) - d2.get(Calendar.MONTH);
+//        int diff2 = (d1.get(Calendar.YEAR) - d2.get(Calendar.YEAR)) * 12;
+//        return diff1 + diff2;
+//    }
 
     // 因为有的字段可能为null,但是必须这样计算的话 就返回9999
     // 这样计算后 如果还要进行比较，就需要加限制条件 !=9999

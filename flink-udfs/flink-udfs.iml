@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="scala-sdk-2.11.2" level="application" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-table-planner_2.11:1.11.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-table-api-java-bridge_2.11:1.11.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-streaming-java_2.11:test-jar:tests:1.11.0" level="project" />

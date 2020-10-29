@@ -1,6 +1,6 @@
 package com.otis.方便测试的connector;
 
-import com.otis.udfs.SortRuleFunction;
+
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -37,7 +37,7 @@ public class DataGenAndPrintTable {
         //注册表
         tableEnv.createTemporaryView("source_table", map);
         //注册函数
-        tableEnv.createFunction("myfunction", SortRuleFunction.class);
+//        tableEnv.createFunction("myfunction", SortRuleFunction.class);
         tableEnv.executeSql("insert into print_table select '01',myfunction(accountName,account,currencyCode,transactionCode,transactionAmount,borrowFlage,businessCode,summary,accountChinessName) from source_table");
 
     }
