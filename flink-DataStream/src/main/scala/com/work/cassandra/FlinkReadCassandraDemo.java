@@ -7,7 +7,7 @@ import org.apache.flink.streaming.connectors.cassandra.ClusterBuilder;
 
 import java.io.IOException;
 
-public class FlinkReadCassandra {
+public class FlinkReadCassandraDemo {
     public static void main(String[] args) throws IOException {
         ClusterBuilder builder = new ClusterBuilder() {
 

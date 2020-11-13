@@ -1,5 +1,6 @@
 package com.work.cassandra
 
+import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.connectors.cassandra.CassandraSink
@@ -10,7 +11,7 @@ import org.apache.flink.streaming.connectors.cassandra.CassandraSink
 object FlinkWriteCassandra {
   def main(args: Array[String]): Unit = {
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
-
+    env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime)
     // get input data by connecting to the socket
     val text: DataStream[String] = env.socketTextStream("10.1.30.10", 7777)
 
