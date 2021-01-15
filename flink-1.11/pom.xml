@@ -9,6 +9,18 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <!-- 写入数据到clickhouse -->
+        <dependency>
+            <groupId>ru.yandex.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>0.1.54</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc_2.11</artifactId>
+            <version>1.11.1</version>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>org.example</groupId>-->
 <!--            <artifactId>flink-udfs</artifactId>-->
