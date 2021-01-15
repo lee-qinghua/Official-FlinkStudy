@@ -11,6 +11,9 @@
         <option value="$PROJECT_DIR$/flink-udfs/pom.xml" />
         <option value="$PROJECT_DIR$/flink-test/pom.xml" />
         <option value="$PROJECT_DIR$/flink-DataStream/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-1.12/pom.xml" />
+        <option value="$PROJECT_DIR$/spark-review/pom.xml" />
+        <option value="$PROJECT_DIR$/spark-sql/pom.xml" />
       </list>
     </option>
   </component>
