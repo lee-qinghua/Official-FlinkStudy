@@ -1,5 +1,3 @@
-target
+*/target
 *.imi
 .idea
-/hive-flink/hive-flink.iml
-Maven_*
