@@ -11,7 +11,7 @@ public class QuickStart {
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
-
+        
         String a = "    CREATE TABLE kafka_apply_info_200 (\n" +
                 "      SESSION_ID STRING,\n" +
                 "      APP_NO STRING,\n" +

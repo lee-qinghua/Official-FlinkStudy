@@ -1,35 +1,62 @@
 package com.otis.clickhouse;
 
-import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.windowing.AllWindowFunction;
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
+import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.util.Collector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlinkJob {
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
-        env.setParallelism(1);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
+
+        String datagen="create table data(\n" +
+                "name string,\n" +
+                "address string,\n" +
+                "age int\n" +
+                ")with(\n" +
+                "'connector'='datagen',\n" +
+                " 'rows-per-second' = '50000'\n" +
+                ")";
+        tableEnv.executeSql(datagen);
+
+        Table table = tableEnv.sqlQuery("select name,address,abs(age) as age from data");
+        DataStream<User> inputStream = tableEnv.toAppendStream(table, User.class);
+
 
         // source
-        DataStream<String> inputStream = env.socketTextStream("10.1.30.10", 7777);
+//        DataStream<String> inputStream = env.socketTextStream("10.1.30.10", 7777);
 
-        // Transform 操作
-        SingleOutputStreamOperator<User> dataStream = inputStream.map(new MapFunction<String, User>() {
-            @Override
-            public User map(String data) throws Exception {
-                String[] split = data.split(",");
-                return new User(split[0],
-                        split[1],
-                        Integer.parseInt(split[2]));
-            }
-        });
 
+        AllWindowedStream<User, GlobalWindow> userGlobalWindowAllWindowedStream = inputStream.countWindowAll(50000);
+        DataStream<List<User>> apply = userGlobalWindowAllWindowedStream.apply(new MyWindowFunction());
         // sink
         String sql = "INSERT INTO user (name, address, age) VALUES (?,?,?)";
         MyClickHouseUtil jdbcSink = new MyClickHouseUtil(sql);
-        dataStream.addSink(jdbcSink);
-        dataStream.print();
+        apply.addSink(jdbcSink);
 
         env.execute("clickhouse sink test");
+    }
+
+    static class MyWindowFunction implements AllWindowFunction<User, List<User>, GlobalWindow> {
+
+
+        @Override
+        public void apply(GlobalWindow window, Iterable<User> values, Collector<List<User>> out) throws Exception {
+            List<User> users = new ArrayList<>();
+            values.forEach(x->users.add(x));
+            out.collect(users);
+        }
     }
 }
