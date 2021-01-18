@@ -1,5 +1,8 @@
 package com.otis.clickhouse;
 
+/**
+ * 对应clickhouse表中的字段
+ */
 public class User {
     private String name;
     private String address;

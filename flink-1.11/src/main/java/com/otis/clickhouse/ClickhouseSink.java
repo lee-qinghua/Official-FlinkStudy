@@ -1,5 +1,14 @@
 //package com.otis.clickhouse;
 //
+//import org.apache.commons.lang3.StringUtils;
+//import org.apache.flink.configuration.Configuration;
+//import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+//import org.apache.flink.types.Row;
+//
+//import java.io.Serializable;
+//import java.sql.*;
+//import java.util.*;
+//
 //public class ClickhouseSink extends RichSinkFunction<Row> implements Serializable {
 //    private String tablename;
 //    private String[] tableColums;
@@ -164,6 +173,7 @@
 //        // 轮询写入各个local表，避免单节点数据过多
 //        if (null != row) {
 //            Random random = new Random();
+//            //因为是根据ip创建的连接，ip的个数就是各个clickhouse集群的大小
 //            int index = random.nextInt(this.ips.length);
 //            switch (index) {
 //

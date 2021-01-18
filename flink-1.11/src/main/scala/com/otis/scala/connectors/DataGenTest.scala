@@ -1,6 +1,5 @@
 package com.otis.scala.connectors
 
-import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.table.api.EnvironmentSettings
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment
@@ -10,7 +9,6 @@ object DataGenTest {
 
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
-    env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
     val settings = EnvironmentSettings.newInstance.useBlinkPlanner.inStreamingMode.build
     val tableEnv = StreamTableEnvironment.create(env, settings)
 
