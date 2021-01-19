@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * countwindow 计数，达到规定的大小批量写入
  */
-public class FlinkJob {
+public class FlinkJob1 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -41,7 +41,7 @@ public class FlinkJob {
         DataStream<List<User>> apply = userGlobalWindowAllWindowedStream.apply(new MyWindowFunction());
         // sink
         String sql = "INSERT INTO user (name, address, age) VALUES (?,?,?)";
-        MyClickHouseUtil jdbcSink = new MyClickHouseUtil(sql);
+        MyClickHouseSink1 jdbcSink = new MyClickHouseSink1(sql);
         apply.addSink(jdbcSink);
 
         env.execute("clickhouse sink test");

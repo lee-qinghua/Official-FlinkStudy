@@ -7,15 +7,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-public class MyClickHouseUtil extends RichSinkFunction<List<User>> {
+public class MyClickHouseSink1 extends RichSinkFunction<List<User>> {
     Connection connection = null;
     String sql;
 
-    public MyClickHouseUtil(String sql) {
+    public MyClickHouseSink1(String sql) {
         this.sql = sql;
     }
 
-    public MyClickHouseUtil() {
+    public MyClickHouseSink1() {
         super();
     }
 
