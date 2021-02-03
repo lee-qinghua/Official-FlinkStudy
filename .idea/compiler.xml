@@ -8,15 +8,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="flink-udfs" />
         <module name="flink-1.12" />
-        <module name="flink-test" />
+        <module name="flink-1.11" />
         <module name="flink-DataStream" />
         <module name="spark-review" />
-        <module name="flink-1.11" />
+        <module name="db-kudu" />
+        <module name="flink-test" />
         <module name="hive-flink" />
         <module name="spark-sql" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="db-kudu" target="8" />
       <module name="flink-1.11" target="8" />
       <module name="flink-1.12" target="1.5" />
       <module name="flink-DataStream" target="1.8" />

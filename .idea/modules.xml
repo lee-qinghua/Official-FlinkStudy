@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Official-FlinkStudy.iml" filepath="$PROJECT_DIR$/.idea/Official-FlinkStudy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/db-kudu/db-kudu.iml" filepath="$PROJECT_DIR$/db-kudu/db-kudu.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.11/flink-1.11.iml" filepath="$PROJECT_DIR$/flink-1.11/flink-1.11.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.12/flink-1.12.iml" filepath="$PROJECT_DIR$/flink-1.12/flink-1.12.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-DataStream/flink-DataStream.iml" filepath="$PROJECT_DIR$/flink-DataStream/flink-DataStream.iml" />
