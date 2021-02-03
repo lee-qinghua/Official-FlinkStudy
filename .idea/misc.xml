@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/spark-review/pom.xml" />
         <option value="$PROJECT_DIR$/spark-sql/pom.xml" />
         <option value="$PROJECT_DIR$/db-kudu/pom.xml" />
+        <option value="$PROJECT_DIR$/project-finicalHystrix/pom.xml" />
       </list>
     </option>
   </component>

@@ -14,6 +14,7 @@
         <module name="db-kudu" />
         <module name="flink-test" />
         <module name="hive-flink" />
+        <module name="project-finicalHystrix" />
         <module name="spark-sql" />
       </profile>
     </annotationProcessing>
@@ -25,6 +26,7 @@
       <module name="flink-test" target="8" />
       <module name="flink-udfs" target="8" />
       <module name="hive-flink" target="1.5" />
+      <module name="project-finicalHystrix" target="1.5" />
       <module name="spark-review" target="1.5" />
       <module name="spark-sql" target="1.5" />
     </bytecodeTargetLevel>

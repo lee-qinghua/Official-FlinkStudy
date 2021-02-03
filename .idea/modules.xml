@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/flink-test/flink-test.iml" filepath="$PROJECT_DIR$/flink-test/flink-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-udfs/flink-udfs.iml" filepath="$PROJECT_DIR$/flink-udfs/flink-udfs.iml" />
       <module fileurl="file://$PROJECT_DIR$/hive-flink/hive-flink.iml" filepath="$PROJECT_DIR$/hive-flink/hive-flink.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project-finicalHystrix/project-finicalHystrix.iml" filepath="$PROJECT_DIR$/project-finicalHystrix/project-finicalHystrix.iml" />
       <module fileurl="file://$PROJECT_DIR$/spark-review/spark-review.iml" filepath="$PROJECT_DIR$/spark-review/spark-review.iml" />
       <module fileurl="file://$PROJECT_DIR$/spark-sql/spark-sql.iml" filepath="$PROJECT_DIR$/spark-sql/spark-sql.iml" />
     </modules>
