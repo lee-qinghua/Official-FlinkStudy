@@ -11,7 +11,6 @@ import org.apache.flink.table.api.bridge.scala._
  * 还款直接发送到下个topic
  */
 
-//todo 新想法，做成拉链表
 object A_SplitAndEtl {
 
   // repayment_flag  0 未还款 1 已还款

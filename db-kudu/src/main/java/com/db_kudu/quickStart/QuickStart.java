@@ -1,4 +1,4 @@
-package com.otis.借款熔断.kudu;
+package com.db_kudu.quickStart;
 
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
@@ -22,7 +22,7 @@ public class QuickStart {
         //初始化操作
         kuduMaster = "real-time-006";
         //指定表名
-        tableName = "qinghua_test";
+        tableName = "qinghua_finicalinfo";
         KuduClient.KuduClientBuilder kuduClientBuilder = new KuduClient.KuduClientBuilder(kuduMaster);
         kuduClientBuilder.defaultSocketReadTimeoutMs(10000);
         kuduClient = kuduClientBuilder.build();
@@ -37,20 +37,20 @@ public class QuickStart {
         if (!kuduClient.tableExists(tableName)) {
             //构建创建表的 schema 信息-----就是表的字段和类型
             ArrayList<ColumnSchema> columnSchemas = new ArrayList<ColumnSchema>();
-            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("id",
-                    Type.INT32).key(true).build());
-//            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("name",
-//                    Type.STRING).build());
-            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("money",
-                    Type.INT32).build());
-//            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("sex",
-//                    Type.INT32).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("relation_id",Type.STRING).key(true).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("event_type",Type.STRING).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("user_id",Type.STRING).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("amt",Type.FLOAT).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("event_dt",Type.INT64).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("should_repay_time",Type.INT64).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("repay_state",Type.STRING).build());
+            columnSchemas.add(new ColumnSchema.ColumnSchemaBuilder("actual_repay_time",Type.INT64).build());
             Schema schema = new Schema(columnSchemas);
             //指定创建表的相关属性
             CreateTableOptions options = new CreateTableOptions();
             ArrayList<String> partitionList = new ArrayList<String>();
             //指定 kudu 表的分区字段是什么
-            partitionList.add("id"); // 按照 id.hashcode % 分区数 = 分区号
+            partitionList.add("relation_id"); // 按照 id.hashcode % 分区数 = 分区号
             options.addHashPartitions(partitionList, 6);
             kuduClient.createTable(tableName, schema, options);
         }

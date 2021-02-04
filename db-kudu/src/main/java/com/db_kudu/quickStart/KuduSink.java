@@ -1,4 +1,4 @@
-package com.otis.借款熔断.kudu.flink_kudu_sink;
+package com.db_kudu.quickStart;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -8,7 +8,8 @@ import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
 import org.apache.kudu.client.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 public class KuduSink<OUT> extends RichSinkFunction<OUT> implements CheckpointedFunction {
 
-    private final static Logger logger = Logger.getLogger(KuduSink.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private KuduClient client;
     private KuduTable table;
@@ -65,7 +66,7 @@ public class KuduSink<OUT> extends RichSinkFunction<OUT> implements Checkpointed
                 logger.error(response.getRowError().toString());
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.toString());
         }
     }
 
@@ -77,7 +78,7 @@ public class KuduSink<OUT> extends RichSinkFunction<OUT> implements Checkpointed
             os.close();
             out.close();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
